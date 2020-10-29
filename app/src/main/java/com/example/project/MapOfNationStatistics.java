@@ -33,7 +33,7 @@ public class MapOfNationStatistics extends Map {
     }
 
     @Override
-    public ArrayList<Place> search_nearplaces(ArrayList<Patient> patientslist) {
+    public ArrayList<Place> search_nearPlaces(ArrayList<Patient> patientsList) {
         return null;
     }
 
