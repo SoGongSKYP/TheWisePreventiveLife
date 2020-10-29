@@ -16,17 +16,7 @@ public class MyMap extends Map {
      * 
      */
     private Void user_markers;
-
-
-    /**
-     * @param arraylist<Patient>  
-     * @return
-     */
-    public ArrayList<Place> search_nearplaces( ArrayList<Patient> patientslist ) {
-        // TODO implement here
-        return null;
-    }
-
+    
     /**
      * 
      */
@@ -39,6 +29,11 @@ public class MyMap extends Map {
      */
     public void input_marker() {
         // TODO implement here
+    }
+
+    @Override
+    public ArrayList<Place> search_nearPlaces(ArrayList<Patient> patientsList) {
+        return null;
     }
 
     /**
