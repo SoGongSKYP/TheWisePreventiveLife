@@ -33,5 +33,10 @@ public class MapOfSelectedClinic extends Map {
         // TODO implement here
     }
 
+    @Override
+    public ArrayList<Place> search_nearPlaces(ArrayList<Patient> patientsList) {
+        return null;
+    }
+
 
 }
