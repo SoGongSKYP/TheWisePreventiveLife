@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PageOfToManager">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toManager_Toolbar"
+        android:elevation="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="24dp"
+        android:background="@color/colorWhite">
+        <TextView
+            android:id="@+id/toManager_Title_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20dp"
+            android:text="어플리케이션 정보"
+            android:textColor="@color/colorDarkGrey"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <Button
+        android:id="@+id/switch_to_manager_Button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/toManager_Toolbar"
+        android:background="@color/colorMainRed"
+        android:layout_margin="15dp"
+        android:text="관리자 모드로 변환"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
