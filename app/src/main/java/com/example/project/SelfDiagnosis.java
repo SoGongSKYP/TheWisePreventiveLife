@@ -9,13 +9,21 @@ public class SelfDiagnosis {
     /**
      * Default constructor
      */
-    public SelfDiagnosis() {
+    public SelfDiagnosis(String questionSentence, boolean answer) {
+        this.questionSentence =questionSentence;
+        this.answer = answer;
+    }
+    private String questionSentence;
+    private boolean answer;
+
+    public boolean isAnswer() {
+        return answer;
+    }
+    public String getQuestionSentence() {
+        return questionSentence;
     }
 
-    /**
-     * 
-     */
-    private String question_sentence;
-
-
+    public void setAnswer(boolean answer) {
+        this.answer = answer;
+    }
 }
