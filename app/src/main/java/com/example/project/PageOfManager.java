@@ -1,10 +1,12 @@
 package com.example.project;
+import androidx.fragment.app.Fragment;
+
 import java.util.*;
 
 /**
  * 
  */
-public class PageOfManager {
+public class PageOfManager extends Fragment {
 
     /**
      * Default constructor
