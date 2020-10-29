@@ -12,19 +12,12 @@ public abstract class Map {
      */
     public Map() {
     }
-
-    /**
-     *
-     */
-    public ArrayList<Place> nearPlaces;
-    public Place centerPlace;
-    public UserLoc userPlace;
+    
+    private ArrayList<Place> nearPlaces;
+    private Place centerPlace;
+    private UserLoc userPlace;
 
 
-
-    /**
-     *
-     */
     public abstract void print_marker();
     public abstract void input_marker();
     public abstract ArrayList<Place> search_nearPlaces(ArrayList<Patient> patientsList);
