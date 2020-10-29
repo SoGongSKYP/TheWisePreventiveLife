@@ -42,17 +42,6 @@ public class MapOfMyDanger extends Map {
         // TODO implement here
     }
 
-    /**
-     * @return
-     */
-    public ArrayList<Place> search_nearplaces() {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * 
-     */
     public void print_marker() {
         // TODO implement here
     }
@@ -62,6 +51,11 @@ public class MapOfMyDanger extends Map {
      */
     public void input_marker() {
         // TODO implement here
+    }
+
+    @Override
+    public ArrayList<Place> search_nearPlaces(ArrayList<Patient> patientsList) {
+        return null;
     }
 
     /**
