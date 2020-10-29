@@ -6,30 +6,30 @@ import java.util.*;
  */
 public class VisitPlace {
 
-    private Place Visit_place;
-    private Date Visit_date;
+    private Place visitPlace;
+    private Date visitDate;
 
     //Constructor
     public VisitPlace(Place place, Date date) {
-        this.Visit_date=date;
-        this.Visit_place=place;
+        this.visitDate=date;
+        this.visitPlace=place;
     }
 
     // get -------------------------
     public Place get_visitPlace(){
-        return this.Visit_place;
+        return this.visitPlace;
     }
     public Date getVisit_date(){
-        return this.Visit_date;
+        return this.visitDate;
     }
     //--------------------------------
 
     // set----------------------------
-    public void setVisit_place(Place p){
-        this.Visit_place=p;
+    public void setVisit_place(Place place){
+        this.visitPlace=place;
     }
-    public void setVisit_date(Date d){
-        this.Visit_date =d;
+    public void setVisit_date(Date date){
+        this.visitDate =date;
     }
     //--------------------------------
 }
