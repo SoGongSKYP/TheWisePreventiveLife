@@ -12,10 +12,10 @@ abstract class Statistics {
     public Statistics() {
     }
 
-    public Date staticsDate;
-    public Integer patientNum;
-    public Integer deadNum;
-    public Integer healerNum;
+    private Date staticsDate;
+    private Integer patientNum;
+    private Integer deadNum;
+    private Integer healerNum;
 
     public abstract void make_chart();
 
