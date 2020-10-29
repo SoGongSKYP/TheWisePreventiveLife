@@ -36,7 +36,7 @@ public abstract class Map {
      * @param arraylist<Patient> 
      * @return
      */
-    public abstract ArrayList<Place> search_nearplaces(ArrayList<Patient> patientslist);
+    public abstract ArrayList<Place> search_nearPlaces(ArrayList<Patient> patientsList);
 
     /**
      * @param Integer x1
