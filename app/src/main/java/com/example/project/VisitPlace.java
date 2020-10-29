@@ -10,13 +10,13 @@ public class VisitPlace {
     private Date Visit_date;
 
     //Constructor
-    public VisitPlace(Place p, Date d) {
-        this.Visit_date=d;
-        this.Visit_place=p;
+    public VisitPlace(Place place, Date date) {
+        this.Visit_date=date;
+        this.Visit_place=place;
     }
 
     // get -------------------------
-    public Place get_visitplace(){
+    public Place get_visitPlace(){
         return this.Visit_place;
     }
     public Date getVisit_date(){
