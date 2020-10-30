@@ -1,6 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorLightGrey"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/patient_aLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:elevation="5dp">
+        <LinearLayout
+            android:id="@+id/patient_title_LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="15dp"
+            android:weightSum="10">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="확진자"
+                android:textSize="18dp"
+                android:textColor="@color/colorDarkGrey"
+                android:textStyle="bold"/>
+            <Button
+                android:id="@+id/patient_duple_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:text="중복 확인"
+                android:textSize="16dp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:background="@drawable/button_full_design"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/patient_loc_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:padding="15dp"
+            android:hint="확진자 지역"
+            android:background="@drawable/edittext_outline_design"/>
+
+        <EditText
+            android:id="@+id/patient_num_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:padding="15dp"
+            android:hint="확진자 번호"
+            android:background="@drawable/edittext_outline_design"/>
+
+        <EditText
+            android:id="@+id/patient_time_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:padding="15dp"
+            android:hint="확진 판정 시간"
+            android:background="@drawable/edittext_outline_design"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/patient_visit_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="7dp"
+        android:background="@color/colorWhite"
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/patient_visit_title_LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:text="확진자 동선 정보"
+                android:textSize="18dp"
+                android:textColor="@color/colorDarkGrey"
+                android:textStyle="bold"/>
+            <Button
+                android:id="@+id/patient_visit_add_Button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="5dp"
+                android:layout_marginRight="15dp"
+                android:textSize="16dp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:background="@drawable/ic_round_add_circle_outline_24"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/patient_visit_RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"/>
+    </LinearLayout>
+</LinearLayout>
