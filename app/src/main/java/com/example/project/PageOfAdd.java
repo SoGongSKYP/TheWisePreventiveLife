@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 public class PageOfAdd extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_manager_add, container, false);
+        View v = inflater.inflate(R.layout.fragment_manager_add, container, false);
+        return v;
     }
 }

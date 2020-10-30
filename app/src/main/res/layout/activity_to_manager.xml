@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toManager_Toolbar"
-        android:elevation="15dp"
+        android:elevation="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="20dp"
-            android:text="어플리케이션 정보"
             android:textColor="@color/colorDarkGrey"/>
     </androidx.appcompat.widget.Toolbar>
 

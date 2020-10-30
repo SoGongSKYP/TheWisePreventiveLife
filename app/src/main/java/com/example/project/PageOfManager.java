@@ -23,7 +23,7 @@ public class PageOfManager extends Fragment {
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PageOfMain.class);
+                Intent intent = new Intent(getActivity(), UserPages.class);
                 startActivity(intent);
             }
         });
