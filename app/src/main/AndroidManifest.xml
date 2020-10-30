@@ -24,8 +24,8 @@
         </activity>
 
         <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="dd9d38db598e5d20b8959372a977410b" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE"/>
     </application>
 
 </manifest>
