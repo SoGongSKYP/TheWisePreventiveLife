@@ -12,10 +12,11 @@ abstract class Statistics {
     public Statistics() {
     }
 
-    private Date staticsDate;
-    private Integer patientNum;
-    private Integer deadNum;
-    private Integer healerNum;
+    protected Date staticsDate; /*기준 날짜*/
+    protected Integer patientNum;/*확진자수*/
+    protected Integer deadNum;/*사망자수*/
+    protected Integer healerNum; /*완치자수==격리해제수*/
+
 
     public abstract void make_chart();
 
