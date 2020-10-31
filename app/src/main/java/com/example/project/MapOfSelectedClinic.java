@@ -1,4 +1,6 @@
 package com.example.project;
+import com.google.android.gms.maps.GoogleMap;
+
 import java.util.*;
 
 /**
@@ -39,4 +41,8 @@ public class MapOfSelectedClinic extends Map {
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
 }
