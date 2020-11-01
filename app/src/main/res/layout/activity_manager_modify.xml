@@ -42,7 +42,8 @@
         android:orientation="horizontal"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="10dp"
+        android:weightSum="2">
         <Spinner
             android:id="@+id/modify_big_Spinner"
             android:layout_width="match_parent"
