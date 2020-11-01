@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PageOfToManager"></activity>
+        <activity android:name=".ManagerModify"></activity>
+        <activity android:name=".PageOfToManager" />
         <activity android:name=".ManagerPages" />
         <activity android:name=".UserPages">
             <intent-filter>
@@ -25,7 +26,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE"/>
+            android:value="AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE" />
     </application>
 
 </manifest>

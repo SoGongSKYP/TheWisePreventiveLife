@@ -17,8 +17,8 @@ public class ManagerPages extends AppCompatActivity {
 
     /*Bottom Navigation Bar 관련 컴포넌트*/
     private FragmentManager fragmentManager = getSupportFragmentManager();
+    private PageOfList pageOfList = new PageOfList();
     private PageOfAdd pageOfAdd = new PageOfAdd();
-    private PageOfModify pageOfModify = new PageOfModify();
     private PageOfManager pageOfManager = new PageOfManager();
     /*Tool Bar 관련 컴포넌트*/
     private Toolbar toolbar;
@@ -36,7 +36,7 @@ public class ManagerPages extends AppCompatActivity {
         navigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.manager_FrameLayout, pageOfAdd).commit();
+        transaction.replace(R.id.manager_FrameLayout, pageOfList).commit();
 
         /*Tool Bar 연결*/
         toolbar = findViewById(R.id.manager_Toolbar);
@@ -56,12 +56,12 @@ public class ManagerPages extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch(item.getItemId()){
                 case R.id.manager_Add:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.manager_FrameLayout, pageOfAdd).commit();
-                    TitleTextView.setText("확진자 정보 추가");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.manager_FrameLayout, pageOfList).commit();
+                    TitleTextView.setText("확진자 리스트");
                     return true;
                 case R.id.manager_Modify:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.manager_FrameLayout, pageOfModify).commit();
-                    TitleTextView.setText("확진자 정보 수정");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.manager_FrameLayout, pageOfAdd).commit();
+                    TitleTextView.setText("확진자 정보 추가");
                     return true;
                 case R.id.manager_Info:
                     getSupportFragmentManager().beginTransaction().replace(R.id.manager_FrameLayout, pageOfManager).commit();

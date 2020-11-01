@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ManagerModify">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/manager_modify_Toolbar"
+        android:elevation="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="24dp"
+        android:background="@color/colorWhite">
+        <TextView
+            android:id="@+id/manager_modify_Title_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20dp"
+            android:textColor="@color/colorDarkGrey"/>
+    </androidx.appcompat.widget.Toolbar>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="수정할 확진자"
+        android:textSize="17dp"
+        android:textColor="@color/colorDarkGrey"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+        <Spinner
+            android:id="@+id/modify_big_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/edittext_outline_design"
+            android:padding="10dp"
+            android:entries="@array/big_location_array"/>
+        <Spinner
+            android:id="@+id/modify_small_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/edittext_outline_design"
+            android:padding="10dp"
+            android:entries="@array/seoul_array"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/modify_num_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:padding="12dp"
+        android:hint="확진자 번호"
+        android:background="@drawable/edittext_outline_design"/>
+
+    <EditText
+        android:id="@+id/modify_time_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="15dp"
+        android:padding="12dp"
+        android:hint="확진 판정 시간"
+        android:background="@drawable/edittext_outline_design"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorLightGrey"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="확진자 동선 정보"
+            android:textSize="17dp"
+            android:textColor="@color/colorDarkGrey"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+        <ImageButton
+            android:id="@+id/modify_visit_add_Button"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_round_add_circle_outline_24"
+            android:background="@color/colorWhite"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/modify_visit_RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"/>
+
+</LinearLayout>

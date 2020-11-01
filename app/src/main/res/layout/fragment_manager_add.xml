@@ -4,15 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorLightGrey"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/patient_aLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/patient_title_LinearLayout"
             android:layout_width="match_parent"
@@ -41,16 +36,34 @@
                 android:background="@drawable/button_full_design"/>
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/patient_loc_EditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
+            android:orientation="horizontal"
             android:layout_marginBottom="10dp"
-            android:padding="15dp"
-            android:hint="확진자 지역"
-            android:background="@drawable/edittext_outline_design"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+            <Spinner
+                android:id="@+id/add_big_Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edittext_outline_design"
+                android:padding="10dp"
+                android:entries="@array/big_location_array"/>
+            <Spinner
+                android:id="@+id/add_small_Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edittext_outline_design"
+                android:padding="10dp"
+                android:entries="@array/seoul_array"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/patient_num_EditText"
@@ -59,7 +72,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
-            android:padding="15dp"
+            android:padding="12dp"
             android:hint="확진자 번호"
             android:background="@drawable/edittext_outline_design"/>
 
@@ -70,19 +83,18 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="15dp"
-            android:padding="15dp"
+            android:padding="12dp"
             android:hint="확진 판정 시간"
             android:background="@drawable/edittext_outline_design"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/patient_visit_LinearLayout"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        android:background="@color/colorWhite"
-        android:layout_weight="1">
+        android:layout_height="2dp"
+        android:background="@color/colorLightGrey"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+
         <LinearLayout
             android:id="@+id/patient_visit_title_LinearLayout"
             android:layout_width="match_parent"
@@ -115,5 +127,5 @@
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="15dp"/>
-    </LinearLayout>
+
 </LinearLayout>

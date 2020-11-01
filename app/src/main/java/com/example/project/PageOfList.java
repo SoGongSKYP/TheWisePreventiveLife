@@ -9,8 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class PageOfModify extends Fragment {
+public class PageOfList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_manager_modify, container, false);
+        View v = inflater.inflate(R.layout.fragment_manager_list, container, false);
+        return v;
     }
 }
