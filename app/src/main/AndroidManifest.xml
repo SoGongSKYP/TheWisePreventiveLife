@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ManagerModify"></activity>
+        <activity android:name=".PageOfSelfDiagnosisResult"></activity>
+        <activity android:name=".ManagerModify" />
         <activity android:name=".PageOfToManager" />
         <activity android:name=".ManagerPages" />
         <activity android:name=".UserPages">
