@@ -14,6 +14,14 @@ import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 public class UserLoc extends AppCompatActivity {
 
     /**
@@ -40,8 +48,32 @@ public class UserLoc extends AppCompatActivity {
         this.userPlace = place;
     }
 
-    public void Loc_by_Search() {
-        // TODO implement here
+    /*장소 검색*/
+    public void Loc_by_Search(String searchText) throws IOException {
+        StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/"); /*URL*/
+        urlBuilder.append("json?" + URLEncoder.encode("input","UTF-8") + "="+URLEncoder.encode(searchText, "UTF-8")); /*장소 text*/
+        urlBuilder.append("&" + URLEncoder.encode("inputtype","UTF-8") + "="+ URLEncoder.encode("textquery", "UTF-8")); /*입력 형식 text로 설정*/
+        urlBuilder.append("&" + URLEncoder.encode("language","UTF-8") + "=" + URLEncoder.encode("ko", "UTF-8")); /*리턴 정보 한국어로 리턴*/
+        urlBuilder.append("&" + URLEncoder.encode("fields","UTF-8") + "=" + URLEncoder.encode("business_status,photos,formatted_address,name,rating,opening_hours,geometry", "UTF-8")); /*반환 받을 값들*/
+        urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
+
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
     }
 
     //권한 확인후 권한 요청
@@ -70,5 +102,4 @@ public class UserLoc extends AppCompatActivity {
             this.userPlace.set_placeAddress("동국대학교 원흥관");//해당 위치정보
         }//제공 동의가 안되어 있때 유저위치를 동국대학교 원흥관으로 디폴트 값 생성
     }
-
 }
