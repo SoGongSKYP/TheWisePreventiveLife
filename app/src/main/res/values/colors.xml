@@ -5,6 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorMainRed">#EE6161</color>
     <color name="colorDarkGrey">#3D3D3D</color>
+    <color name="colorMiddleGrey">#ACACAC</color>
     <color name="colorLightGrey">#E1E1E1</color>
     <color name="colorWhite">#fff</color>
 </resources>

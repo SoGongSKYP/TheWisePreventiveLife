@@ -3,6 +3,7 @@ package com.example.project;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
     private ArrayList<String> questionList;
+    private ArrayList<String> yesList = new ArrayList<>();
 
     public static class DiagnosisViewHolder extends RecyclerView.ViewHolder {
         public Button YesButton;
@@ -71,7 +73,6 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        final ArrayList<String> yesList = new ArrayList<>();
         /*question row*/
         if (holder instanceof DiagnosisViewHolder){
             final DiagnosisViewHolder Qholder = (DiagnosisViewHolder) holder;
@@ -80,18 +81,23 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View view) {
                     yesList.add(Integer.toString(position));
-                    Qholder.YesButton.setBackgroundColor(Color.parseColor("#E1E1E1"));
-                    Qholder.NoButton.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    Qholder.YesButton.setBackgroundResource(R.drawable.button_full_grey);
+                    Qholder.NoButton.setBackgroundResource(R.drawable.button_outline_grey);
+                    Log.d("현재 결과 배열 추가", yesList.toString());
                 }
             });
             Qholder.NoButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    if (yesList.contains(Integer.toString(position-1))){
-                        yesList.remove(Integer.toString(position-1));
-                        Qholder.YesButton.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        Qholder.NoButton.setBackgroundColor(Color.parseColor("#E1E1E1"));
+                    if (yesList.contains(Integer.toString(position))){
+                        yesList.remove(Integer.toString(position));
+                        Qholder.YesButton.setBackgroundResource(R.drawable.button_outline_grey);
+                        Qholder.NoButton.setBackgroundResource(R.drawable.button_full_grey);
+                    }else{
+                        Qholder.YesButton.setBackgroundResource(R.drawable.button_outline_grey);
+                        Qholder.NoButton.setBackgroundResource(R.drawable.button_full_grey);
                     }
+                    Log.d("현재 결과 배열 삭제", yesList.toString());
                 }
             });
         }
