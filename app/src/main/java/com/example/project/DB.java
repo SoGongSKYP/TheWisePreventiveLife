@@ -2,41 +2,32 @@ package com.example.project;
 import java.sql.Connection;
 import java.util.*;
 
-/**
- * 
- */
-public class DB {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-    /**
-     * Default constructor
-     */
-    public DB() {
+public class DB {
+    private ArrayList<Patient> patients;
+    private  URL url;
+    private HttpURLConnection conn;
+
+    public DB() throws MalformedURLException {
+        url = new URL("http://192.168.1.196:8080/WLP/androidDB.jsp");
+        try {
+            conn = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
     }
 
-    /**
-     * 
-     */
-    private String url;
+    public void connect_DB() {
 
-    /**
-     * 
-     */
-    private String id;
-
-    /**
-     * 
-     */
-    private String pw;
-
-    /**
-     * 
-     */
-    private Connection conn;
-
-    /**
-     * 
-     */
-    private ArrayList<Patient> patients;
+    }
 
     /**
      * @return
@@ -45,16 +36,11 @@ public class DB {
         // TODO implement here
         return null;
     }
-
-    /**
-     * 
-     */
-    public void connect_DB() {
-        // TODO implement here
-    }
-
     public boolean update_DB(ArrayList<Patient> patientslist) {
         // TODO implement here
+        return true;
+    }
+    public boolean check_user_idpw(String id, String pw){
         return true;
     }
 }
