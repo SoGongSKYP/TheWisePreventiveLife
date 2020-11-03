@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PageOfSelfDiagnosisResult">
+    tools:context=".PageOfSelfDiagnosisResult"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/diagnosis_result_Toolbar"
@@ -27,17 +30,77 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/diagnosis_result_Toolbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/result_box_red"
+        android:layout_margin="15dp"
+        android:paddingTop="10dp"
+        android:elevation="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="당신은 "
+                android:textColor="@color/colorDarkGrey"
+                android:textStyle="bold"
+                android:textSize="17dp"/>
+            <TextView
+                android:id="@+id/result_main_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="감염 고위험자 "
+                android:textColor="@color/colorMainRed"
+                android:textStyle="bold"
+                android:textSize="17dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="입니다."
+                android:textColor="@color/colorDarkGrey"
+                android:textStyle="bold"
+                android:textSize="17dp"/>
+        </LinearLayout>
         <TextView
-            android:id="@+id/diagnosis_result_TextView"
+            android:id="@+id/result_content_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="결과"/>
+            android:text="내용"
+            android:textSize="15dp"
+            android:textColor="@color/colorDarkGrey"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:paddingBottom="15dp"
+            android:layout_marginBottom="15dp"/>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/row_round_white"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="15dp"
+        android:elevation="10dp">
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="코로나19의 증상"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorDarkGrey"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="공통 증상\n발열, 마른 기침, 피로감"
+            android:textSize="14dp"
+            android:textColor="@color/colorDarkGrey"/>
+    </LinearLayout>
+
+</LinearLayout>

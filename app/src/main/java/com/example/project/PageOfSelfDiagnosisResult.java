@@ -35,7 +35,9 @@ public class PageOfSelfDiagnosisResult extends AppCompatActivity {
         Intent intent = getIntent();
         ArrayList<String> result = (ArrayList<String>) intent.getSerializableExtra("result");
         Log.d("결과 스트링", result.toString());
-        resultTextView = findViewById(R.id.diagnosis_result_TextView);
-        resultTextView.setText(result.toString());
+    }
+
+    public void printResult(){
+
     }
 }
