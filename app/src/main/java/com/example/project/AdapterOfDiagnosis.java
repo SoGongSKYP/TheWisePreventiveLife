@@ -10,19 +10,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
     private ArrayList<String> questionList;
-    private ArrayList<String> yesList = new ArrayList<>();
+    private ArrayList<Integer> yesList = new ArrayList<Integer>(Arrays.asList(2, 2, 2, 2, 2, 2, 2));
+    private int count=0;
 
     public static class DiagnosisViewHolder extends RecyclerView.ViewHolder {
         public Button YesButton;
@@ -73,6 +76,7 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+
         /*question row*/
         if (holder instanceof DiagnosisViewHolder){
             final DiagnosisViewHolder Qholder = (DiagnosisViewHolder) holder;
@@ -80,24 +84,35 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
             Qholder.YesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    yesList.add(Integer.toString(position));
-                    Qholder.YesButton.setBackgroundResource(R.drawable.button_full_grey);
-                    Qholder.NoButton.setBackgroundResource(R.drawable.button_outline_grey);
+                    if(yesList.get(position) == 2){
+                        yesList.set(position, 1);
+                        Qholder.YesButton.setBackgroundResource(R.drawable.button_full_grey);
+                        Qholder.NoButton.setBackgroundResource(R.drawable.button_outline_grey);
+                        count++;
+                    } else{
+                        yesList.set(position, 1);
+                        Qholder.YesButton.setBackgroundResource(R.drawable.button_full_grey);
+                        Qholder.NoButton.setBackgroundResource(R.drawable.button_outline_grey);
+                    }
                     Log.d("현재 결과 배열 추가", yesList.toString());
+                    Log.d("클릭 횟수", Integer.toString(count));
                 }
             });
             Qholder.NoButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    if (yesList.contains(Integer.toString(position))){
-                        yesList.remove(Integer.toString(position));
+                    if (yesList.get(position) == 2){
+                        yesList.set(position, 0);
                         Qholder.YesButton.setBackgroundResource(R.drawable.button_outline_grey);
                         Qholder.NoButton.setBackgroundResource(R.drawable.button_full_grey);
+                        count++;
                     }else{
+                        yesList.set(position, 0);
                         Qholder.YesButton.setBackgroundResource(R.drawable.button_outline_grey);
                         Qholder.NoButton.setBackgroundResource(R.drawable.button_full_grey);
                     }
                     Log.d("현재 결과 배열 삭제", yesList.toString());
+                    Log.d("클릭 횟수", Integer.toString(count));
                 }
             });
         }
@@ -107,9 +122,15 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
             Bholder.SubmitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), PageOfSelfDiagnosisResult.class);
-                    intent.putExtra("result", yesList);
-                    view.getContext().startActivity(intent);
+                    if(count==7){
+                        Intent intent = new Intent(view.getContext(), PageOfSelfDiagnosisResult.class);
+                        intent.putExtra("result", yesList);
+                        view.getContext().startActivity(intent);
+                    }else{
+                        Toast.makeText(view.getContext(), "설문에 모두 답변해주세요", Toast.LENGTH_SHORT).show();
+                        Log.d("클릭 횟수", Integer.toString(count));
+                    }
+
                 }
             });
         }

@@ -108,6 +108,7 @@
             android:textColor="@color/colorMainRed"
             android:textStyle="bold"
             android:textSize="17dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/button_outline_design"/>
     </LinearLayout>
 
