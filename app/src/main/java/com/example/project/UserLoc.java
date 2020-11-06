@@ -69,7 +69,7 @@ public class UserLoc extends AppCompatActivity {
         urlBuilder.append("xml?" + URLEncoder.encode("input","UTF-8") + "="+URLEncoder.encode(searchText, "UTF-8")); /*장소 text*/
         urlBuilder.append("&" + URLEncoder.encode("inputtype","UTF-8") + "="+ URLEncoder.encode("textquery", "UTF-8")); /*입력 형식 text로 설정*/
         urlBuilder.append("&" + URLEncoder.encode("language","UTF-8") + "=" + URLEncoder.encode("ko", "UTF-8")); /*리턴 정보 한국어로 리턴*/
-        urlBuilder.append("&" + URLEncoder.encode("fields","UTF-8") + "=" + URLEncoder.encode("business_status,photos,formatted_address,name,rating,opening_hours,geometry", "UTF-8")); /*반환 받을 값들*/
+        urlBuilder.append("&" + URLEncoder.encode("fields","UTF-8") + "=" + URLEncoder.encode("formatted_address,name,opening_hours,geometry", "UTF-8")); /*반환 받을 값들*/
         urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
 
         URL url = new URL(urlBuilder.toString());
@@ -85,10 +85,10 @@ public class UserLoc extends AppCompatActivity {
 
         NodeList nList=doc.getElementsByTagName("candidates"); //장소 전체 노드
 
-        NodeList geoList=doc.getElementsByTagName("geometry"); // 지역 노드
-        NodeList locList=doc.getElementsByTagName("location"); // 지역 노드
+        NodeList geoList=null;//doc.getElementsByTagName("geometry"); // 지역 노드
+        NodeList locList=null;//doc.getElementsByTagName("location"); // 지역 노드
 
-        NodeList openTimeList=doc.getElementsByTagName("opening_hours"); // 지역 노드
+        NodeList openTimeList=null;//doc.getElementsByTagName("opening_hours"); // 지역 노드
         //System.out.println("파싱할 리스트 수 : "+nList.getLength());
 
         for(int i=0; i<nList.getLength(); i++) {
@@ -96,25 +96,28 @@ public class UserLoc extends AppCompatActivity {
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
 
+                System.out.println("장소 이름: "+getTagValue("name",eElement));
+                System.out.println("장소 주소"+getTagValue("formatted_address",eElement));
+
                 Node timeNode=openTimeList.item(i);
                 if(timeNode.getNodeType()==Node.ELEMENT_NODE){
                     Element timeElement=(Element) timeNode;
                     System.out.println("열려있는지 여부: "+getTagValue("open_now",timeElement));
                 }
-
-                Node geoNode=geoList.item(i);
-                if(geoNode.getNodeType()==Node.ELEMENT_NODE){
-                    Element geoElement=(Element) geoNode;
-                    Node locNode=geoList.item(i);
-                    if(locNode.getNodeType()==Node.ELEMENT_NODE){
-                        Element locElement=(Element) locNode;
-                        System.out.println("장소 경도: "+getTagValue("lat",locElement));
-                        System.out.println("장소 위도: "+getTagValue("lng",locElement));
+                geoList = eElement.getElementsByTagName("geometry");
+                for(int g =0; g<geoList.getLength();g++){
+                    Node geoNode=geoList.item(g);
+                    if(geoNode.getNodeType()==Node.ELEMENT_NODE){
+                        Element geoElement=(Element) geoNode;
+                        locList = geoElement.getElementsByTagName("location");
+                        Node locNode=locList.item(0);
+                        if(locNode.getNodeType()==Node.ELEMENT_NODE){
+                            Element locElement=(Element) locNode;
+                            System.out.println("장소 경도: "+getTagValue("lat",locElement));
+                            System.out.println("장소 위도: "+getTagValue("lng",locElement));
+                        }
                     }
                 }
-                System.out.println("장소 이름: "+getTagValue("name",eElement));
-                System.out.println("장소 주소"+getTagValue("formatted_address",eElement));
-                System.out.println();
             }
         }
     }
