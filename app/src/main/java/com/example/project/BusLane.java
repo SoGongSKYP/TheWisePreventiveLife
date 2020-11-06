@@ -8,7 +8,6 @@ public class BusLane {
     BusLane(String busNo, int type, int busID,
             Place startStation,Place endStation, int startID, int endID,
             ArrayList<Stations> stations){
-
     }
     private String busNo; //버스 번호 (버스인 경우에만 필수)
     private int type; //버스 코드 (버스인 경우에만 필수)
