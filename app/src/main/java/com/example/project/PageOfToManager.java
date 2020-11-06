@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -76,8 +77,18 @@ public class PageOfToManager extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //managerID = managerIDEditText.getText().toString();
-                //managerPW = managerPWEditText.getText().toString();
+                try {
+                    String result;
+                    managerID = managerIDEditText.getText().toString();
+                    managerPW = managerPWEditText.getText().toString();
+
+                    DB task = new DB();
+                    result = task.execute(managerID,managerPW).get();
+
+                    Log.i("Servertest", "ㅅㅓ버에서 받은 값"+result);
+                } catch (Exception e) {
+                    Log.i("DBtest", ".....ERROR.....!");
+                }
                 Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
                 startActivity(intent);
                 loginDialog.dismiss();
