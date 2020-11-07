@@ -37,7 +37,7 @@ public class PageOfMyDanger extends Fragment {
     public PageOfMyDanger() {
         this.userLoc.LocPermission();
         this.userLoc.LocBy_gps();//사용자 위치 받아옴
-        this.resultSearchPath =null;
+        this.searchResultPath =null;
     }
 
     /**
@@ -47,7 +47,7 @@ public class PageOfMyDanger extends Fragment {
     private ArrayList<Place> visitPlaceList;
     private ArrayList<Place> routeList;
     private int danger;
-    private ArrayList<SearchPath> resultSearchPath;
+    private ArrayList<SearchPath> searchResultPath;
     /**
      * 
      */
@@ -70,6 +70,7 @@ public class PageOfMyDanger extends Fragment {
     public Place searchPlace(String startPoint) throws IOException, ParserConfigurationException, SAXException {
         String parsingUrl="";
         Place searchLoc=null;
+
         StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/"); /*URL*/
         urlBuilder.append("xml?" + URLEncoder.encode("input","UTF-8") + "="+URLEncoder.encode(startPoint, "UTF-8")); /*장소 text*/
         urlBuilder.append("&" + URLEncoder.encode("inputtype","UTF-8") + "="+ URLEncoder.encode("textquery", "UTF-8")); /*입력 형식 text로 설정*/
@@ -122,9 +123,9 @@ public class PageOfMyDanger extends Fragment {
         return searchLoc;
     }
 
-    private void calRoute(Place startPoint,Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
+    private ArrayList<SearchPath> calRoute(Place startPoint,Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
         String parsingUrl="";
-
+        ArrayList<SearchPath> resultSearchPath=null;
         StringBuilder urlBuilder = new StringBuilder("https://api.odsay.com/v1/api/searchPubTransPath"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("output","UTF-8") + "=" + URLEncoder.encode("XML", "UTF-8")); /*출력형태*/
         urlBuilder.append("&" + URLEncoder.encode("SX","UTF-8") + "=" + URLEncoder.encode(Double.toString(startPoint.get_placeX()), "UTF-8")); /*출발지 경도좌표*/
@@ -204,6 +205,7 @@ public class PageOfMyDanger extends Fragment {
                             if(laneNode.getNodeType()==Node.ELEMENT_NODE){
                                 Element laneElement=(Element) laneNode;
                                 if(getTagValue("trafficType",subPathElement)!="1"){ //지하철일때
+                                    swlTemp.setIndex(l);
                                     swlTemp.setName(getTagValue("name",laneElement));/*1-9-3-5-1 지하철 노선명 (지하철인 경우에만 필수)*/
                                     swlTemp.setSubwayCode(Integer.parseInt(getTagValue("subwayCode",laneElement)));/*1-9-3-5-5 지하철 노선 번호 (지하철인 경우에만 필수)*/
                                     swlTemp.setSubwayCityCode(Integer.parseInt(getTagValue("subwayCityCode",laneElement)));/*1-9-3-5-6 지하철 도시코드 (지하철인 경우에만 필수)*/
@@ -211,6 +213,7 @@ public class PageOfMyDanger extends Fragment {
                                 }
                                 else if(getTagValue("trafficType",subPathElement)!="2")// 버스 일때
                                 {
+                                    blTemp.setIndex(l);
                                     blTemp.setBusID(Integer.parseInt(getTagValue("busID",laneElement)));/*1-9-3-5-4 버스 코드 (버스인 경우에만 필수)*/
                                     blTemp.setType(Integer.parseInt(getTagValue("type",laneElement)));/*1-9-3-5-3 버스 타입 (버스인 경우에만 필수,최하단 참조)*/
                                     blTemp.setBusNo(getTagValue("busNo",laneElement));/*1-9-3-5-2 버스 번호 (버스인 경우에만 필수)*/
@@ -280,20 +283,150 @@ public class PageOfMyDanger extends Fragment {
                     }
                 }
                 temp.setSubPaths(subPathsList);
-                this.resultSearchPath.add(temp);
+                resultSearchPath.add(temp);
             }
         }
+        return resultSearchPath;
     }
 
-    public void printRoute() {
-        // TODO implement here
-    }
+    public void printPath(int i,Place startPlace,Place desPlace) throws ParserConfigurationException, SAXException, IOException {
+        String startPoint = null;
+        String desPoint  =null;
+        SearchPath path = this.searchResultPath.get(i);
+        ExtendNode exNode = path.getInfo();
+        SubPath subPath=null;
+        if (path.getPathType()==1){
+            System.out.println("지하철만 이용");
+        }
+        else if(path.getPathType()==2)
+        {
+            System.out.println("버스만 이용");
+        }
+        else if(path.getPathType()==3){
+            System.out.println("지하철+버스 이용");
+        }
+
+        System.out.println("총 요금: "+exNode.getPayment());
+        System.out.println("총 이동 거리: "+exNode.getTotalDistance());
+        System.out.println("출발 지점: "+startPlace.get_placeAddress());
+        System.out.println("도착 지점: "+desPlace.get_placeAddress());
+        System.out.println("최초 출발 역/정류장: "+exNode.getFirstStartStation());
+        System.out.println("최종 도착 역/정류장: "+exNode.getLastEndStation());
+
+        for(int a =0; a<path.getSubPaths().size();a++){
+            subPath=path.getSubPaths().get(a);
+            System.out.println("이동 거리: "+subPath.getDistance()+"km");
+            System.out.println("이동 시간: "+subPath.getSectionTime());
+            if(subPath.getTrafficType()==1){
+                System.out.println("이동 수단: 지하철");
+                System.out.println("이동 정거장 수: "+subPath.getStationCount());
+                System.out.println("승차 정류장: "+subPath.getStartStation().get_placeAddress());
+                System.out.println("하차 정류장: "+subPath.getEndStation().get_placeAddress());
+                System.out.println("이동 방면: "+subPath.getWay());
+                if(subPath.getWayCode() ==1 ){
+                    System.out.println("상행");
+                }
+                else{
+                    System.out.println("하행");
+                }
+                System.out.println("지하철 환승 위치: "+subPath.getDoor());
+                if(subPath.getStartExitNo()!=null){
+                    System.out.println("지하철 입구: "+subPath.getStartExitNo().get_placeAddress());
+                }
+                if(subPath.getEndExitNo()!=null){
+                    System.out.println("지하철 출구: "+subPath.getEndExitNo().get_placeAddress());
+                }
+                for(int sub = 0; sub < subPath.getSubwayLanes().size();sub++){
+                    SubwayLane temp = subPath.getSubwayLanes().get(sub);
+                    System.out.println("지하철 노선: "+temp.getName());
+                }
+            }
+            else if(subPath.getTrafficType()==2){
+                System.out.println("이동 수단: 버스");
+                System.out.println("이동 정거장 수: "+subPath.getStationCount());
+                System.out.println("승차 정류장: "+subPath.getStartStation().get_placeAddress());
+                System.out.println("하차 정류장: "+subPath.getEndStation().get_placeAddress());
+                for(int sub = 0; sub < subPath.getBusLanes().size();sub++){
+                    BusLane temp = subPath.getBusLanes().get(sub);
+                    System.out.println("버스 번호: "+temp.getBusNo());
+                    if(temp.getType() == 1){
+                        System.out.println("일반");
+                    }
+                    else if(temp.getType() == 2){
+                        System.out.println("좌석");
+                    }
+                    else if(temp.getType() == 3){
+                        System.out.println("마을 버스");
+                    }
+                    else if(temp.getType() == 4){
+                        System.out.println("직행 좌석");
+                    }
+                    else if(temp.getType() == 5){
+                        System.out.println("공항 버스");
+                    }
+                    else if(temp.getType() == 6){
+                        System.out.println("간선 급행");
+                    }
+                    else if(temp.getType() == 10){
+                        System.out.println("외곽 ");
+                    }
+                    else if(temp.getType() == 11){
+                        System.out.println("간선");
+                    }
+                    else if(temp.getType() == 12){
+                        System.out.println("지선");
+                    }
+                    else if(temp.getType() == 13){
+                        System.out.println("순환");
+                    }
+                    else if(temp.getType() == 14){
+                        System.out.println("광역");
+                    }
+                    else if(temp.getType() == 15){
+                        System.out.println("급행");
+                    }
+                    else if(temp.getType() == 20){
+                        System.out.println("농어촌 버스");
+                    }
+                    else if(temp.getType() == 21){
+                        System.out.println("제주도 시외형 버스");
+                    }
+                    else if(temp.getType() == 22){
+                        System.out.println("경기도 시외형 버스");
+                    }
+                    else if(temp.getType() == 26){
+                        System.out.println("급행 간선");
+                    }
+                }
+            }
+            else if(subPath.getTrafficType()==3){
+                System.out.println("이동 수단: 도보");
+            }
+
+        }
+    }// 여러개의 path중 하나의 path를 출력할 함수
+
+    public void printRoute() throws ParserConfigurationException, SAXException, IOException {
+        String startPoint = null;
+        String desPoint  =null;
+        Place startPlace =searchPlace(startPoint);
+        Place desPlace =searchPlace(desPoint);
+
+        this.searchResultPath=calRoute(startPlace,desPlace);//경로 검색
+
+    }//여러개의 path 모두다 출력
 
     /**
      * @return
      */
-    public int printDanger() {
-        // TODO implement here
+    public int printDanger(ArrayList<SearchPath> searchPath) {
+
+        for(int i=0; i < searchPath.size();i++){
+            for (int j=0;j<searchPath.get(i).getSubPaths().size();j++){
+                this.visitPlaceList.add(searchPath.get(i).getSubPaths().get(j).getStartStation());
+                this.visitPlaceList.add(searchPath.get(i).getSubPaths().get(j).getEndStation());
+            }
+        } // 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
         return 0;
     }
 
