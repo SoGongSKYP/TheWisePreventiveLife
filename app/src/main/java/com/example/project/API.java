@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 /**
  * version1
  */
@@ -47,6 +46,18 @@ public class API {
     }
 
    public void nation_API() throws IOException, ParserConfigurationException, SAXException{
+        Date StaticsDate;
+        Integer patientNum;
+        Integer deadNum;
+        Integer healerNum;
+        Integer testNum;
+        ArrayList<LocalStatistics> localStatistics;
+        Integer careNum;
+        Integer testNeg;
+        Integer testCnt;
+        Integer testCntComplete;
+        double accDefRate;
+
     	String parsingUrl="";
     	
         StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson"); /*URL*/
@@ -54,7 +65,7 @@ public class API {
         urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode("-", "UTF-8")); /*공공데이터포털에서 받은 인증키*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
-        urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode("20200310", "UTF-8")); /*검색할 생성일 범위의 시작*/
+        urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode(this.currDate, "UTF-8")); /*검색할 생성일 범위의 시작*/
         urlBuilder.append("&" + URLEncoder.encode("endCreateDt","UTF-8") + "=" + URLEncoder.encode(this.currDate, "UTF-8")); /*검색할 생성일 범위의 종료*/
 
         URL url = new URL(urlBuilder.toString());
@@ -89,32 +100,44 @@ public class API {
 		
 		NodeList nList=doc.getElementsByTagName("item");
 		//System.out.println("파싱할 리스트 수 : "+nList.getLength());
-		
+
 		for(int i=0; i<nList.getLength(); i++) {
 			Node nNode=nList.item(i);
 			if(nNode.getNodeType()==Node.ELEMENT_NODE) {
 				Element eElement=(Element) nNode;
-				System.out.println("누적 확진률 : "+getTagValue("accDefRate",eElement));
-				System.out.println("누적 검사 수"+getTagValue("accExamCnt",eElement));
-				System.out.println("누적 검사 완료 수"+getTagValue("accExamCompCnt",eElement));
-				System.out.println("치료중 환자 수"+getTagValue("careCnt",eElement));
-				System.out.println("격리해제 수"+getTagValue("clearCnt",eElement));
-				System.out.println("등록일시분초"+getTagValue("createDt",eElement));
-				System.out.println("사망자 수"+getTagValue("deathCnt",eElement));
-				System.out.println("확진자 수"+getTagValue("decideCnt",eElement));
-				System.out.println("검사진행 수"+getTagValue("examCnt",eElement));
-				System.out.println("결과 음성 수"+getTagValue("resutlNegCnt",eElement));
-				System.out.println("게시글 번호"+getTagValue("seq",eElement));
-				System.out.println("기준일"+getTagValue("stateDt",eElement));
-				System.out.println("기준시간"+getTagValue("stateTime",eElement));
-				System.out.println("수정일시분초"+getTagValue("updateDt",eElement));
-				System.out.println();
-			}
+                //string을 date로 변환
+                String stateDt=getTagValue("stateDt",eElement);
+                SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
+                staticsDate=transFormat.parse(stateDt);
+
+                patientNum=Integer.parseInt(getTagValue("decideCnt",eElement));
+                deadNum=Integer.parseInt(getTagValue("deathCnt",eElement));
+                healerNum=Integer.parseInt(getTagValue("clearCnt",eElement));
+                testNum=Integer.parseInt(getTagValue("examCnt",eElement));
+                //localstatics,,>
+                careNum=Integer.parseInt(getTagValue("careCnt",eElement));
+                testNeg=Integer.parseInt(getTagValue("resutlNegCnt",eElement));
+                testCnt=Integer.parseInt(getTagValue("accExamCnt",eElement));
+                testCntComplete=Integer.parseInt(getTagValue("accExamCompCnt",eElement));
+                accDefRate=Double.parseDouble(getTagValue("accDefRate",eElement));
+
+            }
 		}
-        
-        
-    }
+
+		//전국통계 객체 생성
+       NationStatics nation=new NationStatics(NationStatistics(staticsDate,patientNum, deadNum, healerNum,testNum,
+                                            localStatistics,careNum,testNeg, testCnt,testCntComplete,accDefRate));
+
+   }
     public void local_API() throws IOException, ParserConfigurationException, SAXException {
+        Date staticsDate;
+        Integer patientNum;
+        Integer deadNum;
+        Integer healerNum;
+        String localName;
+        Place localPosition;
+        Integer increaseDecrease;
+
     	String parsingUrl="";
 
         StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"); /*URL*/
@@ -156,26 +179,27 @@ public class API {
 		
 		NodeList nList=doc.getElementsByTagName("item");
 		//System.out.println("파싱할 리스트 수 : "+nList.getLength());
-		
+
+        ArrayList<LocalStatistics> localStatistics;
+
 		for(int i=0; i<nList.getLength(); i++) {
 			Node nNode=nList.item(i);
 			if(nNode.getNodeType()==Node.ELEMENT_NODE) {
 				Element eElement=(Element) nNode;
-				System.out.println("등록일시분초"+getTagValue("createDt",eElement));
-				System.out.println("사망자 수"+getTagValue("deathCnt",eElement));
-				System.out.println("확진자 수"+getTagValue("defCnt",eElement));
-				System.out.println("시도명(한글)"+getTagValue("gubun",eElement));
-				System.out.println("시도명(영어)"+getTagValue("gubunEn",eElement));
-				System.out.println("전일대비 증감수"+getTagValue("incDec",eElement));
-				System.out.println("격리 해제 수"+getTagValue("isolClearCnt",eElement));
-				System.out.println("격리중 환자 수"+getTagValue("isolIngCnt",eElement));
-				System.out.println("지역발생 수"+getTagValue("localOccCnt",eElement));
-				System.out.println("해외유입 수"+getTagValue("overFlowCnt",eElement));
-				System.out.println("10만명당 발생률"+getTagValue("qurRate",eElement));
-				System.out.println("게시글번호"+getTagValue("seq",eElement));
-				System.out.println("기준일시"+getTagValue("stdDay",eElement));
-				System.out.println("수정일시분초"+getTagValue("updateDt",eElement));
-				System.out.println();
+                String stateDt=getTagValue("stdDay",eElement);
+                SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
+                staticsDate=transFormat.parse(stateDt);
+
+                patientNum=Integer.parseInt(getTagValue("defCnt",eElement));
+                deadNum=Integer.parseInt(getTagValue("deathCnt",eElement));
+                healerNum=Integer.parseInt(getTagValue("isolClearCnt",eElement));
+                localName=getTagValue("gubun",eElement);
+                //localPosition;
+                increaseDecrease=Integer.parseInt(getTagValue("incDec",eElement));
+                //지역통계
+                localStatistics[i]=new LocalStatistics(Date staticsDate,Integer patientNum,Integer deadNum,Integer healerNum,
+                        String localName,Place localPosition, Integer increaseDecrease)
+
 			}
 		}
     }
@@ -210,8 +234,6 @@ public class API {
 
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
 		API a=new API();
-		a.nation_API();
-		a.local_API();
-	}
 
+	}
 }
