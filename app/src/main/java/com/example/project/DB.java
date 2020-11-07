@@ -17,7 +17,7 @@ import java.net.URL;
 public class DB  extends AsyncTask<String, Void, String> {
     /*원래 설했던 필드들*/
      private ArrayList<Patient> patients;
-     public void connect_DB() { }
+    // public void connect_DB() { }
      public ArrayList<Patient> bring_patient_infoNroute() { return null; }
      public boolean update_DB(ArrayList<Patient> patientslist) { return true; }
      public boolean check_user_idpw(String id, String pw) throws IOException { return true;}
@@ -25,7 +25,7 @@ public class DB  extends AsyncTask<String, Void, String> {
     //서버로 보낼 메세지, 받을 메세
     String sendMsg, receiveMsg;
     // 접속할 서버 주소 (이클립스에서 android.jsp 실행시 웹브라우저 주소)
-    String serverip="http://192.168.1.196:8080/WLP/androidDB.jsp";
+    String serverip="http://172.20.10.7:8080/WLP/androidDB.jsp";
 
     //클래스 생성자
     DB(String sendMsg){
@@ -52,8 +52,8 @@ public class DB  extends AsyncTask<String, Void, String> {
              *             }
              **/
 
-            if(sendMsg.equals("test")){
-            sendMsg = "id=" + strings[0] + "&pw=" + strings[1]+"&type="+strings[2];}
+            if(sendMsg.equals("test_write")){
+            sendMsg = "id=" + strings[0] + "&pw=" + strings[1]+"&type="+"test_write";}
 
             //안드로이드에서 jsp 서버로 통신값 보내
             osw.write(sendMsg);

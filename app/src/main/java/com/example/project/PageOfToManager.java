@@ -78,12 +78,13 @@ public class PageOfToManager extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    String sendmsg="test";//어떠한 동작을 수행시키고 싶은지 지. db의 생성자에 넣을 스트링 값, 서버로 보내는 메세
+                    String sendmsg="test_write";//어떠한 동작을 수행시키고 싶은지 지. db의 생성자에 넣을 스트링 값, 서버로 보내는 메세
                     String result;//서버로부터 받고 싶은 값-> 지금은 일단 스트링 값으로 "회원가입 완료!" 리턴 받
                     managerID = managerIDEditText.getText().toString();
                     managerPW = managerPWEditText.getText().toString();
                     DB task = new DB(sendmsg);
-                    result = task.execute(managerID,managerPW,"test").get();
+                    result = task.execute(managerID,managerPW,sendmsg).get();
+
                     Log.i("Servertest", "서버에서 받은 값"+result);
                 } catch (Exception e) {
                     Log.i("DBtest", ".....ERROR.....!");
