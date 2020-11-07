@@ -17,7 +17,9 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 /**
@@ -45,7 +47,7 @@ public class API {
         this.currDate = this.mFormat.format(this.currentDate); // 현재 날짜 저장
     }
 
-   public void nation_API() throws IOException, ParserConfigurationException, SAXException{
+   public void nation_API() throws IOException, ParserConfigurationException, SAXException, ParseException {
         Date StaticsDate;
         Integer patientNum;
         Integer deadNum;
@@ -108,7 +110,7 @@ public class API {
                 //string을 date로 변환
                 String stateDt=getTagValue("stateDt",eElement);
                 SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
-                staticsDate=transFormat.parse(stateDt);
+                StaticsDate=transFormat.parse(stateDt);
 
                 patientNum=Integer.parseInt(getTagValue("decideCnt",eElement));
                 deadNum=Integer.parseInt(getTagValue("deathCnt",eElement));
@@ -125,11 +127,9 @@ public class API {
 		}
 
 		//전국통계 객체 생성
-       NationStatics nation=new NationStatics(NationStatistics(staticsDate,patientNum, deadNum, healerNum,testNum,
-                                            localStatistics,careNum,testNeg, testCnt,testCntComplete,accDefRate));
 
    }
-    public void local_API() throws IOException, ParserConfigurationException, SAXException {
+    public void local_API() throws IOException, ParserConfigurationException, SAXException, ParseException {
         Date staticsDate;
         Integer patientNum;
         Integer deadNum;
@@ -180,7 +180,7 @@ public class API {
 		NodeList nList=doc.getElementsByTagName("item");
 		//System.out.println("파싱할 리스트 수 : "+nList.getLength());
 
-        ArrayList<LocalStatistics> localStatistics;
+        ArrayList<LocalStatistics> localList = new ArrayList<LocalStatistics>();
 
 		for(int i=0; i<nList.getLength(); i++) {
 			Node nNode=nList.item(i);
@@ -197,8 +197,8 @@ public class API {
                 //localPosition;
                 increaseDecrease=Integer.parseInt(getTagValue("incDec",eElement));
                 //지역통계
-                localStatistics[i]=new LocalStatistics(Date staticsDate,Integer patientNum,Integer deadNum,Integer healerNum,
-                        String localName,Place localPosition, Integer increaseDecrease)
+                //localList.add(new LocalStatistics(staticsDate,patientNum,deadNum,healerNum,
+                //        localName,localPosition,increaseDecrease));
 
 			}
 		}
