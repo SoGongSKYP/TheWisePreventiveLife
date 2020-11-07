@@ -24,6 +24,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     private MapView googleMap;
     private Void my_place;
     private ArrayList<Place> near_places;
+    //private UserLoc userLoc = new UserLoc();
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
@@ -57,8 +58,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.title("서울");
         markerOptions.snippet("수도");
         googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL,13));
     } // 유저 현위치에 마커 추가
 
     @Override
