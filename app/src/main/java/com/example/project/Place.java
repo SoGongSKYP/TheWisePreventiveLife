@@ -25,7 +25,7 @@ public class Place {
     public double get_placeY(){
         return this.placeY;
     }
-    public String get_placeAddress(String provider){
+    public String get_placeAddress(){
         return this.placeAddress;
     }
     //----------------------------
