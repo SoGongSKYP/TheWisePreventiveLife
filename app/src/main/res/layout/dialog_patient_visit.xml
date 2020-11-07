@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/search"
-            android:background="Null"
+            android:background="@null"
             android:layout_centerInParent="true"
             android:layout_alignRight="@id/dialog_search_bar_TextView"
             android:layout_marginRight="5dp"
