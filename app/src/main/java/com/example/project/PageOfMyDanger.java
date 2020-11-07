@@ -24,7 +24,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * 
+ *
  */
 public class PageOfMyDanger extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -35,21 +35,20 @@ public class PageOfMyDanger extends Fragment {
      * Default constructor
      */
     public PageOfMyDanger() {
-        this.userLoc.LocPermission();
-        this.userLoc.LocBy_gps();//사용자 위치 받아옴
-        this.searchResultPath =null;
+        //this.userLoc=new UserLoc();
+        this.searchResultPath = new ArrayList<SearchPath>();
+        this.visitPlaceList = new ArrayList<Place>();
+        this.routeList =new ArrayList<Place>();
+        this.danger=0;
     }
 
-    /**
-     * 
-     */
     private UserLoc userLoc;
     private ArrayList<Place> visitPlaceList;
     private ArrayList<Place> routeList;
     private int danger;
     private ArrayList<SearchPath> searchResultPath;
     /**
-     * 
+     *
      */
 
     public void printUI() {
@@ -57,7 +56,7 @@ public class PageOfMyDanger extends Fragment {
     }
 
     /**
-     * 
+     *
      */
     /*시내 교통 서치 루트*/
     private static String getTagValue(String tag, Element eElement) {
@@ -413,6 +412,9 @@ public class PageOfMyDanger extends Fragment {
         Place desPlace =searchPlace(desPoint);
 
         this.searchResultPath=calRoute(startPlace,desPlace);//경로 검색
+        for(int i =0 ;i <searchResultPath.size();i++){
+            printPath(i,startPlace,desPlace);
+        }
 
     }//여러개의 path 모두다 출력
 
@@ -429,10 +431,5 @@ public class PageOfMyDanger extends Fragment {
         } // 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
         return 0;
     }
-
-    /**
-     * @return
-     */
-
 
 }
