@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="370dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dialog_box"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/dialog_add_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/dialog_dismiss_Button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_search_bar"
+        android:textColor="@color/colorDarkGrey"
+        android:textStyle="bold"
+        android:textSize="17dp"
+        android:text="  확진자 방문지"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageButton
+        android:id="@+id/dialog_dismiss_Button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/dialog_add_title"
+        android:src="@drawable/cancel"
+        android:background="@color/colorWhite"/>
+
+    <RelativeLayout
+        android:id="@+id/dialog_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_visit_select_title">
+        <TextView
+            android:id="@+id/dialog_search_bar_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="임시 SearchBar"
+            android:textColor="@color/colorLightGrey"
+            android:background="@drawable/button_outline_grey"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search"
+            android:background="Null"
+            android:layout_centerInParent="true"
+            android:layout_alignRight="@id/dialog_search_bar_TextView"
+            android:layout_marginRight="5dp"
+            android:padding="10dp"
+            android:alpha="0.5"/>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/dialog_visit_select_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_search_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_visit_select_detail"
+        android:text="동국대학교 신공학관"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+    <TextView
+        android:id="@+id/dialog_visit_select_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_visit_select_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_visit_date_EditText"
+        android:text="서울특별시 중구 필동로1길 30"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="14dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/dialog_visit_date_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_visit_select_detail"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_visit_time_EditText"
+        android:hint="방문 날짜 (MM.DD)"
+        android:padding="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edittext_outline_design"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/dialog_visit_time_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_visit_date_EditText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_add_Button"
+        android:hint="방문 시간 (HH.MM)"
+        android:padding="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edittext_outline_design"/>
+
+    <Button
+        android:id="@+id/dialog_add_Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_visit_time_EditText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="방문지 정보 추가"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorMainRed"
+        android:background="@drawable/button_outline_design"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
