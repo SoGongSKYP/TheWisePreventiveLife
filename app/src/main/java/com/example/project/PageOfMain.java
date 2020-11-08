@@ -1,4 +1,10 @@
 package com.example.project;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +12,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,86 +30,91 @@ import java.util.*;
  * 
  */
 public class PageOfMain extends Fragment implements OnMapReadyCallback {
-    private MapView googleMap;
-    private Void my_place;
+    private MapView mapView;
     private ArrayList<Place> near_places;
-    //private UserLoc userLoc = new UserLoc();
+    private UserLoc userLoc;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
-        googleMap = v.findViewById(R.id.user_main_Map);
-        googleMap.getMapAsync(this);
-        return v;
-    }
+        // 구글 맵 연결
 
-    /**
-     * Default constructor
-     */
-    public PageOfMain() {
+        /*UserLoc 클래스와 연결*/
+        userLoc = new UserLoc();            // 디폴트 좌표
+        userLoc.LocBy_gps(getContext());    // gps 좌표; 새로고침을 해야 gps 좌표가 뜸
+
+        /*맵 컴포넌트 연결*/
+        mapView = v.findViewById(R.id.user_main_Map);
+        mapView.getMapAsync(this);
+
+        return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        if(googleMap != null){
-            googleMap.onCreate(savedInstanceState);
+        if(mapView != null){
+            mapView.onCreate(savedInstanceState);
         }
+
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //LatLng userPoint = new LatLng(this.userLocation.getUserPlace().get_placeX(), this.userLocation.getUserPlace().get_placeY());
-        //googleMap.addMarker(new MarkerOptions().position(userPoint).title("현 위치"));
-        LatLng SEOUL = new LatLng(37.56, 126.97);
+        LatLng userPoint = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        googleMap.addMarker(new MarkerOptions().position(userPoint).title("현 위치"));
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(SEOUL);
-        markerOptions.title("서울");
-        markerOptions.snippet("수도");
+        markerOptions.position(userPoint);
+        markerOptions.title("사용자");
+        markerOptions.snippet("현재 위치 GPS");
         googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL,13));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPoint,15));
     } // 유저 현위치에 마커 추가
 
     @Override
     public void onStart(){
         super.onStart();
-        googleMap.onStart();
+        mapView.onStart();
     }
+
 
     @Override
     public void onStop(){
         super.onStop();
-        googleMap.onStop();
+        mapView.onStop();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        googleMap.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        googleMap.onResume();
+        mapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        googleMap.onPause();
+        mapView.onPause();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        googleMap.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        googleMap.onLowMemory();
+        mapView.onLowMemory();
     }
 
 
