@@ -77,7 +77,7 @@ public class SelectedClinic {
     }
 
     /*직선거리 구하기 위한 함수*/
-    public double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+    public double Distance(double lat1, double lon1, double lat2, double lon2, String unit) {
 
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
