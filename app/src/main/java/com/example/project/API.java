@@ -224,12 +224,13 @@ public class API {
         }
     }
 
-    public void clinic_API() throws IOException, ParserConfigurationException, SAXException {
+    public ArrayList<SelectedClinic> clinic_API() throws IOException, ParserConfigurationException, SAXException {
         String sidoNm;//시도명
         String sgguNm;//시군구명
         String yadmNm;//기관명
         String code;//구분코드
         String phonenum;//전화번호
+        ArrayList<SelectedClinic> clinicsList= new ArrayList<SelectedClinic>();
 
         String parsingUrl="";
 
@@ -276,14 +277,13 @@ public class API {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                sidoNm=getTagValue("sidoNm",eElement);
-                sgguNm=getTagValue("sgguNm",eElement);
-                yadmNm=getTagValue("yadmNm",eElement);
-                phonenum=getTagValue("telno",eElement);
-                code=getTagValue("code",eElement);
+                SelectedClinic temp = new SelectedClinic(getTagValue("yadmNm",eElement),
+                        null,code=getTagValue("code",eElement),phonenum=getTagValue("telno",eElement));
+                temp.setPlace(temp.calXY(temp.getName()));
+                clinicsList.add(temp);
             }
         }
-
+        return clinicsList;
     }
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, ParseException {
