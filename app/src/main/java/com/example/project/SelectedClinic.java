@@ -9,22 +9,15 @@ public class SelectedClinic {
     /**
      * Default constructor
      */
-    public SelectedClinic( String name,Place place , Date date, char type ,String code, String phoneNum) {
+    public SelectedClinic( String name,Place place , String code, String phoneNum) {
         this.name =name;
         this.place=place;
         this.phoneNum=phoneNum;
-        this.date=date;
         this.code=code;
-        this.type=type;
     }
 
     private String name; //기관이름 넣기
     private Place place;//주소명에 api에서 받은 시도명 시군구명
-    private Date date; // 운영가능일자
-
-    private char type;
-    /*선정유형A: 일반 호흡기 환자 진료를 위한 호흡기 전용 외래 설치 운영 병원)
-    B: 호흡기 환자 전용 외래입원 진료가 가능한 선별진료소 운영 병원*/
 
     private String code;
     /*
@@ -41,17 +34,11 @@ public class SelectedClinic {
         this.name = name;
     }
 
-    public void setType(char type) {
-        this.type = type;
-    }
     public void setPlace(Place place) {
         this.place = place;
     }
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
-    }
-    public void setDate(Date date) {
-        this.date = date;
     }
     public void setCode(String code) {
         this.code = code;
@@ -68,12 +55,6 @@ public class SelectedClinic {
     }
     public Place getPlace() {
         return place;
-    }
-    public Date getDate() {
-        return date;
-    }
-    public char getType() {
-        return type;
     }
 
     /*직선거리 구하기 위한 함수*/
@@ -104,6 +85,11 @@ public class SelectedClinic {
     // This function converts radians to decimal degrees
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+    private Place calXY(){
+
+        return null;
     }
 
 }
