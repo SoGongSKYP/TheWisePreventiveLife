@@ -111,6 +111,15 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         markerOptions.position(SEOUL);
         markerOptions.title("서울");
         markerOptions.snippet("수도");
+        try {
+            this.addMarker(googleMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
         googleMap.addMarker(markerOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 13));
     } // 유저 현위치에 마커 추가
