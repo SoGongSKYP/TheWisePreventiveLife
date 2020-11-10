@@ -17,7 +17,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.*;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 class Pair implements Comparable<Pair> {
     double first;
@@ -45,6 +50,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     private MapView googleMap;
     private ArrayList<SelectedClinic> clinics;
     private UserLoc userPlace;
+    private API api;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
@@ -62,7 +68,10 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         }
     }
 
-    public PriorityQueue<Pair> find_clinic() {
+    public PriorityQueue<Pair> find_clinic() throws ParserConfigurationException, SAXException, IOException {
+        this.api = new API();
+        this.clinics = api.clinic_API();
+
         ArrayList<SelectedClinic> near_clinics = null;
         PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
         for (int i = 0; i < this.clinics.size(); i++) {
@@ -73,7 +82,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         return pq;
     }// 가까운 거리의 클리닉 찾기
 
-    public void addMarker(GoogleMap googleMap) {
+    public void addMarker(GoogleMap googleMap) throws IOException, SAXException, ParserConfigurationException {
         ArrayList<SelectedClinic> nearClinics =null;
         ArrayList<Double> nearDistance =null;
         PriorityQueue<Pair> pq = find_clinic();
