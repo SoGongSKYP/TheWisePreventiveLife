@@ -110,6 +110,12 @@
             android:textSize="17dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_outline_design"/>
+
+        <Button
+            android:id="@+id/temp_Button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="관리자 페이지 전환 임시 버튼"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
