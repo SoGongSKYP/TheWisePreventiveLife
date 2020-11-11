@@ -134,53 +134,38 @@ public class UserLoc extends AppCompatActivity {
 
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1/2;
 
 
     public void LocBy_gps(Context context) {
         GPSListener gpsListener = new GPSListener();
         try {
-            System.out.println("1");
             LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             Location location = null;
             if (!isGPSEnabled && !isNetworkEnabled) {
-                System.out.println("12345678");
             } else {
-                System.out.println("2");
                 int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
                 if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("3");
                     if (isNetworkEnabled) {
-                        System.out.println("5");
                         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
                         if (locationManager != null) {
-                            System.out.println("6");
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
-                                System.out.println("7");
                                 this.userPlace.set_placeX(location.getLatitude());
                                 this.userPlace.set_placeY(location.getLongitude());//위도
-                                this.userPlace.set_placeAddress(location.getProvider());//해당 위치정보
                             }
                         }
                     }
                     if (isGPSEnabled) {
-                        System.out.println("adsffds");
                         if (location == null) {
-                            System.out.println("8");
                             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
                             if (locationManager != null) {
-                                System.out.println("9");
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
-                                    System.out.println("10");
-                                    System.out.println("gps x: " + Double.toString(location.getLatitude()));
-                                    System.out.println("gps y: " + Double.toString(location.getLongitude()));
                                     this.userPlace.set_placeX(location.getLatitude());
                                     this.userPlace.set_placeY(location.getLongitude());//위도
-                                    this.userPlace.set_placeAddress(location.getProvider());//해당 위치정보
                                 }
                             }
                         }
