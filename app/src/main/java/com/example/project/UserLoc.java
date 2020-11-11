@@ -1,192 +1,214 @@
 package com.example.project;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-
-
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.util.*;
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-class Pair implements Comparable<Pair> {
-    double first;
-    SelectedClinic second;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
-    Pair(double f, SelectedClinic s) {
-        this.first = f;
-        this.second = s;
-    }
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
-    public int compareTo(Pair p) {
-        if (this.first < p.first) {
-            return -1; // 오름차순
-        }
-        return 1; // 이미 this.first가 더 큰 것이 됐으므로, 1로 해준다. -1로
-        // -1로 하면 결과가 이상하게 출력됨.
-    }
-}
-/**
- *
- */
-public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback {
+import androidx.appcompat.app.AppCompatActivity;
 
-    private MapView googleMap;
-    private ArrayList<SelectedClinic> clinics;
-    private UserLoc userPlace;
-    private API api;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-    public PageOfSelectedClinic() {
-        this.api = new API();
-        this.userPlace =new UserLoc();
-        this.clinics =null;
-    }
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
-        googleMap = v.findViewById(R.id.user_main_Map);
-        googleMap.getMapAsync(this);
-        return v;
-    }
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (googleMap != null) {
-            googleMap.onCreate(savedInstanceState);
-        }
-    }
-
-    public PriorityQueue<Pair> find_clinic() throws ParserConfigurationException, SAXException, IOException {
-        this.clinics = api.clinicAPI();
-
-        ArrayList<SelectedClinic> near_clinics = null;
-        PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
-        for (int i = 0; i < this.clinics.size(); i++) {
-            double dis = clinics.get(i).Distance(this.userPlace.getUserPlace().get_placeX(),
-                    this.userPlace.getUserPlace().get_placeY(), "kilometer"); // 현재 위치와 병원과의 직선 거리
-            pq.add(new Pair(dis,clinics.get(i)));
-        }
-        return pq;
-    }// 가까운 거리의 클리닉 찾기
-
-    public void addMarker(GoogleMap googleMap) throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<SelectedClinic> nearClinics =null;
-        ArrayList<Double> nearDistance =null;
-        PriorityQueue<Pair> pq = find_clinic();
-        for(int t =0; t<5;t++){
-            nearClinics.add(pq.poll().second);
-            nearDistance.add(pq.poll().first);
-        }
-        for (int i = 0; i < nearClinics.size(); i++) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLng(nearClinics.get(i).getPlace().get_placeX(),
-                    nearClinics.get(i).getPlace().get_placeY()));
-            markerOptions.title(nearClinics.get(i).getName());
-            markerOptions.snippet("주소: " + nearClinics.get(i).getPlace().get_placeAddress() +
-                    "전화번호: " + nearClinics.get(i).getPhoneNum()+
-                    "거리: " + nearDistance.get(i).toString());
-            googleMap.addMarker(markerOptions);
-        }
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        //LatLng userPoint = new LatLng(this.userLocation.getUserPlace().get_placeX(), this.userLocation.getUserPlace().get_placeY());
-        //googleMap.addMarker(new MarkerOptions().position(userPoint).title("현 위치"));
-        LatLng SEOUL = new LatLng(37.56, 126.97);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(SEOUL);
-        markerOptions.title("서울");
-        markerOptions.snippet("수도");
-        try {
-            this.addMarker(googleMap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 13));
-    } // 유저 현위치에 마커 추가
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        googleMap.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        googleMap.onStop();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        googleMap.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        googleMap.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        googleMap.onPause();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        googleMap.onLowMemory();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        googleMap.onLowMemory();
-    }
+public class UserLoc extends AppCompatActivity {
 
     /**
      * Default constructor
      */
+    //private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
+    private Place userPlace;
 
-
-    /**
-     *
-     */
-
-
-    public void print_UI() {
-        // TODO implement here
+    // 1: 사용자 위치정보 허용 상태, 2: 사용자 위치 정보 허용하지 않은 상태
+    public UserLoc() {
+        this.userPlace = new Place("동국대학교 정보문화관", 37.559562, 126.998557);
     }
 
-    /**
-     * @return
-     */
+    public Place getUserPlace() {
+        return this.userPlace;
+    }
 
+    public Integer getMode() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    public void setUser_place(Place place) {
+        this.userPlace = place;
+    }
+
+    /*장소 검색*/
+    public void Loc_by_Search(String searchText) throws IOException, ParserConfigurationException, SAXException {
+        String parsingUrl = "";
+
+        StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/"); /*URL*/
+        urlBuilder.append("xml?" + URLEncoder.encode("input", "UTF-8") + "=" + URLEncoder.encode(searchText, "UTF-8")); /*장소 text*/
+        urlBuilder.append("&" + URLEncoder.encode("inputtype", "UTF-8") + "=" + URLEncoder.encode("textquery", "UTF-8")); /*입력 형식 text로 설정*/
+        urlBuilder.append("&" + URLEncoder.encode("language", "UTF-8") + "=" + URLEncoder.encode("ko", "UTF-8")); /*리턴 정보 한국어로 리턴*/
+        urlBuilder.append("&" + URLEncoder.encode("fields", "UTF-8") + "=" + URLEncoder.encode("formatted_address,name,opening_hours,geometry", "UTF-8")); /*반환 받을 값들*/
+        urlBuilder.append("&" + URLEncoder.encode("key", "UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
+
+        URL url = new URL(urlBuilder.toString());
+        parsingUrl = url.toString();
+        //System.out.println(parsingUrl);
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(parsingUrl);
+
+        doc.getDocumentElement().normalize();
+        //System.out.println("Root element : "+doc.getDocumentElement().getNodeName());
+
+        NodeList nList = doc.getElementsByTagName("candidates"); //장소 전체 노드
+
+        NodeList geoList = null;//doc.getElementsByTagName("geometry"); // 지역 노드
+        NodeList locList = null;//doc.getElementsByTagName("location"); // 지역 노드
+
+        NodeList openTimeList = null;//doc.getElementsByTagName("opening_hours"); // 지역 노드
+        //System.out.println("파싱할 리스트 수 : "+nList.getLength());
+
+        for (int i = 0; i < nList.getLength(); i++) {
+            Node nNode = nList.item(i);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+
+                System.out.println("장소 이름: " + getTagValue("name", eElement));
+                System.out.println("장소 주소" + getTagValue("formatted_address", eElement));
+
+                Node timeNode = openTimeList.item(i);
+                if (timeNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element timeElement = (Element) timeNode;
+                    System.out.println("열려있는지 여부: " + getTagValue("open_now", timeElement));
+                }
+                geoList = eElement.getElementsByTagName("geometry");
+                for (int g = 0; g < geoList.getLength(); g++) {
+                    Node geoNode = geoList.item(g);
+                    if (geoNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element geoElement = (Element) geoNode;
+                        locList = geoElement.getElementsByTagName("location");
+                        Node locNode = locList.item(0);
+                        if (locNode.getNodeType() == Node.ELEMENT_NODE) {
+                            Element locElement = (Element) locNode;
+                            System.out.println("장소 경도: " + getTagValue("lat", locElement));
+                            System.out.println("장소 위도: " + getTagValue("lng", locElement));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static String getTagValue(String tag, Element eElement) {
+        NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
+        Node nValue = (Node) nlList.item(0);
+        if (nValue == null) return null;
+        return nValue.getNodeValue();
+    }
+
+
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1/2;
+
+
+    public void LocBy_gps(Context context) {
+        GPSListener gpsListener = new GPSListener();
+        try {
+            System.out.println("1");
+            LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            Location location = null;
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                System.out.println("12345678");
+            } else {
+                System.out.println("2");
+                int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+                if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("3");
+                    if (isNetworkEnabled) {
+                        System.out.println("5");
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
+                        if (locationManager != null) {
+                            System.out.println("6");
+                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            if (location != null) {
+                                System.out.println("7");
+                                this.userPlace.set_placeX(location.getLatitude());
+                                this.userPlace.set_placeY(location.getLongitude());//위도
+                                this.userPlace.set_placeAddress(location.getProvider());//해당 위치정보
+                            }
+                        }
+                    }
+                    if (isGPSEnabled) {
+                        System.out.println("adsffds");
+                        if (location == null) {
+                            System.out.println("8");
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
+                            if (locationManager != null) {
+                                System.out.println("9");
+                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if (location != null) {
+                                    System.out.println("10");
+                                    System.out.println("gps x: " + Double.toString(location.getLatitude()));
+                                    System.out.println("gps y: " + Double.toString(location.getLongitude()));
+                                    this.userPlace.set_placeX(location.getLatitude());
+                                    this.userPlace.set_placeY(location.getLongitude());//위도
+                                    this.userPlace.set_placeAddress(location.getProvider());//해당 위치정보
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.d("@@@", "" + e.toString());
+        }
+    }
+    private class GPSListener implements LocationListener {
+
+        public void onLocationChanged(Location location) {
+            //capture location data sent by current provider
+            Double latitude = location.getLatitude();
+            Double longitude = location.getLongitude();
+
+            String msg = "Latitude : "+ latitude + "\nLongitude:"+ longitude;
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+    }
 }
