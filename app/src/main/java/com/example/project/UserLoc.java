@@ -134,7 +134,7 @@ public class UserLoc extends AppCompatActivity {
 
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1/2;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
 
 
     public void LocBy_gps(Context context) {
