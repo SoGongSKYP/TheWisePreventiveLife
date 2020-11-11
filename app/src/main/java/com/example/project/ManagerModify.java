@@ -4,7 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ManagerModify extends AppCompatActivity {
@@ -13,6 +15,10 @@ public class ManagerModify extends AppCompatActivity {
     private Toolbar toolbar;
     private ActionBar actionBar;
     private TextView TitleTextView;
+
+    /*Dialog 관련 컴포넌트*/
+    Button addButton;
+    Dialog placeAddDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,7 @@ public class ManagerModify extends AppCompatActivity {
 
         TitleTextView = findViewById(R.id.manager_modify_Title_TextView);
         TitleTextView.setText("확진자 정보 수정");
+
     }
 
 }
