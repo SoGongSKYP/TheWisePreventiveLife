@@ -34,7 +34,7 @@ public class API {
     private Date currentDate;
     private String currDate;
 
-    ArrayList<LocalStatistics> localList = new ArrayList<LocalStatistics>();
+
 
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList=eElement.getElementsByTagName(tag).item(0).getChildNodes();
@@ -49,18 +49,8 @@ public class API {
         this.currDate = this.mFormat.format(this.currentDate); // 현재 날짜 저장
     }
 
-    public void nation_API() throws IOException, ParserConfigurationException, SAXException, ParseException {
-        Date staticsDate;
-        Integer patientNum;
-        Integer deadNum;
-        Integer healerNum;
-        Integer testNum;
-        Integer careNum;
-        Integer testNeg;
-        Integer testCnt;
-        Integer testCntComplete;
-        double accDefRate;
-
+    public NationStatistics nationAPI() throws IOException, ParserConfigurationException, SAXException, ParseException {
+        NationStatistics nation =null;
         String parsingUrl="";
 
         StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson"); /*URL*/
@@ -111,29 +101,20 @@ public class API {
                 //string을 date로 변환
                 String stateDt=getTagValue("stateDt",eElement);
                 SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
-                staticsDate=transFormat.parse(stateDt);
 
-                patientNum=Integer.parseInt(getTagValue("decideCnt",eElement));
-                deadNum=Integer.parseInt(getTagValue("deathCnt",eElement));
-                healerNum=Integer.parseInt(getTagValue("clearCnt",eElement));
-                testNum=Integer.parseInt(getTagValue("examCnt",eElement));
-                careNum=Integer.parseInt(getTagValue("careCnt",eElement));
-                testNeg=Integer.parseInt(getTagValue("resutlNegCnt",eElement));
-                testCnt=Integer.parseInt(getTagValue("accExamCnt",eElement));
-                testCntComplete=Integer.parseInt(getTagValue("accExamCompCnt",eElement));
-                accDefRate=Double.parseDouble(getTagValue("accDefRate",eElement));
-
-                NationStatistics nation=new NationStatistics(staticsDate,patientNum,deadNum,healerNum,
-                        testNum, localList,careNum,testNeg, testCnt, testCntComplete, accDefRate);
+                nation=new NationStatistics(transFormat.parse(stateDt),Integer.parseInt(getTagValue("decideCnt",eElement))
+                        ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("clearCnt",eElement)),
+                        Integer.parseInt(getTagValue("examCnt",eElement)), this.localAPI(),Integer.parseInt(getTagValue("careCnt",eElement)),
+                        Integer.parseInt(getTagValue("resutlNegCnt",eElement)), Integer.parseInt(getTagValue("accExamCnt",eElement))
+                        , Integer.parseInt(getTagValue("accExamCompCnt",eElement)), Double.parseDouble(getTagValue("accDefRate",eElement)));
             }
         }
 
         //전국통계 객체 생성
-
+        return nation;
     }
-    public void local_API() throws IOException, ParserConfigurationException, SAXException, ParseException {
-
-
+    public  ArrayList<LocalStatistics> localAPI() throws IOException, ParserConfigurationException, SAXException, ParseException {
+        ArrayList<LocalStatistics> localList = new ArrayList<LocalStatistics>();
         String parsingUrl="";
 
         StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"); /*URL*/
@@ -180,21 +161,12 @@ public class API {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                Date staticsDate;
-                Integer patientNum;
-                Integer deadNum;
-                Integer healerNum;
                 String localName;
                 Place localPosition=null;
-                Integer increaseDecrease;
 
                 String stateDt=getTagValue("stdDay",eElement);
                 SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
-                staticsDate=transFormat.parse(stateDt);
 
-                patientNum=Integer.parseInt(getTagValue("defCnt",eElement));
-                deadNum=Integer.parseInt(getTagValue("deathCnt",eElement));
-                healerNum=Integer.parseInt(getTagValue("isolClearCnt",eElement));
                 localName=getTagValue("gubun",eElement);
 
                 //localPosition;
@@ -215,21 +187,16 @@ public class API {
                 else if(localName.equals("전북")) localPosition=new Place("전라북도청",35.820345, 127.108735);
                 else if(localName.equals("울산")) localPosition=new Place("울산광역시청",35.539620, 129.311527);
                 else if(localName.equals("세종")) localPosition=new Place("세종특별자치시청",36.480131, 127.289033);
-                increaseDecrease=Integer.parseInt(getTagValue("incDec",eElement));
                 //지역통계
-                localList.add(new LocalStatistics(staticsDate,patientNum,deadNum,healerNum,
-                        localName,localPosition,increaseDecrease));
-
+                localList.add(new LocalStatistics(transFormat.parse(stateDt),Integer.parseInt(getTagValue("defCnt",eElement))
+                        ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("isolClearCnt",eElement))
+                        ,getTagValue("gubun",eElement),localPosition,Integer.parseInt(getTagValue("incDec",eElement))));
             }
         }
+        return localList;
     }
 
-    public ArrayList<SelectedClinic> clinic_API() throws IOException, ParserConfigurationException, SAXException {
-        String sidoNm;//시도명
-        String sgguNm;//시군구명
-        String yadmNm;//기관명
-        String code;//구분코드
-        String phonenum;//전화번호
+    public ArrayList<SelectedClinic> clinicAPI() throws IOException, ParserConfigurationException, SAXException {
         ArrayList<SelectedClinic> clinicsList= new ArrayList<SelectedClinic>();
 
         String parsingUrl="";
@@ -278,16 +245,11 @@ public class API {
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
                 SelectedClinic temp = new SelectedClinic(getTagValue("yadmNm",eElement),
-                        null,code=getTagValue("code",eElement),phonenum=getTagValue("telno",eElement));
+                        null,getTagValue("code",eElement),getTagValue("telno",eElement));
                 temp.setPlace(temp.calXY(temp.getName()));
                 clinicsList.add(temp);
             }
         }
         return clinicsList;
-    }
-
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, ParseException {
-        API a=new API();
-        a.nation_API();
     }
 }
