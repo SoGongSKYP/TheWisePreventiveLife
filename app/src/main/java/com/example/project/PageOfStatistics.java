@@ -40,7 +40,6 @@ public class PageOfStatistics extends Fragment {
 
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
         this.api = new API();
-        this.nationStatistic=this.api.nationAPI();
         this.userPlace=new UserLoc();
     }
 
@@ -55,7 +54,12 @@ public class PageOfStatistics extends Fragment {
         return nValue.getNodeValue();
     }
 
-    private void findLoc() throws IOException, ParserConfigurationException, SAXException {
+    private void connApi() throws ParserConfigurationException, SAXException, ParseException, IOException {
+        this.nationStatistic=this.api.nationAPI();
+    }
+
+    private void findLoc() throws IOException, ParserConfigurationException, SAXException, ParseException {
+        this.connApi();
         String parsingUrl="";
         Place searchLoc=null;
         String state=null;
@@ -111,7 +115,6 @@ public class PageOfStatistics extends Fragment {
             }
         }
         this.userPlace.getUserPlace().set_placeAddress(shortLocName); // 사용자가 있는 지역 이름 받음
-        
     } //역 지오 코딩
 
     public void print_UI() {
