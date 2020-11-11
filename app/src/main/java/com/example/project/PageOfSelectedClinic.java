@@ -58,6 +58,12 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         googleMap.getMapAsync(this);
         return v;
     }
+    public PageOfSelectedClinic() {
+        this.api = new API();
+        this.userPlace =new UserLoc();
+        this.clinics =null;
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -169,8 +175,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     /**
      * Default constructor
      */
-    public PageOfSelectedClinic() {
-    }
 
     /**
      *
