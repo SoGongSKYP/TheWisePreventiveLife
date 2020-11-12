@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="seoul_array"></string-array>
-    <string-array name="busan_array"></string-array>
-    <string-array name="daegu_array"></string-array>
-    <string-array name="incheon_array"></string-array>
-    <string-array name="gwangju_array"></string-array>
-    <string-array name="daejeon_array"></string-array>
-    <string-array name="ulsan_array"></string-array>
-    <string-array name="sejong_array"></string-array>
+    <string-array name="seoul_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="busan_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="daegu_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="incheon_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="gwangju_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="daejeon_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="ulsan_array">
+        <item>ㅡ</item>
+    </string-array>
+    <string-array name="sejong_array">
+        <item>ㅡ</item>
+    </string-array>
     <string-array name="gyeonggi_array">
         <item>수원시</item>
         <item>성남시</item>

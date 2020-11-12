@@ -22,7 +22,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/edittext_outline_design"
-            android:padding="10dp"
             android:entries="@array/big_location_array"/>
         <Spinner
             android:id="@+id/list_small_Spinner"
@@ -32,7 +31,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/edittext_outline_design"
-            android:padding="10dp"
             android:entries="@array/seoul_array"/>
     </LinearLayout>
 
