@@ -11,6 +11,7 @@
     <color name="colorGreen">#43A047</color>
     <color name="colorLightGreen">#A5D6A7</color>
     <color name="colorDarkGrey">#3D3D3D</color>
+    <color name="colorTitleGrey">#535353</color>
     <color name="colorMiddleGrey">#ACACAC</color>
     <color name="colorLightGrey">#E1E1E1</color>
     <color name="colorWhite">#fff</color>

@@ -15,18 +15,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".PageOfSelfDiagnosisResult"></activity>
-        <activity android:name=".ManagerModify" />
-        <activity android:name=".PageOfToManager" />
-        <activity android:name=".ManagerPages" />
-        <activity android:name=".UserPages">
+        <activity android:name=".PageOfIntro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".PageOfSelfDiagnosisResult"></activity>
+        <activity android:name=".ManagerModify" />
+        <activity android:name=".PageOfToManager" />
+        <activity android:name=".ManagerPages" />
+        <activity android:name=".UserPages"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE" />
