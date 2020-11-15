@@ -45,7 +45,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private ArrayList<Place> near_places;
     private UserLoc userLoc;
-    PerThread perThread;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
 
@@ -54,14 +53,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         // 구글 맵 연결
         /*UserLoc 클래스와 연결*/
         userLoc = new UserLoc();            // 디폴트 좌표
-
-        perThread =new PerThread(this,getActivity(),getContext());
-        perThread.start();
-        try {
-            perThread.join(); // perThread가 종료될때까지 메인 스레드를 정지시킴
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         /*맵 컴포넌트 연결*/
         mapView = v.findViewById(R.id.user_main_Map);
         mapView.getMapAsync(this);
@@ -96,14 +87,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         super.onStart();
         mapView.onStart();
     }
-    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
-    public void LocPermission(Activity activity , Context context) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_DENIED ) {
-            //Toast.makeText(context, "사용자 위치정보 동의 거부시 사용이 제한되는 부분이 있을수 있습니다.", Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        } // 권한확인후 위치정보 제공 동의가 안 되어 있을때 위치 정보 제공 동의받기
-    }
+
 
     @Override
     public void onStop(){
@@ -235,16 +219,3 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     }
 }
 
-class PerThread extends Thread{
-    PageOfMain page;
-    Activity act;
-    Context con;
-    public PerThread(PageOfMain page,Activity act, Context con){
-        this.page=page;
-        this.act=act;
-        this.con=con;
-    }
-    public void run() {
-        page.LocPermission(this.act,this.con);
-    }
-}
