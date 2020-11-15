@@ -36,7 +36,7 @@ import static android.content.Context.LOCATION_SERVICE;
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
 /**
- * 
+ *
  */
 public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
@@ -55,12 +55,13 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
 
-    public PageOfMain(){
-        this.nearPlaces=new ArrayList<VisitPlace>();
-        this.patient=new ArrayList<Patient>();
-        this.nearMaker=new ArrayList<Marker>();
+    public PageOfMain() {
+        this.nearPlaces = new ArrayList<VisitPlace>();
+        this.patient = new ArrayList<Patient>();
+        this.nearMaker = new ArrayList<Marker>();
     }
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
         // 구글 맵 연결
         /*UserLoc 클래스와 연결*/
@@ -73,9 +74,9 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(mapView != null){
+        if (mapView != null) {
             mapView.onCreate(savedInstanceState);
         }
     }
@@ -89,32 +90,32 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.position(myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
-        userPoint=this.mMap.addMarker(markerOptions);
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,15));
+        userPoint = this.mMap.addMarker(markerOptions);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
         this.LocBy_gps(getContext());
     } // 유저 현위치에 마커 추가
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         mapView.onStart();
     }
 
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         mapView.onStop();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mapView.onResume();
     }
@@ -137,7 +138,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-    public void RefreshMarker(){
+    public void RefreshMarker() {
         System.out.print("5");
         this.userPoint.remove();
         myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
@@ -145,8 +146,8 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.position(myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
-        this.userPoint=this.mMap.addMarker(markerOptions);
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng,15));
+        this.userPoint = this.mMap.addMarker(markerOptions);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
     }
 
     public void LocBy_gps(Context context) {
@@ -161,7 +162,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             } else {
                 System.out.println("2");
                 int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-                System.out.println("hasFineLocationPermission: "+Integer.toString(hasFineLocationPermission));
+                System.out.println("hasFineLocationPermission: " + Integer.toString(hasFineLocationPermission));
                 if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
                     if (isNetworkEnabled) {
                         System.out.println("3");
@@ -206,14 +207,17 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
-            System.out.println("latitude"+Double.toString(latitude));
-            System.out.println("longitude"+Double.toString(longitude));
             RefreshMarker();
+            calNearPlace();
+            addNearPlaceMaker();
         }
+
         public void onProviderDisabled(String provider) {
         }
+
         public void onProviderEnabled(String provider) {
         }
+
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     }
@@ -221,34 +225,33 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     public void calNearPlace() {
         this.nearPlaces.clear();
-        for(int a =0; a<this.patient.size();a++){
-            for(int b=0; b <this.patient.get(a).getVisitPlaceList().size();b++){
-                if(this.patient.get(a).getVisitPlaceList().get(b).
+        for (int a = 0; a < this.patient.size(); a++) {
+            for (int b = 0; b < this.patient.get(a).getVisitPlaceList().size(); b++) {
+                if (this.patient.get(a).getVisitPlaceList().get(b).
                         Distance(this.userLoc.getUserPlace().get_placeX(),
-                                this.userLoc.getUserPlace().get_placeX(),"kilometer") <= 1){
-                        this.nearPlaces.add(this.patient.get(a).getVisitPlaceList().get(b));
+                                this.userLoc.getUserPlace().get_placeX(), "kilometer") <= 1) {
+                    this.nearPlaces.add(this.patient.get(a).getVisitPlaceList().get(b));
                 }
             }
         }
-    }//반경 1km이내 확진자 동선  
+    }//반경 1km이내 확진자 동선
 
-    public void addNearPlaceMaker(){
-        for(int a =0;a<this.nearMaker.size();a++){
+    public void addNearPlaceMaker() {
+        for (int a = 0; a < this.nearMaker.size(); a++) {
             this.nearMaker.get(a).remove();
         }
-        if(this.nearMaker.size()!=0){
+        if (this.nearMaker.size() != 0) {
             this.nearMaker.clear();
         }
-        for(int a =0; a<this.nearPlaces.size();a++){
+        for (int a = 0; a < this.nearPlaces.size(); a++) {
             LatLng nearLatlng = new LatLng(this.nearPlaces.get(a).getVisitPlace().get_placeX(), this.nearPlaces.get(a).getVisitPlace().get_placeY());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(nearLatlng);
             markerOptions.title("확진자");
             SimpleDateFormat transFormat = new SimpleDateFormat("MM월dd일");
-            markerOptions.snippet(transFormat.format(this.nearPlaces.get(a).getVisitDate())+this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
+            markerOptions.snippet(transFormat.format(this.nearPlaces.get(a).getVisitDate()) + this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
             this.nearMaker.add(this.mMap.addMarker(markerOptions));
         }
     } //주변 확진자 마커 추가
-
 }
 
