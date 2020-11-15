@@ -13,14 +13,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class PageOfList extends Fragment {
     private Spinner bigLocSpinner, smallLocSpinner;
     private ArrayAdapter bigAdapter, smallAdapter;
+    private RecyclerView patientRecyclerView;
+    private LinearLayoutManager layoutManager;
+    private ArrayList<Patient> patientArrayList;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_manager_list, container, false);
 
+        /*Spinner 연결*/
         bigLocSpinner = v.findViewById(R.id.list_big_Spinner);
         smallLocSpinner = v.findViewById(R.id.list_small_Spinner);
 
@@ -33,8 +42,22 @@ public class PageOfList extends Fragment {
         smallLocSpinner.setAdapter(smallAdapter);
 
         SpinnerAction();
+        //--------------------------------------------------------------------------------------
+        /*RecyclerView 연결*/
+        patientRecyclerView = v.findViewById(R.id.list_RecyclerView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        patientRecyclerView.setLayoutManager(layoutManager);
+        patientRecyclerView.setHasFixedSize(true);
+
+        //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
+        //patientRecyclerView.setAdapter(adapter);
+
 
         return v;
+    }
+
+    private void MakeTempArray(){
+
     }
 
     private void SpinnerAction(){

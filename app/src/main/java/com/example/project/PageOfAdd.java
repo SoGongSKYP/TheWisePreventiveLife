@@ -11,13 +11,23 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class PageOfAdd extends Fragment {
     private Spinner bigLocSpinner, smallLocSpinner;
     private ArrayAdapter bigAdapter, smallAdapter;
+    private RecyclerView visitRecyclerView;
+    private LinearLayoutManager layoutManager;
+    //private ArrayList<Patient> patientArrayList;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_manager_add, container, false);
 
+        /*Spinner 연결*/
         bigLocSpinner = v.findViewById(R.id.add_big_Spinner);
         smallLocSpinner = v.findViewById(R.id.add_small_Spinner);
 
@@ -30,6 +40,15 @@ public class PageOfAdd extends Fragment {
         smallLocSpinner.setAdapter(smallAdapter);
 
         SpinnerAction();
+        //--------------------------------------------------------------------------------------
+        /*RecyclerView 연결*/
+        visitRecyclerView = v.findViewById(R.id.patient_visit_RecyclerView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        visitRecyclerView.setLayoutManager(layoutManager);
+        visitRecyclerView.setHasFixedSize(true);
+
+        //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
+        //patientRecyclerView.setAdapter(adapter);
 
         return v;
     }
