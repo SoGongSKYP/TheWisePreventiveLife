@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -40,14 +41,25 @@ import static android.content.pm.PackageManager.PERMISSION_DENIED;
 public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     public GoogleMap mMap;
+
     private Marker userPoint;
+    private ArrayList<Marker> nearMaker;
+
     private LatLng myLatLng;
     private MapView mapView;
-    private ArrayList<Place> near_places;
+
     private UserLoc userLoc;
+    private ArrayList<Patient> patient;
+    private ArrayList<VisitPlace> nearPlaces;
+
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
 
+    public PageOfMain(){
+        this.nearPlaces=new ArrayList<VisitPlace>();
+        this.patient=new ArrayList<Patient>();
+        this.nearMaker=new ArrayList<Marker>();
+    }
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
         // 구글 맵 연결
@@ -207,15 +219,36 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public void print_UI() {
-        // TODO implement here
-    }
+    public void calNearPlace() {
+        this.nearPlaces.clear();
+        for(int a =0; a<this.patient.size();a++){
+            for(int b=0; b <this.patient.get(a).getVisitPlaceList().size();b++){
+                if(this.patient.get(a).getVisitPlaceList().get(b).
+                        Distance(this.userLoc.getUserPlace().get_placeX(),
+                                this.userLoc.getUserPlace().get_placeX(),"kilometer") <= 1){
+                        this.nearPlaces.add(this.patient.get(a).getVisitPlaceList().get(b));
+                }
+            }
+        }
+    }//반경 1km이내 확진자 동선  
 
-    /**
-     *
-     */
-    public void print_map() {
-        // TODO implement here
-    }
+    public void addNearPlaceMaker(){
+        for(int a =0;a<this.nearMaker.size();a++){
+            this.nearMaker.get(a).remove();
+        }
+        if(this.nearMaker.size()!=0){
+            this.nearMaker.clear();
+        }
+        for(int a =0; a<this.nearPlaces.size();a++){
+            LatLng nearLatlng = new LatLng(this.nearPlaces.get(a).getVisitPlace().get_placeX(), this.nearPlaces.get(a).getVisitPlace().get_placeY());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(nearLatlng);
+            markerOptions.title("확진자");
+            SimpleDateFormat transFormat = new SimpleDateFormat("MM월dd일");
+            markerOptions.snippet(transFormat.format(this.nearPlaces.get(a).getVisitDate())+this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
+            this.nearMaker.add(this.mMap.addMarker(markerOptions));
+        }
+    } //주변 확진자 마커 추가
+
 }
 
