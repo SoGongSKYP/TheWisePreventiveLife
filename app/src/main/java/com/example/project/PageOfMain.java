@@ -85,13 +85,13 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         //LocPermission(getActivity(),getContext());
         this.mMap = googleMap;
-        myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(myLatLng);
+        markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
-        userPoint = this.mMap.addMarker(markerOptions);
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
+        this.userPoint = this.mMap.addMarker(markerOptions);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         this.LocBy_gps(getContext());
     } // 유저 현위치에 마커 추가
 
@@ -100,7 +100,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         super.onStart();
         mapView.onStart();
     }
-
 
     @Override
     public void onStop() {
@@ -141,13 +140,13 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     public void RefreshMarker() {
         System.out.print("5");
         this.userPoint.remove();
-        myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(myLatLng);
+        markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
-        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
 
     public void LocBy_gps(Context context) {
