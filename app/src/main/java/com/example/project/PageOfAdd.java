@@ -1,12 +1,17 @@
 package com.example.project;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,11 +22,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class PageOfAdd extends Fragment {
+
+    /*Spinner 관련 컴포넌트*/
     private Spinner bigLocSpinner, smallLocSpinner;
     private ArrayAdapter bigAdapter, smallAdapter;
+
+    /*RecyclerView 관련 컴포넌트*/
     private RecyclerView visitRecyclerView;
     private LinearLayoutManager layoutManager;
     //private ArrayList<Patient> patientArrayList;
+
+    /*다이얼로그 관련 컴포넌트*/
+    private Button addPlaceButton;
+    private DialogOfPlace dialog;
+
+    /*UI 컴포넌트*/
+    private TextView dupleCheckTextView;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -49,7 +65,17 @@ public class PageOfAdd extends Fragment {
 
         //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
         //patientRecyclerView.setAdapter(adapter);
-
+        //--------------------------------------------------------------------------------------
+        /*다이얼로그 연결*/
+        addPlaceButton = v.findViewById(R.id.dialog_add_Button);
+        addPlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new DialogOfPlace(getContext());
+                dialog.show();
+            }
+        });
+        //--------------------------------------------------------------------------------------
         return v;
     }
     private void SpinnerAction(){
