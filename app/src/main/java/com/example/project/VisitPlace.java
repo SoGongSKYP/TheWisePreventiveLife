@@ -16,19 +16,19 @@ public class VisitPlace {
     }
 
     // get -------------------------
-    public Place get_visitPlace(){
+    public Place getVisitPlace(){
         return this.visitPlace;
     }
-    public Date getVisit_date(){
+    public Date getVisitDate(){
         return this.visitDate;
     }
     //--------------------------------
 
     // set----------------------------
-    public void setVisit_place(Place place){
+    public void setVisitPlace(Place place){
         this.visitPlace=place;
     }
-    public void setVisit_date(Date date){
+    public void setVisitDate(Date date){
         this.visitDate =date;
     }
     //--------------------------------
