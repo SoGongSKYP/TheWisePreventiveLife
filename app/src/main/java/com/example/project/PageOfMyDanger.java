@@ -1,17 +1,29 @@
 package com.example.project;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.*;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,14 +31,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 /**
  *
  */
-public class PageOfMyDanger extends Fragment {
+public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_user_danger, container, false);
     }
@@ -35,7 +54,9 @@ public class PageOfMyDanger extends Fragment {
      * Default constructor
      */
     public PageOfMyDanger() {
-        //this.userLoc=new UserLoc();
+        this.userLoc=new UserLoc();
+        this.patient =new ArrayList<Patient>();
+        this.nearPlaces =new ArrayList<VisitPlace>();
         this.searchResultPath = new ArrayList<SearchPath>();
         this.visitPlaceList = new ArrayList<Place>();
         this.routeList =new ArrayList<Place>();
@@ -43,21 +64,178 @@ public class PageOfMyDanger extends Fragment {
     }
 
     private UserLoc userLoc;
-    private ArrayList<Place> visitPlaceList;
-    private ArrayList<Place> routeList;
-    private int danger;
-    private ArrayList<SearchPath> searchResultPath;
-    /**
-     *
-     */
+    private ArrayList<Patient> patient;
+    private ArrayList<VisitPlace> nearPlaces; // 경로 주변 확진자
+    private ArrayList<Place> visitPlaceList; // 출력 결과 경로 경유지
+    private ArrayList<Place> routeList; // 입력받은 출발 도착
+    private int danger; // 위험도
 
-    public void printUI() {
-        // TODO implement here
+    private ArrayList<SearchPath> searchResultPath;
+
+    public GoogleMap mMap;
+
+    private Marker userPoint;
+    private ArrayList<Marker> nearMaker;
+
+    private LatLng myLatLng;
+    private MapView mapView;
+
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
+
+    public void onMapReady(GoogleMap googleMap) {
+        //LocPermission(getActivity(),getContext());
+        this.mMap = googleMap;
+        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(this.myLatLng);
+        markerOptions.title("사용자");
+        markerOptions.snippet("현재 위치 GPS");
+        this.userPoint = this.mMap.addMarker(markerOptions);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
+        this.LocBy_gps(getContext());
+    } // 유저 현위치에 마커 추가
+
+    public void LocBy_gps(Context context) {
+        PageOfMyDanger.GPSListener gpsListener = new PageOfMyDanger.GPSListener();
+        try {
+            System.out.println("1");
+            LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            Location location = null;
+            if (!isGPSEnabled && !isNetworkEnabled) {
+            } else {
+                System.out.println("2");
+                int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+                System.out.println("hasFineLocationPermission: " + Integer.toString(hasFineLocationPermission));
+                if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
+                    if (isNetworkEnabled) {
+                        System.out.println("3");
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
+                        if (locationManager != null) {
+                            System.out.println("4");
+                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            if (location != null) {
+                                System.out.println("5");
+                                this.userLoc.getUserPlace().set_placeX(location.getLatitude());
+                                this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위
+                            }
+                        }
+                    }
+                    if (isGPSEnabled) {
+                        System.out.println("6");
+                        if (location == null) {
+                            System.out.println("7");
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
+                            if (locationManager != null) {
+                                System.out.println("8");
+                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if (location != null) {
+                                    System.out.println("9");
+                                    this.userLoc.getUserPlace().set_placeX(location.getLatitude());
+                                    this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위도
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.d("@@@", "" + e.toString());
+        }
     }
 
-    /**
-     *
-     */
+    public void RefreshMarker() {
+        System.out.print("5");
+        this.userPoint.remove();
+        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(this.myLatLng);
+        markerOptions.title("사용자");
+        markerOptions.snippet("현재 위치 GPS");
+        this.userPoint = this.mMap.addMarker(markerOptions);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
+    }
+
+    public void calNearPlace() {
+        this.nearPlaces.clear();
+        for (int a = 0; a < this.patient.size(); a++) {
+            for (int b = 0; b < this.patient.get(a).getVisitPlaceList().size(); b++) {
+                for (int v = 0;  v<this.visitPlaceList.size();v++) {
+                    if (this.patient.get(a).getVisitPlaceList().get(b).
+                            Distance(this.visitPlaceList.get(v).get_placeX(),
+                                    this.visitPlaceList.get(v).get_placeY(), "kilometer") <= 1) {
+                        this.nearPlaces.add(this.patient.get(a).getVisitPlaceList().get(b));
+                    }
+                }
+            }
+        }
+    }//반경 1km이내 확진자 동선
+
+    private class GPSListener implements LocationListener {
+
+        public void onLocationChanged(Location location) {
+            //capture location data sent by current provider
+            Double latitude = location.getLatitude();
+            Double longitude = location.getLongitude();
+            RefreshMarker();
+            calNearPlace();
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onLowMemory();
+    }
+
+
     /*시내 교통 서치 루트*/
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList=eElement.getElementsByTagName(tag).item(0).getChildNodes();
@@ -405,6 +583,24 @@ public class PageOfMyDanger extends Fragment {
         }
     }// 여러개의 path중 하나의 path를 출력할 함수
 
+    public void calDanger(){
+        if (this.nearPlaces.size() >=50){
+            this.danger=5;
+        }//초고도 위험
+        else if(this.nearPlaces.size() >=25){
+            this.danger=4;
+        }// 고위험
+        else if(this.nearPlaces.size() >=10){
+            this.danger=3;
+        }// 위험
+        else if(this.nearPlaces.size() >=1){
+            this.danger=2;
+        }// 주의
+        else{
+            this.danger=1;
+        }//안전
+    }
+
     public void printRoute() throws ParserConfigurationException, SAXException, IOException {
         String startPoint = null;
         String desPoint  =null;
@@ -418,9 +614,6 @@ public class PageOfMyDanger extends Fragment {
 
     }//여러개의 path 모두다 출력
 
-    /**
-     * @return
-     */
     public int printDanger(ArrayList<SearchPath> searchPath) {
 
         for(int i=0; i < searchPath.size();i++){

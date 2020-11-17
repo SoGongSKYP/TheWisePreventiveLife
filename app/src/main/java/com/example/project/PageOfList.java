@@ -16,14 +16,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PageOfList extends Fragment {
     private Spinner bigLocSpinner, smallLocSpinner;
     private ArrayAdapter bigAdapter, smallAdapter;
     private RecyclerView patientRecyclerView;
     private LinearLayoutManager layoutManager;
-    private ArrayList<Patient> patientArrayList;
+    private ArrayList<RowOfPatient> patientArrayList;
+    private AdapterOfList adapter;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -44,20 +48,30 @@ public class PageOfList extends Fragment {
         SpinnerAction();
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
+        patientArrayList = new ArrayList<RowOfPatient>();
+        MakeTempArray();
+
         patientRecyclerView = v.findViewById(R.id.list_RecyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         patientRecyclerView.setLayoutManager(layoutManager);
         patientRecyclerView.setHasFixedSize(true);
 
-        //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
-        //patientRecyclerView.setAdapter(adapter);
+        adapter = new AdapterOfList(patientArrayList);
+        patientRecyclerView.setAdapter(adapter);
 
 
         return v;
     }
 
-    private void MakeTempArray(){
-
+    private void MakeTempArray() {
+        RowOfPatient rowOfPatient = new RowOfPatient("1", "2020년 11월 13일");
+        RowOfPatient rowOfPatient1 = new RowOfPatient("2", "2020년 11월 14일");
+        RowOfPatient rowOfPatient2 = new RowOfPatient("3", "2020년 11월 15일");
+        RowOfPatient rowOfPatient3 = new RowOfPatient("4", "2020년 11월 16일");
+        patientArrayList.add(rowOfPatient);
+        patientArrayList.add(rowOfPatient1);
+        patientArrayList.add(rowOfPatient2);
+        patientArrayList.add(rowOfPatient3);
     }
 
     private void SpinnerAction(){

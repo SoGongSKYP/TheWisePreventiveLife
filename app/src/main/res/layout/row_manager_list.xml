@@ -18,14 +18,15 @@
         android:layout_marginRight="15dp"
         android:padding="15dp">
         <TextView
+            android:id="@+id/patient_num_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="확진자 1"
             android:textColor="@color/colorDarkGrey"
             android:textSize="17dp"
-            android:textStyle="bold"
-            android:layout_marginBottom="5dp"/>
+            android:textStyle="bold"/>
         <TextView
+            android:id="@+id/patient_date_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2020년 11월 02일"

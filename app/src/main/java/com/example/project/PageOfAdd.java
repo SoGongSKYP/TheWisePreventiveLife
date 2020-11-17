@@ -67,6 +67,7 @@ public class PageOfAdd extends Fragment {
         //patientRecyclerView.setAdapter(adapter);
         //--------------------------------------------------------------------------------------
         /*다이얼로그 연결*/
+        /*
         addPlaceButton = v.findViewById(R.id.dialog_add_Button);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +76,7 @@ public class PageOfAdd extends Fragment {
                 dialog.show();
             }
         });
+        */
         //--------------------------------------------------------------------------------------
         return v;
     }
