@@ -58,7 +58,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private LatLng myLatLng;
     private MapView mapView;
-    private AutocompleteSupportFragment searchBar;
 
     private UserLoc userLoc;
     private ArrayList<Patient> patient;
@@ -66,7 +65,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
+
 
     public PageOfMain() {
         this.nearPlaces = new ArrayList<VisitPlace>();
@@ -84,29 +83,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         mapView = v.findViewById(R.id.user_main_Map);
         mapView.getMapAsync(this);
 
-        /*맵 서치바 연결*/
-        /*
-        searchBar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.user_main_search_fragment);
-        searchBar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-        searchBar.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
 
-            @Override
-            public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(getContext());
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-
-        */
         return v;
     }
 
@@ -118,26 +95,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    /*구글 서치바 override onActivityResult*/
-    /*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
-                Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-    */
 
 
 
