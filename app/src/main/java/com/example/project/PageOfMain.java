@@ -3,6 +3,7 @@ package com.example.project;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -28,10 +30,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
@@ -47,6 +58,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private LatLng myLatLng;
     private MapView mapView;
+    private AutocompleteSupportFragment searchBar;
 
     private UserLoc userLoc;
     private ArrayList<Patient> patient;
@@ -54,6 +66,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     public PageOfMain() {
         this.nearPlaces = new ArrayList<VisitPlace>();
@@ -63,13 +76,37 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
-        // 구글 맵 연결
+
         /*UserLoc 클래스와 연결*/
         userLoc = new UserLoc();            // 디폴트 좌표
+
         /*맵 컴포넌트 연결*/
         mapView = v.findViewById(R.id.user_main_Map);
         mapView.getMapAsync(this);
 
+        /*맵 서치바 연결*/
+        /*
+        searchBar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.user_main_search_fragment);
+        searchBar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        searchBar.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(getContext());
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
+        */
         return v;
     }
 
@@ -80,6 +117,29 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             mapView.onCreate(savedInstanceState);
         }
     }
+
+    /*구글 서치바 override onActivityResult*/
+    /*
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    */
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
