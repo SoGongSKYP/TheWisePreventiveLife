@@ -155,7 +155,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     }
 
     public void RefreshMarker() {
-        System.out.print("5");
         this.userPoint.remove();
         this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
@@ -169,40 +168,31 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     public void LocBy_gps(Context context) {
         GPSListener gpsListener = new GPSListener();
         try {
-            System.out.println("1");
             LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             Location location = null;
             if (!isGPSEnabled && !isNetworkEnabled) {
             } else {
-                System.out.println("2");
                 int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
                 System.out.println("hasFineLocationPermission: " + Integer.toString(hasFineLocationPermission));
                 if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
                     if (isNetworkEnabled) {
-                        System.out.println("3");
                         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
                         if (locationManager != null) {
-                            System.out.println("4");
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
-                                System.out.println("5");
                                 this.userLoc.getUserPlace().set_placeX(location.getLatitude());
                                 this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위
                             }
                         }
                     }
                     if (isGPSEnabled) {
-                        System.out.println("6");
                         if (location == null) {
-                            System.out.println("7");
                             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
                             if (locationManager != null) {
-                                System.out.println("8");
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
-                                    System.out.println("9");
                                     this.userLoc.getUserPlace().set_placeX(location.getLatitude());
                                     this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위도
                                 }
