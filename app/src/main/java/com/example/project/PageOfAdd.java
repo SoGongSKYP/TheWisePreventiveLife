@@ -1,6 +1,8 @@
 package com.example.project;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,7 +36,7 @@ public class PageOfAdd extends Fragment {
     //private ArrayList<Patient> patientArrayList;
 
     /*다이얼로그 관련 컴포넌트*/
-    private Button addPlaceButton;
+    private ImageButton addPlaceButton;
     private DialogOfPlace dialog;
 
     /*UI 컴포넌트*/
@@ -67,16 +70,18 @@ public class PageOfAdd extends Fragment {
         //patientRecyclerView.setAdapter(adapter);
         //--------------------------------------------------------------------------------------
         /*다이얼로그 연결*/
-        /*
-        addPlaceButton = v.findViewById(R.id.dialog_add_Button);
+        addPlaceButton = v.findViewById(R.id.patient_visit_add_Button);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog = new DialogOfPlace(getContext());
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
-        */
+
         //--------------------------------------------------------------------------------------
         return v;
     }

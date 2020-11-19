@@ -2,6 +2,7 @@ package com.example.project;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -42,10 +43,18 @@ public class DialogOfPlace extends Dialog {
         visitPlaceTextView = findViewById(R.id.dialog_visit_select_title);
         visitDetailTextView = findViewById(R.id.dialog_visit_select_detail);
 
-
         dialogDismissButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        placeAddButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // 임시로 다이얼로그를 닫는다
+                // void updatePatientVisitButton();
                 dismiss();
             }
         });
