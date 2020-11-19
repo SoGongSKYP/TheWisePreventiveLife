@@ -71,7 +71,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
-        googleMap = v.findViewById(R.id.user_main_Map);
+        googleMap = v.findViewById(R.id.user_clinic_Map);
         googleMap.getMapAsync(this);
         return v;
     }
