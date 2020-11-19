@@ -75,18 +75,18 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
         android:padding="12dp"
-        android:hint="확진자 번호"
+        android:hint="확진자 번호 : 13"
         android:background="@drawable/edittext_outline_design"/>
 
     <EditText
-        android:id="@+id/patient_time_EditText"
+        android:id="@+id/patient_date_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="8dp"
         android:padding="12dp"
-        android:hint="확진 판정 시간"
+        android:hint="확진 판정 날짜 : YYMMDD"
         android:background="@drawable/edittext_outline_design"/>
 
     <TextView
@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="확진자 정보 중복 확인 후 동선을 입력하세요."
-        android:textColor="@color/colorDarkGrey"
+        android:textColor="@color/colorMainRed"
         android:textSize="13dp"
         android:layout_marginRight="25dp"
         android:layout_marginLeft="25dp"

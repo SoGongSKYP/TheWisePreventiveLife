@@ -24,6 +24,15 @@
             android:layout_gravity="center"
             android:textSize="20dp"
             android:textColor="@color/colorDarkGrey"/>
+        <ImageButton
+            android:id="@+id/manager_modify_save_ImageButton"
+            android:layout_width="30dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/diskette"
+            android:background="@color/colorWhite"
+            android:scaleType="fitCenter"/>
     </androidx.appcompat.widget.Toolbar>
     <TextView
         android:layout_width="wrap_content"

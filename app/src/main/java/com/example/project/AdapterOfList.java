@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHolder>{
@@ -38,6 +39,10 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
     @Override
     public void onBindViewHolder(@NonNull AdapterOfList.ListViewHolder holder, int position) {
         holder.patientNumTextView.setText("확진자 "+ datalist.get(position).getPatientNum());
+
+        //String date = datalist.get(position).getConfirmDate();
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 mm월 dd일");
+
         holder.patientDateTextView.setText(datalist.get(position).getConfirmDate());
     }
 

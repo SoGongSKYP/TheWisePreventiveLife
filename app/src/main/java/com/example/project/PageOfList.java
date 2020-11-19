@@ -36,6 +36,9 @@ public class PageOfList extends Fragment {
     private ArrayList<RowOfPatient> patientArrayList;
     private AdapterOfList adapter;
 
+    /*데이터 저장 변수*/
+    String pBigLocal, pSmallLocal;
+
 
 
 
@@ -54,7 +57,8 @@ public class PageOfList extends Fragment {
         smallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         smallLocSpinner.setAdapter(smallAdapter);
 
-        SpinnerAction();
+        BigSpinnerAction();
+        SmallSpinnerAction();
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
         patientArrayList = new ArrayList<RowOfPatient>();
@@ -73,17 +77,17 @@ public class PageOfList extends Fragment {
     }
 
     private void MakeTempArray() {
-        RowOfPatient rowOfPatient = new RowOfPatient("1", "2020년 11월 13일");
-        RowOfPatient rowOfPatient1 = new RowOfPatient("2", "2020년 11월 14일");
-        RowOfPatient rowOfPatient2 = new RowOfPatient("3", "2020년 11월 15일");
-        RowOfPatient rowOfPatient3 = new RowOfPatient("4", "2020년 11월 16일");
+        RowOfPatient rowOfPatient = new RowOfPatient("1", "201113");
+        RowOfPatient rowOfPatient1 = new RowOfPatient("2", "201114");
+        RowOfPatient rowOfPatient2 = new RowOfPatient("3", "201115");
+        RowOfPatient rowOfPatient3 = new RowOfPatient("4", "201116");
         patientArrayList.add(rowOfPatient);
         patientArrayList.add(rowOfPatient1);
         patientArrayList.add(rowOfPatient2);
         patientArrayList.add(rowOfPatient3);
     }
 
-    private void SpinnerAction(){
+    private void BigSpinnerAction(){
         bigLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -140,13 +144,29 @@ public class PageOfList extends Fragment {
                         smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.jeju_array, android.R.layout.simple_spinner_dropdown_item);
                         break;
                 }
+                pBigLocal = Integer.toString(i);
+                Log.d("큰 도시 선택 : ", pBigLocal);
                 smallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 smallLocSpinner.setAdapter(smallAdapter);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                pBigLocal = "0";
+            }
+        });
+    }
+    private void SmallSpinnerAction(){
+        smallLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                pSmallLocal = Integer.toString(i);
+                Log.d("작은 도시 선택 : ", pSmallLocal);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                pSmallLocal = "0";
             }
         });
     }
