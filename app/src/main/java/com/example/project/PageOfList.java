@@ -1,5 +1,7 @@
 package com.example.project;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,12 +25,18 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PageOfList extends Fragment {
+
+    /*Spinner 관련 컴포넌트*/
     private Spinner bigLocSpinner, smallLocSpinner;
     private ArrayAdapter bigAdapter, smallAdapter;
+
+    /*RecyclerView 관련 컴포넌트*/
     private RecyclerView patientRecyclerView;
     private LinearLayoutManager layoutManager;
     private ArrayList<RowOfPatient> patientArrayList;
     private AdapterOfList adapter;
+
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){

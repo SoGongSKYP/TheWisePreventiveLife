@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,8 +25,8 @@ public class ManagerModify extends AppCompatActivity {
     private TextView TitleTextView;
 
     /*Dialog 관련 컴포넌트*/
-    Button addButton;
-    Dialog placeAddDialog;
+    ImageButton addPlaceButton;
+    private DialogOfPlace dialog;
 
     /*RecyclerView 관련 컴포넌트*/
     private RecyclerView patientRecyclerView;
@@ -53,7 +57,19 @@ public class ManagerModify extends AppCompatActivity {
 
         //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
         //patientRecyclerView.setAdapter(adapter);
-
+        //--------------------------------------------------------------------------------------
+        /*다이얼로그 연결*/
+        addPlaceButton = findViewById(R.id.modify_visit_add_Button);
+        addPlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new DialogOfPlace(ManagerModify.this);
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
     }
 
 }
