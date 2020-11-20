@@ -43,7 +43,7 @@ public class PageOfIntro extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
-        , 3000);
+        , 6000);
     }
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
     public void LocPermission(Activity activity , Context context) {
