@@ -34,8 +34,6 @@ public class API {
     private Date currentDate;
     private String currDate;
 
-
-
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList=eElement.getElementsByTagName(tag).item(0).getChildNodes();
         Node nValue=(Node)nlList.item(0);
@@ -102,7 +100,7 @@ public class API {
         urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=0eMMHHcbnpAK1eXmexxzB4pMr9lfDCq4Tl6P4wh2DrYWPkvQfiB0u9Vr5mMh39H6x63xk%2FesCnLgUfMbHBQV8g%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode("-", "UTF-8")); /*공공데이터포털에서 받은 인증키*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("18", "UTF-8")); /*한 페이지 결과 수*/
         urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode("20200410", "UTF-8")); /*검색할 생성일 범위의 시작*/
         urlBuilder.append("&" + URLEncoder.encode("endCreateDt","UTF-8") + "=" + URLEncoder.encode(this.currDate, "UTF-8")); /*검색할 생성일 범위의 종료*/
         URL url = new URL(urlBuilder.toString());
@@ -155,48 +153,5 @@ public class API {
             }
         }
         return localList;
-    }
-
-    public ArrayList<SelectedClinic> clinicAPI() throws IOException, ParserConfigurationException, SAXException {
-        ArrayList<SelectedClinic> clinicsList= new ArrayList<SelectedClinic>();
-
-        String parsingUrl="";
-
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B551182/pubReliefHospService/getpubReliefHospList"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=0eMMHHcbnpAK1eXmexxzB4pMr9lfDCq4Tl6P4wh2DrYWPkvQfiB0u9Vr5mMh39H6x63xk%2FesCnLgUfMbHBQV8g%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode("-", "UTF-8")); /*공공데이터포털에서 받은 인증키*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8")); /*한 페이지 결과 수*/
-        urlBuilder.append("&" + URLEncoder.encode("spclAdmTyCd","UTF-8") + "=" + URLEncoder.encode("99", "UTF-8")); /*A0: 국민안심병원/97: 코로나검사 실시기관/99: 코로나 선별진료소 운영기관*/
-        URL url = new URL(urlBuilder.toString());
-        //System.out.println(sb.toString());
-
-        parsingUrl=url.toString();
-        //System.out.println(parsingUrl);
-
-        DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
-        Document doc=dBuilder.parse(parsingUrl);
-
-        doc.getDocumentElement().normalize();
-        //System.out.println("Root element : "+doc.getDocumentElement().getNodeName());
-
-        NodeList nList=doc.getElementsByTagName("item");
-        //System.out.println("파싱할 리스트 수 : "+nList.getLength());
-
-        for(int i=0; i<nList.getLength(); i++) {
-            Node nNode=nList.item(i);
-            if(nNode.getNodeType()==Node.ELEMENT_NODE) {
-                Element eElement=(Element) nNode;
-                System.out.println(getTagValue("yadmNm",eElement));
-                System.out.println(getTagValue("spclAdmTyCd",eElement));
-                System.out.println(getTagValue("telno",eElement));
-                SelectedClinic temp = new SelectedClinic(getTagValue("yadmNm",eElement),
-                        null,getTagValue("spclAdmTyCd",eElement),getTagValue("telno",eElement));
-                temp.setPlace(temp.calXY(temp.getName()));
-                clinicsList.add(temp);
-            }
-        }
-        return clinicsList;
     }
 }
