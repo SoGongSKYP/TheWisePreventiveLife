@@ -64,6 +64,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     private Marker userPoint;
 
     private ArrayList<SelectedClinic> clinics;
+    private ArrayList<Marker> clinicsMarker;
     private UserLoc userPlace;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
@@ -75,8 +76,10 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         return v;
     }
     public PageOfSelectedClinic() {
+        this.clinicsMarker=new ArrayList<Marker>();
         this.userPlace =new UserLoc();
-        this.clinics = APIEntity.getClinicsList();
+        this.clinics = new ArrayList<SelectedClinic>();
+        this.clinics = clinicAPIEntity.getClinicsList();
     }
 
     public void RefreshMarker() {
@@ -100,7 +103,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     }
 
     public PriorityQueue<Pair> find_clinic() throws ParserConfigurationException, SAXException, IOException {
-        ArrayList<SelectedClinic> near_clinics = null;
+        ArrayList<SelectedClinic> near_clinics =new ArrayList<SelectedClinic>();
         PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
         for (int i = 0; i < this.clinics.size(); i++) {
             double dis = clinics.get(i).Distance(this.userPlace.getUserPlace().get_placeX(),
@@ -111,12 +114,15 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     }// 가까운 거리의 클리닉 찾기
 
     public void addMarker(GoogleMap googleMap) throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<SelectedClinic> nearClinics =null;
-        ArrayList<Double> nearDistance =null;
+        ArrayList<SelectedClinic> nearClinics = new  ArrayList<SelectedClinic>();
+        ArrayList<Double> nearDistance = new  ArrayList<Double>();
         PriorityQueue<Pair> pq = find_clinic();
-        for(int t =0; t<5;t++){
+        for(int t = 0; t<5;t++){
             nearClinics.add(pq.poll().second);
             nearDistance.add(pq.poll().first);
+        }
+        for(int i =0; i <clinicsMarker.size();i++ ){
+            this.clinicsMarker.get(i).remove();
         }
         for (int i = 0; i < nearClinics.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions();
@@ -126,7 +132,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             markerOptions.snippet("주소: " + nearClinics.get(i).getPlace().get_placeAddress() +
                     "전화번호: " + nearClinics.get(i).getPhoneNum()+
                     "거리: " + nearDistance.get(i).toString());
-            googleMap.addMarker(markerOptions);
+            clinicsMarker.add(googleMap.addMarker(markerOptions));
         }
     }
 
@@ -253,11 +259,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             this.page.RefreshMarker();
             try {
                 this.page.addMarker(this.mMap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
+            } catch (IOException | ParserConfigurationException | SAXException e) {
                 e.printStackTrace();
             }
         }
