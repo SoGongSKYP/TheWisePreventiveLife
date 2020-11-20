@@ -9,7 +9,7 @@ public class NationStatistics extends Statistics {
     /**
      * Default constructor
      */
-    public NationStatistics(Date staticsDate,Integer patientNum, Integer deadNum,Integer healerNum,
+    public NationStatistics(String staticsDate,Integer patientNum, Integer deadNum,Integer healerNum,
                             Integer testNum, ArrayList<LocalStatistics> localStatistics,Integer careNum,
                             Integer testNeg, Integer testCnt, Integer testCntComplete, double accDefRate) {
         this.staticsDate=staticsDate;
@@ -32,7 +32,7 @@ public class NationStatistics extends Statistics {
     private Integer testCntComplete; /*누적 검사 완료수*/
     private double accDefRate; /*누적 확진률*/
 
-    public Date getStaticsDate(){
+    public String getStaticsDate(){
         return this.staticsDate;
     }
     public Integer getPatientNum() {
