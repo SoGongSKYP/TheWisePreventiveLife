@@ -11,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class APIEntity implements Runnable{
     private static ArrayList<LocalStatistics> localList;
-    private static ArrayList<SelectedClinic> clinicsList;
     private static NationStatistics nation;
     private final Lock lock;
 
@@ -21,9 +20,6 @@ public class APIEntity implements Runnable{
 
     public static NationStatistics getNation() {
         return nation;
-    }
-    public static ArrayList<SelectedClinic> getClinicsList() {
-        return clinicsList;
     }
     public static ArrayList<LocalStatistics> getLocalList() {
         return localList;
@@ -40,11 +36,6 @@ public class APIEntity implements Runnable{
                 e.printStackTrace();
             }
             try {
-                clinicsList = api.clinicAPI();
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                e.printStackTrace();
-            }
-            try {
                 nation = api.nationAPI(localList);
             } catch (IOException | ParserConfigurationException | SAXException | ParseException e) {
                 e.printStackTrace();
@@ -55,6 +46,5 @@ public class APIEntity implements Runnable{
         } finally {
             lock.unlock();
         }
-
     }
 }
