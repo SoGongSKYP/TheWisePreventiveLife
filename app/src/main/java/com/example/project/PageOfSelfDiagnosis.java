@@ -17,8 +17,7 @@ import java.util.*;
  */
 public class PageOfSelfDiagnosis extends Fragment {
 
-    private ArrayList<String> QuestionSentencesArray = new ArrayList<>();
-    private ArrayList<Boolean> QuestionAnswerArray = new ArrayList<>();
+    private ArrayList<String> QuestionSentencesArray;
     private Integer diagnosis_result;
 
     /* RecyclerView와 관련된 컴포넌트 */
@@ -28,7 +27,7 @@ public class PageOfSelfDiagnosis extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_selfdiagnosis, container, false);
-
+        QuestionSentencesArray = new ArrayList<>();
         print_UI();
 
         recyclerView = v.findViewById(R.id.diagnosis_RecyclerView);

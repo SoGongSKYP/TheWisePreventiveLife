@@ -66,6 +66,8 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
 
         patientNumEditText = v.findViewById(R.id.patient_num_EditText);
         patientDateEditText = v.findViewById(R.id.patient_date_EditText);
+        patientNumEditText.setText(null);
+        patientDateEditText.setText(null);
 
         dupleCheck = false;
         saveCheck = false;
@@ -132,6 +134,8 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                     Toast.makeText(getContext(), "확진자"+pNum+" 정보가 저장되었습니다.", Toast.LENGTH_SHORT).show();
                     dupleButton.setText("새 로 고 침");
                     dupleButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_full_blue));
+                    dupleCheckTextView.setText("정보가 저장되었습니다. 새로고침하여 새 정보를 입력하세요.");
+                    dupleCheckTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlue));
                     saveCheck = true;
                 }
                 else if(dupleCheck && saveCheck){

@@ -3,6 +3,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,13 +32,37 @@ import javax.xml.parsers.ParserConfigurationException;
  * 
  */
 public class PageOfStatistics extends Fragment {
+    ImageButton btn_seoul, btn_busan, btn_daegu, btn_incheon, btn_gwangju, btn_daejeon, btn_ulsan, btn_sejong,
+            btn_gyeonggido, btn_gangwondo, btn_chungbuk, btn_chungnam, btn_jeonbuk, btn_jeonnam, btn1_gyeongbuk,
+            btn2_gyeongbuk, btn1_gyeongnam, btn2_gyeongnam, btn_jeju;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_user_statistics, container, false);
+        View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
+
+        btn_gyeonggido = v.findViewById(R.id.gyunggi_Button);
+        btn_gangwondo = v.findViewById(R.id.gangwondo_Button);
+        btn_chungbuk = v.findViewById(R.id.chungBuk_Button);
+        btn_chungnam = v.findViewById(R.id.chungNam_Button);
+        btn_jeonbuk = v.findViewById(R.id.jeonBuk_Button);
+        btn_jeonnam = v.findViewById(R.id.jeonNam_Button);
+        btn1_gyeongbuk = v.findViewById(R.id.gyeongBuk1_Button);
+        btn2_gyeongbuk = v.findViewById(R.id.gyeongBuk2_Button);
+        btn1_gyeongnam = v.findViewById(R.id.gyeongNam1_Button);
+        btn2_gyeongnam = v.findViewById(R.id.gyeongNam2_Button);
+        btn_jeju = v.findViewById(R.id.jeju_Button);
+
+        btn_seoul = v.findViewById(R.id.seoul_Button);
+        btn_busan = v.findViewById(R.id.busan_Button);
+        btn_daegu = v.findViewById(R.id.daegu_Button);
+        btn_incheon = v.findViewById(R.id.incheon_Button);
+        btn_gwangju = v.findViewById(R.id.gwangju_Button);
+        btn_daejeon = v.findViewById(R.id.dajeon_Button);
+        btn_ulsan = v.findViewById(R.id.ulsan_Button);
+        btn_sejong = v.findViewById(R.id.sejong_Button);
+
+        return v;
     }
 
-    /**
-     * Default constructor
-     */
 
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
         this.api = new API();
@@ -55,7 +81,7 @@ public class PageOfStatistics extends Fragment {
     }
 
     private void connApi() throws ParserConfigurationException, SAXException, ParseException, IOException {
-        this.nationStatistic=this.api.nationAPI();
+        //this.nationStatistic=this.api.nationAPI();
     }
 
     private void findLoc() throws IOException, ParserConfigurationException, SAXException, ParseException {
@@ -117,20 +143,11 @@ public class PageOfStatistics extends Fragment {
         this.userPlace.getUserPlace().set_placeAddress(shortLocName); // 사용자가 있는 지역 이름 받음
     } //역 지오 코딩
 
-    public void print_UI() {
-        // TODO implement here
-    }
 
-    /**
-     * 
-     */
     public void print_nationStatistics() {
         // TODO implement here
     }
 
-    /**
-     * 
-     */
     public void print_localStatistics() {
         // TODO implement here
     }

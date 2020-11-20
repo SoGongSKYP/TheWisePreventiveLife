@@ -17,7 +17,6 @@ public class Patient {
         this.visitPlaceList = visitPlaceList;
     }
 
-
     private String smallLocalNum;
     private String bigLocalNum;
     private String patientNum;

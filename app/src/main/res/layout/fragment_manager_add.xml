@@ -86,7 +86,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="8dp"
         android:padding="12dp"
-        android:hint="확진 판정 날짜 : YYMMDD"
+        android:hint="확진 판정 날짜 : YYYYMMDD"
         android:background="@drawable/edittext_outline_design"/>
 
     <TextView
