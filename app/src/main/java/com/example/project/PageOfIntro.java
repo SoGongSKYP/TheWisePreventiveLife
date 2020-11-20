@@ -10,6 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
 public class PageOfIntro extends AppCompatActivity {
@@ -18,6 +21,12 @@ public class PageOfIntro extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+
+        final Lock lock = new ReentrantLock(); // lock instance
+
+        Thread thread = new Thread(new APIEntity(lock));
+        thread.start();
+
         this.LocPermission(this,getApplicationContext());
         new android.os.Handler().postDelayed(
                 new Runnable() {
