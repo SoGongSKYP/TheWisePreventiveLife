@@ -9,7 +9,7 @@ public class LocalStatistics extends Statistics {
     /**
      * Default constructor
      */
-    public LocalStatistics(Date staticsDate,Integer patientNum,Integer deadNum,Integer healerNum,String localName,Place localPosition, Integer increaseDecrease) {
+    public LocalStatistics(String staticsDate,Integer patientNum,Integer deadNum,Integer healerNum,String localName,Place localPosition, Integer increaseDecrease) {
     this.staticsDate=staticsDate;
     this.patientNum=patientNum;
     this.deadNum =deadNum;
@@ -28,7 +28,7 @@ public class LocalStatistics extends Statistics {
     public String getLocalName() {
         return this.localName;
     }
-    public Date getStaticsDate(){
+    public String getStaticsDate(){
         return this.staticsDate;
     }
     public Integer getPatientNum() {
