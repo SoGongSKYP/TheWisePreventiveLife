@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,29 +27,12 @@ public class PageOfIntro extends AppCompatActivity {
 
         Thread thread = new Thread(new APIEntity(lock));
         thread.start();
+        Thread threadArray[] = new Thread[21];
+        for(int i =0; i < 21;i++){
+            threadArray[i]=new Thread(new clinicAPIEntity(i+1));
+            threadArray[i].start();
+        }
 
-        Thread thread1 =new Thread(new clinicAPIEntity(1));
-        thread1.start();
-        Thread thread2 =new Thread(new clinicAPIEntity(2));
-        thread2.start();
-        Thread thread3 =new Thread(new clinicAPIEntity(3));
-        thread3.start();
-        Thread thread4 =new Thread(new clinicAPIEntity(4));
-        thread4.start();
-        Thread thread5 =new Thread(new clinicAPIEntity(5));
-        thread5.start();
-        Thread thread6 =new Thread(new clinicAPIEntity(6));
-        thread6.start();
-        Thread thread7 =new Thread(new clinicAPIEntity(7));
-        thread7.start();
-        Thread thread8 =new Thread(new clinicAPIEntity(8));
-        thread8.start();
-        Thread thread9 =new Thread(new clinicAPIEntity(9));
-        thread9.start();
-        Thread thread10 =new Thread(new clinicAPIEntity(10));
-        thread10.start();
-        Thread thread11 =new Thread(new clinicAPIEntity(11));
-        thread11.start();
 
         this.LocPermission(this,getApplicationContext());
         new android.os.Handler().postDelayed(
