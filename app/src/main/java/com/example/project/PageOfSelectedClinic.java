@@ -65,7 +65,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
 
     private ArrayList<SelectedClinic> clinics;
     private UserLoc userPlace;
-    private API api;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
 
@@ -76,9 +75,8 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         return v;
     }
     public PageOfSelectedClinic() {
-        this.api = new API();
         this.userPlace =new UserLoc();
-        this.clinics =null;
+        this.clinics = APIEntity.getClinicsList();
     }
 
     public void RefreshMarker() {
@@ -102,12 +100,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     }
 
     public PriorityQueue<Pair> find_clinic() throws ParserConfigurationException, SAXException, IOException {
-        this.api = new API();
-
-        if(this.clinics ==null){
-            this.clinics = api.clinicAPI();
-        }//이 clinics 객체가 남아있다면 API에서 값을 받은 상태이므로 걍 넘어가도 됨
-
         ArrayList<SelectedClinic> near_clinics = null;
         PriorityQueue<Pair> pq = new PriorityQueue<Pair>();
         for (int i = 0; i < this.clinics.size(); i++) {
