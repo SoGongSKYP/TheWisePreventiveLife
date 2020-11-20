@@ -24,7 +24,7 @@ public class SelectedClinic {
     /**
      * Default constructor
      */
-    public SelectedClinic( String name,Place place , String code, String phoneNum) {
+    public SelectedClinic( String name, Place place, String code, String phoneNum) {
         this.name =name;
         this.place=place;
         this.phoneNum=phoneNum;
@@ -110,7 +110,7 @@ public class SelectedClinic {
 
     public Place calXY(String name) throws IOException, ParserConfigurationException, SAXException {
         String parsingUrl="";
-        Place searchLoc=null;
+        Place searchLoc=new Place("",0.0,0.0);
 
         StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/"); /*URL*/
         urlBuilder.append("xml?" + URLEncoder.encode("input","UTF-8") + "="+URLEncoder.encode(name, "UTF-8")); /*장소 text*/
@@ -120,6 +120,7 @@ public class SelectedClinic {
         urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
         URL url = new URL(urlBuilder.toString());
         parsingUrl=url.toString();
+        System.out.println("url:"+parsingUrl);
         //System.out.println(parsingUrl);
 
         DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
@@ -133,14 +134,12 @@ public class SelectedClinic {
         NodeList geoList=null;//doc.getElementsByTagName("geometry"); // 지역 노드
         NodeList locList=null;//doc.getElementsByTagName("location"); // 지역 노드
 
-        NodeList openTimeList=null;//doc.getElementsByTagName("opening_hours"); // 지역 노드
-        //System.out.println("파싱할 리스트 수 : "+nList.getLength());
-
         for(int i=0; i<nList.getLength(); i++) {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                searchLoc.set_placeAddress(getTagValue("formatted_address",eElement));
+                String tm = getTagValue("formatted_address",eElement);
+                searchLoc.set_placeAddress(tm);
 
                 geoList = eElement.getElementsByTagName("geometry");
                 for(int g =0; g<geoList.getLength();g++){
@@ -148,11 +147,13 @@ public class SelectedClinic {
                     if(geoNode.getNodeType()==Node.ELEMENT_NODE){
                         Element geoElement=(Element) geoNode;
                         locList = geoElement.getElementsByTagName("location");
-                        Node locNode=locList.item(0);
-                        if(locNode.getNodeType()==Node.ELEMENT_NODE){
-                            Element locElement=(Element) locNode;
-                            searchLoc.set_placeX(Double.parseDouble(getTagValue("lat",locElement)));//경도
-                            searchLoc.set_placeY(Double.parseDouble(getTagValue("lng",locElement)));//위도
+                        for(int l =0 ;l<locList.getLength();l++){
+                            Node locNode=locList.item(l);
+                            if(locNode.getNodeType()==Node.ELEMENT_NODE){
+                                Element locElement=(Element) locNode;
+                                searchLoc.set_placeX(Double.parseDouble(getTagValue("lat",locElement)));//경도
+                                searchLoc.set_placeY(Double.parseDouble(getTagValue("lng",locElement)));//위도
+                            }
                         }
                     }
                 }
