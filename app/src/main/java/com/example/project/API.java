@@ -49,7 +49,7 @@ public class API {
         this.currDate = this.mFormat.format(this.currentDate); // 현재 날짜 저장
     }
 
-    public NationStatistics nationAPI() throws IOException, ParserConfigurationException, SAXException, ParseException {
+    public NationStatistics nationAPI(ArrayList<LocalStatistics> localList) throws IOException, ParserConfigurationException, SAXException, ParseException {
         NationStatistics nation =null;
         String parsingUrl="";
 
@@ -82,12 +82,10 @@ public class API {
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
                 //string을 date로 변환
-                String stateDt=getTagValue("stateDt",eElement);
-                SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
 
-                nation=new NationStatistics(transFormat.parse(stateDt),Integer.parseInt(getTagValue("decideCnt",eElement))
+                nation=new NationStatistics(getTagValue("stateDt",eElement),Integer.parseInt(getTagValue("decideCnt",eElement))
                         ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("clearCnt",eElement)),
-                        Integer.parseInt(getTagValue("examCnt",eElement)), this.localAPI(),Integer.parseInt(getTagValue("careCnt",eElement)),
+                        Integer.parseInt(getTagValue("examCnt",eElement)),localList,Integer.parseInt(getTagValue("careCnt",eElement)),
                         Integer.parseInt(getTagValue("resutlNegCnt",eElement)), Integer.parseInt(getTagValue("accExamCnt",eElement))
                         , Integer.parseInt(getTagValue("accExamCompCnt",eElement)), Double.parseDouble(getTagValue("accDefRate",eElement)));
             }
@@ -130,9 +128,6 @@ public class API {
                 String localName;
                 Place localPosition=null;
 
-                String stateDt=getTagValue("stdDay",eElement);
-                SimpleDateFormat transFormat=new SimpleDateFormat("yyyy-MM-dd");
-
                 localName=getTagValue("gubun",eElement);
 
                 //localPosition;
@@ -154,7 +149,7 @@ public class API {
                 else if(localName.equals("울산")) localPosition=new Place("울산광역시청",35.539620, 129.311527);
                 else if(localName.equals("세종")) localPosition=new Place("세종특별자치시청",36.480131, 127.289033);
                 //지역통계
-                localList.add(new LocalStatistics(transFormat.parse(stateDt),Integer.parseInt(getTagValue("defCnt",eElement))
+                localList.add(new LocalStatistics(getTagValue("stdDay",eElement),Integer.parseInt(getTagValue("defCnt",eElement))
                         ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("isolClearCnt",eElement))
                         ,getTagValue("gubun",eElement),localPosition,Integer.parseInt(getTagValue("incDec",eElement))));
             }
@@ -193,8 +188,11 @@ public class API {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
+                System.out.println(getTagValue("yadmNm",eElement));
+                System.out.println(getTagValue("spclAdmTyCd",eElement));
+                System.out.println(getTagValue("telno",eElement));
                 SelectedClinic temp = new SelectedClinic(getTagValue("yadmNm",eElement),
-                        null,getTagValue("code",eElement),getTagValue("telno",eElement));
+                        null,getTagValue("spclAdmTyCd",eElement),getTagValue("telno",eElement));
                 temp.setPlace(temp.calXY(temp.getName()));
                 clinicsList.add(temp);
             }
