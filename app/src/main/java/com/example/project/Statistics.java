@@ -12,7 +12,7 @@ abstract class Statistics {
     public Statistics() {
     }
 
-    protected Date staticsDate; /*기준 날짜*/
+    protected String staticsDate; /*기준 날짜*/
     protected Integer patientNum;/*확진자수*/
     protected Integer deadNum;/*사망자수*/
     protected Integer healerNum; /*완치자수==격리해제수*/
