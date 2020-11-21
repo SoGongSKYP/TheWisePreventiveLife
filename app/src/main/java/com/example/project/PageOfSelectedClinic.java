@@ -70,8 +70,8 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-        this.LocBy_gps(getContext());
-
+        GPSListener gpsListener =new GPSListener(this,mMap);
+        UserLoc.LocBy_gps(getContext(),gpsListener);
     } // 유저 현위치에 마커 추가
 
     @Override
@@ -165,51 +165,10 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         super.onLowMemory();
         googleMap.onLowMemory();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         googleMap.onLowMemory();
-    }
-    public void LocBy_gps(Context context) {
-        PageOfSelectedClinic.GPSListener gpsListener = new PageOfSelectedClinic.GPSListener(this,this.mMap);
-        try {
-            LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            Location location = null;
-            if (!isGPSEnabled && !isNetworkEnabled) {
-            } else {
-                int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-                System.out.println("hasFineLocationPermission: " + Integer.toString(hasFineLocationPermission));
-                if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
-                    if (isNetworkEnabled) {
-                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (location != null) {
-                                UserLoc.getUserPlace().set_placeX(location.getLatitude());
-                                UserLoc.getUserPlace().set_placeY(location.getLongitude());//위
-                            }
-                        }
-                    }
-                    if (isGPSEnabled) {
-                        if (location == null) {
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
-                            if (locationManager != null) {
-                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                if (location != null) {
-                                    UserLoc.getUserPlace().set_placeX(location.getLatitude());
-                                    UserLoc.getUserPlace().set_placeY(location.getLongitude());//위도
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.d("@@@", "" + e.toString());
-        }
     }
 
     private class GPSListener implements LocationListener {
