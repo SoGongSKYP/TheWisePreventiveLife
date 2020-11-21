@@ -65,14 +65,43 @@ public class PageOfStatistics extends Fragment {
         LocalButtonAction();
         return v;
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
-        this.userPlace=new UserLoc();
-        //final Lock lock = new ReentrantLock(); // lock instance
         this.nationStatistic = APIEntity.getNation();
-        //geoThread geo = new geoThread(this,lock);
-        //Thread thread = new Thread(geo);
-        //thread.start();
         if(userPlace.getUserPlace().get_placeAddress() == "제주"){
             localNum=1;
         }
@@ -266,4 +295,5 @@ public class PageOfStatistics extends Fragment {
         btn_ulsan.setOnClickListener(localClickListener);
         btn_sejong.setOnClickListener(localClickListener);
     }
+
 }
