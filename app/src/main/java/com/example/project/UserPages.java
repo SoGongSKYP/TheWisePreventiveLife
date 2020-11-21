@@ -8,6 +8,9 @@ package com.example.project;
         import androidx.fragment.app.FragmentManager;
         import androidx.fragment.app.FragmentTransaction;
 
+        import android.app.AlarmManager;
+        import android.app.PendingIntent;
+        import android.content.Context;
         import android.content.Intent;
         import android.os.Bundle;
         import android.view.MenuItem;
@@ -22,6 +25,7 @@ package com.example.project;
 
         import java.io.IOException;
         import java.text.ParseException;
+        import java.util.Calendar;
         import java.util.concurrent.locks.Lock;
         import java.util.concurrent.locks.ReentrantLock;
 
@@ -49,7 +53,7 @@ public class UserPages extends AppCompatActivity {
     private AutocompleteSupportFragment searchBar;
     private CardView searchCardView;
     private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-
+    private Intent intent;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
@@ -107,7 +111,7 @@ public class UserPages extends AppCompatActivity {
         InfoImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PageOfToManager.class);
+                intent = new Intent(getApplicationContext(), PageOfToManager.class);
                 startActivity(intent);
             }
         });
@@ -162,13 +166,6 @@ public class UserPages extends AppCompatActivity {
     }
     */
 
-
-
-    //권한 확인후 권한 요청
-    public void getLocationByGPS(){
-
-    }
-
     /* 일반사용자 페이지 네비게이션 바 연결*/
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -208,5 +205,22 @@ public class UserPages extends AppCompatActivity {
     private void ToolbarInfoButtonAction(){
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (intent!=null) {
+            stopService(intent);
+            intent = null;
+        }
+    }
+    protected void setAlarmTimer() {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.SECOND, 1);
+        Intent intent = new Intent(this, Alarm.class);
+        PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
 
+        AlarmManager mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        mAlarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+    }
 }
