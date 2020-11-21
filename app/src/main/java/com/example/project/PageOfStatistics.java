@@ -69,13 +69,64 @@ public class PageOfStatistics extends Fragment {
 
 
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
-        this.api = new API();
         this.userPlace=new UserLoc();
+        this.nationStatistic = APIEntity.getNation();
+        this.findLoc();
+        if(userPlace.getUserPlace().get_placeAddress() == "제주"){
+            localNum=1;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "경남"){
+            localNum=2;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "경북"){
+            localNum=3;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "전남"){
+            localNum=4;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "전북"){
+            localNum=5;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "충남"){
+            localNum=6;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "충북"){
+            localNum=7;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "강원"){
+            localNum=8;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "경기"){
+            localNum=9;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "세종"){
+            localNum=10;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "울산"){
+            localNum=11;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "대전"){
+            localNum=12;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "광주"){
+            localNum=13;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "인천"){
+            localNum=14;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "대구"){
+            localNum=15;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "부산"){
+            localNum=16;
+        }
+        else if(userPlace.getUserPlace().get_placeAddress() == "서울"){
+            localNum=17;
+        }
     }
 
     private UserLoc userPlace;
     private NationStatistics nationStatistic;
-    private API api;
 
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList=eElement.getElementsByTagName(tag).item(0).getChildNodes();
@@ -84,23 +135,16 @@ public class PageOfStatistics extends Fragment {
         return nValue.getNodeValue();
     }
 
-    private void connApi() throws ParserConfigurationException, SAXException, ParseException, IOException {
-        //this.nationStatistic=this.api.nationAPI();
-    }
-
     private void findLoc() throws IOException, ParserConfigurationException, SAXException, ParseException {
-        this.connApi();
         String parsingUrl="";
         Place searchLoc=null;
         String state=null;
         String shortLocName=null;
-        String longLocName=null;
 
         StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/geocode/xml"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("latlng","UTF-8") + "="
                 +URLEncoder.encode(Double.toString(this.userPlace.getUserPlace().get_placeY()), "UTF-8")+","
                 +URLEncoder.encode(Double.toString(this.userPlace.getUserPlace().get_placeX()), "UTF-8") ); /*여기는 위도 경도 y,x순*/
-
         urlBuilder.append("&" + URLEncoder.encode("language","UTF-8") + "=" + URLEncoder.encode("ko", "UTF-8")); /*리턴 정보 한국어로 리턴*/
         urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
         URL url = new URL(urlBuilder.toString());
@@ -148,12 +192,41 @@ public class PageOfStatistics extends Fragment {
     } //역 지오 코딩
 
 
-    public void print_nationStatistics() {
-        // TODO implement here
+    public void nationStatistics() {
+        System.out.println("전국");
+        System.out.println("기준 일시: "+this.nationStatistic.getStaticsDate());
+
+        System.out.println("누적 검사 횟수 : "+this.nationStatistic.getTestCnt());
+        System.out.println("누적 검사 완료수: "+this.nationStatistic.getTestCntComplete());
+        System.out.println("결과 음성: "+this.nationStatistic.getTestNeg());
+        System.out.println("검사 중: "+this.nationStatistic.getTestNum());
+        Double confirmRate = ((double) this.nationStatistic.getPatientNum()/(double)this.nationStatistic.getTestCntComplete())*100;
+        System.out.println("확진률: "+confirmRate+"%");
+
+        System.out.println("누적 확진자: "+this.nationStatistic.getPatientNum());
+        System.out.println("오늘 확진자: "+this.nationStatistic.getLocalStatistics().get(this.nationStatistic.getLocalStatistics().size()-1).getIncreaseDecrease());
+        System.out.println("지역 유입: "+this.nationStatistic.getLocalStatistics().get(this.nationStatistic.getLocalStatistics().size()-1).getLocConfirm());
+        System.out.println("해외 유입: "+this.nationStatistic.getLocalStatistics().get(this.nationStatistic.getLocalStatistics().size()-1).getBroadConfirm());
+
+        System.out.println("격리 중 : "+this.nationStatistic.getCareNum());
+        System.out.println("누적 격리 해제: "+this.nationStatistic.getHealerNum());
+        System.out.println("사망자: "+this.nationStatistic.getDeadNum());
+        System.out.println("10만명당 확진률: "+this.nationStatistic.getLocalStatistics().get(this.nationStatistic.getLocalStatistics().size()-1).getQurRate()+"%");
     }
 
-    public void print_localStatistics() {
-        // TODO implement here
+    public void localStatistics() {
+        System.out.println("지역: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getLocalName());
+        System.out.println("기준 일시: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getStaticsDate());
+
+        System.out.println("누적 확진자: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getAccumulatePatient());
+        System.out.println("오늘 확진자: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getTodayConfirm());
+        System.out.println("지역 유입: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getLocConfirm());
+        System.out.println("해외 유입: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getBroadConfirm());
+
+        System.out.println("격리 중 : "+this.nationStatistic.getLocalStatistics().get(this.localNum).getPatientNum());
+        System.out.println("누적 격리 해제: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getHealerNum());
+        System.out.println("사망자: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getDeadNum());
+        System.out.println("10만명당 확진률: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getAccumulatePatient()+"%");
     }
 
     Button.OnClickListener localClickListener = new View.OnClickListener(){
@@ -162,73 +235,73 @@ public class PageOfStatistics extends Fragment {
             switch (view.getId()){
                 case R.id.seoul_Button:
                     Toast.makeText(getContext(), "서울 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 0;
+                    localNum = 17;
                     break;
                 case R.id.busan_Button:
                     Toast.makeText(getContext(), "부산 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 1;
+                    localNum = 16;
                     break;
                 case R.id.daegu_Button:
                     Toast.makeText(getContext(), "대구 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 2;
+                    localNum = 15;
                     break;
                 case R.id.incheon_Button:
                     Toast.makeText(getContext(), "인천 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 3;
+                    localNum = 14;
                     break;
                 case R.id.gwangju_Button:
                     Toast.makeText(getContext(), "광주 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 4;
+                    localNum = 13;
                     break;
                 case R.id.daejeon_Button:
                     Toast.makeText(getContext(), "대전 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 5;
+                    localNum = 12;
                     break;
                 case R.id.ulsan_Button:
                     Toast.makeText(getContext(), "울산 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 6;
+                    localNum = 11;
                     break;
                 case R.id.sejong_Button:
                     Toast.makeText(getContext(), "세종 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 7;
+                    localNum = 10;
                     break;
                 case R.id.gyeonggi_Button:
                     Toast.makeText(getContext(), "경기 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 8;
+                    localNum = 9;
                     break;
                 case R.id.gangwondo_Button:
                     Toast.makeText(getContext(), "강원 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 9;
+                    localNum = 8;
                     break;
                 case R.id.chungBuk_Button:
                     Toast.makeText(getContext(), "충북 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 10;
+                    localNum = 7;
                     break;
                 case R.id.chungNam_Button:
                     Toast.makeText(getContext(), "충남 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 11;
+                    localNum = 6;
                     break;
                 case R.id.jeonBuk_Button:
                     Toast.makeText(getContext(), "전북 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 12;
+                    localNum = 5;
                     break;
                 case R.id.jeonNam_Button:
                     Toast.makeText(getContext(), "전남 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 13;
+                    localNum = 4;
                     break;
                 case R.id.gyeongBuk1_Button:
                 case R.id.gyeongBuk2_Button:
                     Toast.makeText(getContext(), "경북 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 14;
+                    localNum = 3;
                     break;
                 case R.id.gyeongNam1_Button:
                 case R.id.gyeongNam2_Button:
                     Toast.makeText(getContext(), "경남 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 15;
+                    localNum = 2;
                     break;
                 case R.id.jeju_Button:
                     Toast.makeText(getContext(), "제주 클릭", Toast.LENGTH_SHORT).show();
-                    localNum = 16;
+                    localNum = 1;
                     break;
             }
         }
