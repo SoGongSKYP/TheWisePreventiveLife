@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,11 +36,12 @@ public class PageOfStatistics extends Fragment {
     ImageButton btn_seoul, btn_busan, btn_daegu, btn_incheon, btn_gwangju, btn_daejeon, btn_ulsan, btn_sejong,
             btn_gyeonggido, btn_gangwondo, btn_chungbuk, btn_chungnam, btn_jeonbuk, btn_jeonnam, btn1_gyeongbuk,
             btn2_gyeongbuk, btn1_gyeongnam, btn2_gyeongnam, btn_jeju;
+    int localNum = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
 
-        btn_gyeonggido = v.findViewById(R.id.gyunggi_Button);
+        btn_gyeonggido = v.findViewById(R.id.gyeonggi_Button);
         btn_gangwondo = v.findViewById(R.id.gangwondo_Button);
         btn_chungbuk = v.findViewById(R.id.chungBuk_Button);
         btn_chungnam = v.findViewById(R.id.chungNam_Button);
@@ -56,12 +58,14 @@ public class PageOfStatistics extends Fragment {
         btn_daegu = v.findViewById(R.id.daegu_Button);
         btn_incheon = v.findViewById(R.id.incheon_Button);
         btn_gwangju = v.findViewById(R.id.gwangju_Button);
-        btn_daejeon = v.findViewById(R.id.dajeon_Button);
+        btn_daejeon = v.findViewById(R.id.daejeon_Button);
         btn_ulsan = v.findViewById(R.id.ulsan_Button);
         btn_sejong = v.findViewById(R.id.sejong_Button);
 
+        LocalButtonAction();
         return v;
     }
+
 
 
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
@@ -150,6 +154,107 @@ public class PageOfStatistics extends Fragment {
 
     public void print_localStatistics() {
         // TODO implement here
+    }
+
+    Button.OnClickListener localClickListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.seoul_Button:
+                    Toast.makeText(getContext(), "서울 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 0;
+                    break;
+                case R.id.busan_Button:
+                    Toast.makeText(getContext(), "부산 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 1;
+                    break;
+                case R.id.daegu_Button:
+                    Toast.makeText(getContext(), "대구 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 2;
+                    break;
+                case R.id.incheon_Button:
+                    Toast.makeText(getContext(), "인천 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 3;
+                    break;
+                case R.id.gwangju_Button:
+                    Toast.makeText(getContext(), "광주 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 4;
+                    break;
+                case R.id.daejeon_Button:
+                    Toast.makeText(getContext(), "대전 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 5;
+                    break;
+                case R.id.ulsan_Button:
+                    Toast.makeText(getContext(), "울산 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 6;
+                    break;
+                case R.id.sejong_Button:
+                    Toast.makeText(getContext(), "세종 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 7;
+                    break;
+                case R.id.gyeonggi_Button:
+                    Toast.makeText(getContext(), "경기 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 8;
+                    break;
+                case R.id.gangwondo_Button:
+                    Toast.makeText(getContext(), "강원 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 9;
+                    break;
+                case R.id.chungBuk_Button:
+                    Toast.makeText(getContext(), "충북 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 10;
+                    break;
+                case R.id.chungNam_Button:
+                    Toast.makeText(getContext(), "충남 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 11;
+                    break;
+                case R.id.jeonBuk_Button:
+                    Toast.makeText(getContext(), "전북 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 12;
+                    break;
+                case R.id.jeonNam_Button:
+                    Toast.makeText(getContext(), "전남 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 13;
+                    break;
+                case R.id.gyeongBuk1_Button:
+                case R.id.gyeongBuk2_Button:
+                    Toast.makeText(getContext(), "경북 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 14;
+                    break;
+                case R.id.gyeongNam1_Button:
+                case R.id.gyeongNam2_Button:
+                    Toast.makeText(getContext(), "경남 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 15;
+                    break;
+                case R.id.jeju_Button:
+                    Toast.makeText(getContext(), "제주 클릭", Toast.LENGTH_SHORT).show();
+                    localNum = 16;
+                    break;
+            }
+        }
+    };
+
+    private void LocalButtonAction(){
+        btn_gyeonggido.setOnClickListener(localClickListener);
+        btn_gangwondo.setOnClickListener(localClickListener);
+        btn_chungbuk.setOnClickListener(localClickListener);
+        btn_chungnam.setOnClickListener(localClickListener);
+        btn_jeonbuk.setOnClickListener(localClickListener);
+        btn_jeonnam.setOnClickListener(localClickListener);
+        btn1_gyeongbuk.setOnClickListener(localClickListener);
+        btn2_gyeongbuk.setOnClickListener(localClickListener);
+        btn1_gyeongnam.setOnClickListener(localClickListener);
+        btn2_gyeongnam.setOnClickListener(localClickListener);
+        btn_jeju.setOnClickListener(localClickListener);
+
+        btn_seoul.setOnClickListener(localClickListener);
+        btn_busan.setOnClickListener(localClickListener);
+        btn_daegu.setOnClickListener(localClickListener);
+        btn_incheon.setOnClickListener(localClickListener);
+        btn_gwangju.setOnClickListener(localClickListener);
+        btn_daejeon.setOnClickListener(localClickListener);
+        btn_ulsan.setOnClickListener(localClickListener);
+        btn_sejong.setOnClickListener(localClickListener);
     }
 
 }

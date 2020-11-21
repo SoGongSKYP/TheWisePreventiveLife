@@ -40,7 +40,7 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
     public void onBindViewHolder(@NonNull AdapterOfList.ListViewHolder holder, int position) {
         holder.patientNumTextView.setText("확진자 "+ datalist.get(position).getPatientNum());
 
-        //String date = datalist.get(position).getConfirmDate();
+        String date = datalist.get(position).getConfirmDate();
         //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 mm월 dd일");
 
         holder.patientDateTextView.setText(datalist.get(position).getConfirmDate());

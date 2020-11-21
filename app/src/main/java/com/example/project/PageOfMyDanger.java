@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,8 +48,19 @@ import static android.content.Context.LOCATION_SERVICE;
  *
  */
 public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
+
+    EditText startEditText, finishEditText;
+    Button findRouteButton;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_user_danger, container, false);
+        View v = inflater.inflate(R.layout.fragment_user_danger, container, false);
+        startEditText = v.findViewById(R.id.starting_point_editText);
+        finishEditText = v.findViewById(R.id.destination_editText);
+        findRouteButton = v.findViewById(R.id.search_route_Button);
+
+        mapView = v.findViewById(R.id.danger_MapView);
+        mapView.getMapAsync(this);
+
+        return v;
     }
 
     /**

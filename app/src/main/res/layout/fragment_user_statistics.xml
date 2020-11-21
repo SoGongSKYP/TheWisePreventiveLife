@@ -78,7 +78,7 @@
                         android:background="@null"
                         android:src="@drawable/statistics_mark" />
                     <ImageButton
-                        android:id="@+id/gyunggi_Button"
+                        android:id="@+id/gyeonggi_Button"
                         android:layout_width="75dp"
                         android:layout_height="match_parent"
                         android:background="@null"
@@ -90,7 +90,7 @@
                         android:layout_height="30dp"
                         android:background="@null"
                         android:src="@drawable/statistics_mark"
-                        android:layout_alignLeft="@id/gyunggi_Button"
+                        android:layout_alignLeft="@id/gyeonggi_Button"
                         android:layout_marginTop="45dp"/>
                     <ImageButton
                         android:id="@+id/gangwondo_Button"
@@ -98,7 +98,7 @@
                         android:layout_height="100dp"
                         android:background="@null"
                         android:src="@drawable/statistics_mark"
-                        android:layout_toRightOf="@id/gyunggi_Button"/>
+                        android:layout_toRightOf="@id/gyeonggi_Button"/>
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/korea_button2_RelativeLayout"
@@ -126,7 +126,7 @@
                         android:src="@drawable/statistics_mark"
                         android:layout_toRightOf="@id/chungNam_Button"/>
                     <ImageButton
-                        android:id="@+id/dajeon_Button"
+                        android:id="@+id/daejeon_Button"
                         android:layout_width="30dp"
                         android:layout_height="25dp"
                         android:background="@null"
