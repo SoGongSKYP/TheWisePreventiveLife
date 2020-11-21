@@ -58,9 +58,10 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private LatLng myLatLng;
     private MapView mapView;
-    
+
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces;
+    private GPSListener gpsListener;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
@@ -103,7 +104,8 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-        this.LocBy_gps(getContext());
+        this.gpsListener = new GPSListener();
+        UserLoc.LocBy_gps(getContext(),this.gpsListener);
     } // 유저 현위치에 마커 추가
 
     @Override
@@ -160,50 +162,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
 
-    public void LocBy_gps(Context context) {
-        GPSListener gpsListener = new GPSListener();
-        try {
-            LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            Location location = null;
-            if (!isGPSEnabled && !isNetworkEnabled) {
-            } else {
-                int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-                System.out.println("hasFineLocationPermission: " + Integer.toString(hasFineLocationPermission));
-                if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
-                    if (isNetworkEnabled) {
-                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (location != null) {
-                                UserLoc.getUserPlace().set_placeX(location.getLatitude());
-                                UserLoc.getUserPlace().set_placeY(location.getLongitude());//위
-                            }
-                        }
-                    }
-                    if (isGPSEnabled) {
-                        if (location == null) {
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
-                            if (locationManager != null) {
-                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                if (location != null) {
-                                    UserLoc.getUserPlace().set_placeX(location.getLatitude());
-                                    UserLoc.getUserPlace().set_placeY(location.getLongitude());//위도
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.d("@@@", "" + e.toString());
-        }
-    }
-
-
     private class GPSListener implements LocationListener {
-
         public void onLocationChanged(Location location) {
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
@@ -222,7 +181,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     }
-
 
     public void calNearPlace() {
         this.nearPlaces.clear();
