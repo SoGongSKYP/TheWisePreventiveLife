@@ -37,7 +37,7 @@ public class PageOfStatistics extends Fragment {
     ImageButton btn_seoul, btn_busan, btn_daegu, btn_incheon, btn_gwangju, btn_daejeon, btn_ulsan, btn_sejong,
             btn_gyeonggido, btn_gangwondo, btn_chungbuk, btn_chungnam, btn_jeonbuk, btn_jeonnam, btn1_gyeongbuk,
             btn2_gyeongbuk, btn1_gyeongnam, btn2_gyeongnam, btn_jeju;
-    int localNum = 0;
+    int localNum = 17;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
@@ -66,15 +66,13 @@ public class PageOfStatistics extends Fragment {
         return v;
     }
 
-
-
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
         this.userPlace=new UserLoc();
-        final Lock lock = new ReentrantLock(); // lock instance
+        //final Lock lock = new ReentrantLock(); // lock instance
         this.nationStatistic = APIEntity.getNation();
-        geoThread geo = new geoThread(this,lock);
-        Thread thread = new Thread(geo);
-        thread.start();
+        //geoThread geo = new geoThread(this,lock);
+        //Thread thread = new Thread(geo);
+        //thread.start();
         if(userPlace.getUserPlace().get_placeAddress() == "제주"){
             localNum=1;
         }
@@ -131,7 +129,7 @@ public class PageOfStatistics extends Fragment {
     private UserLoc userPlace;
     private NationStatistics nationStatistic;
 
-    public void nationStatistics() {
+    public void nationStatisticsPrint() {
         System.out.println("전국");
         System.out.println("기준 일시: "+this.nationStatistic.getStaticsDate());
 
@@ -153,7 +151,7 @@ public class PageOfStatistics extends Fragment {
         System.out.println("10만명당 확진률: "+this.nationStatistic.getLocalStatistics().get(this.nationStatistic.getLocalStatistics().size()-1).getQurRate()+"%");
     }
 
-    public void localStatistics() {
+    public void localStatisticsPrint() {
         System.out.println("지역: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getLocalName());
         System.out.println("기준 일시: "+this.nationStatistic.getLocalStatistics().get(this.localNum).getStaticsDate());
 
@@ -267,112 +265,5 @@ public class PageOfStatistics extends Fragment {
         btn_daejeon.setOnClickListener(localClickListener);
         btn_ulsan.setOnClickListener(localClickListener);
         btn_sejong.setOnClickListener(localClickListener);
-    }
-    public UserLoc getUserPlace() {
-        return userPlace;
-    }
-}
-class geoThread implements Runnable{
-    PageOfStatistics page;
-    private final Lock lock;
-    geoThread(PageOfStatistics page, Lock lock){
-        this.page=page;
-        this.lock = lock;
-    }
-    private static String getTagValue(String tag, Element eElement) {
-        NodeList nlList=eElement.getElementsByTagName(tag).item(0).getChildNodes();
-        Node nValue=(Node)nlList.item(0);
-        if(nValue==null) return null;
-        return nValue.getNodeValue();
-    }
-    @Override
-    public void run() {
-        String parsingUrl="";
-        Place searchLoc=null;
-        String state=null;
-        String shortLocName=null;
-        lock.lock();
-        try{
-            StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/geocode/xml"); /*URL*/
-            try {
-                urlBuilder.append("?" + URLEncoder.encode("latlng","UTF-8") + "="
-                        +URLEncoder.encode(Double.toString(page.getUserPlace().getUserPlace().get_placeY()), "UTF-8")+","
-                        +URLEncoder.encode(Double.toString(page.getUserPlace().getUserPlace().get_placeX()), "UTF-8") ); /*여기는 위도 경도 y,x순*/
-                urlBuilder.append("&" + URLEncoder.encode("language","UTF-8") + "=" + URLEncoder.encode("ko", "UTF-8")); /*리턴 정보 한국어로 리턴*/
-                urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            URL url = null;
-            try {
-                url = new URL(urlBuilder.toString());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            assert url != null;
-            parsingUrl=url.toString();
-            //System.out.println(parsingUrl);
-
-            DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder= null;
-            try {
-                dBuilder = dbFactory.newDocumentBuilder();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }
-            Document doc= null;
-            try {
-                if(dBuilder != null){
-                    doc = dBuilder.parse(parsingUrl);
-                }
-                else{
-                    page.getUserPlace().getUserPlace().set_placeAddress("서울");
-                    return;
-                }//지역을 못 찾았을시 서울로 지역을 기본 값으로 고정해준다.
-            } catch (IOException | SAXException e) {
-                e.printStackTrace();
-            }
-
-            doc.getDocumentElement().normalize();
-            //System.out.println("Root element : "+doc.getDocumentElement().getNodeName());
-
-            NodeList geoList=doc.getElementsByTagName("GeocodeResponse"); //장소 전체 노드
-
-            NodeList status=null;//doc.getElementsByTagName("status"); // 지역 노드
-            NodeList resultList=null;//doc.getElementsByTagName("result"); // 지역 노드
-
-            NodeList ComponentList=null;//doc.getElementsByTagName("address_component"); // 지역 노드
-
-            for(int i=0; i<geoList.getLength(); i++) {
-                Node geoNode=geoList.item(i);
-                if(geoNode.getNodeType()==Node.ELEMENT_NODE) {
-                    Element geoElement=(Element) geoNode;
-                    state= getTagValue("status",geoElement); // 상태(오류)
-                    resultList = geoElement.getElementsByTagName("result");
-                    Node resultNode=resultList.item(i);
-                    if(resultNode.getNodeType()==Node.ELEMENT_NODE){
-                        Element resultElement=(Element) resultNode;
-                        ComponentList =resultElement.getElementsByTagName("address_component");
-                        for(int c =0; c<ComponentList.getLength();c++){
-                            Node ComponentNode=ComponentList.item(c);
-                            if(ComponentNode.getNodeType()==Node.ELEMENT_NODE){
-                                Element ComponentElement=(Element) ComponentNode;
-                                if(getTagValue("type",ComponentElement)=="administrative_area_level_1"){
-                                    shortLocName=getTagValue("short_name",ComponentElement);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            page.getUserPlace().getUserPlace().set_placeAddress(shortLocName); // 사용자가 있는 지역 이름 받음
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            lock.unlock();
-        }
     }
 }
