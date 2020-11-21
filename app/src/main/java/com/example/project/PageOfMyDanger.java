@@ -67,7 +67,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
      * Default constructor
      */
     public PageOfMyDanger() {
-        this.userLoc=new UserLoc();
+        //this.userLoc=new UserLoc();
         this.patient =new ArrayList<Patient>();
         this.nearPlaces =new ArrayList<VisitPlace>();
         this.searchResultPath = new ArrayList<SearchPath>();
@@ -76,7 +76,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         this.danger=0;
     }
 
-    private UserLoc userLoc;
+    //private UserLoc userLoc;
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces; // 경로 주변 확진자
     private ArrayList<Place> visitPlaceList; // 출력 결과 경로 경유지
@@ -99,7 +99,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         //LocPermission(getActivity(),getContext());
         this.mMap = googleMap;
-        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
@@ -131,8 +131,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
                                 System.out.println("5");
-                                this.userLoc.getUserPlace().set_placeX(location.getLatitude());
-                                this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위
+                                UserLoc.getUserPlace().set_placeX(location.getLatitude());
+                                UserLoc.getUserPlace().set_placeY(location.getLongitude());//위
                             }
                         }
                     }
@@ -146,8 +146,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
                                     System.out.println("9");
-                                    this.userLoc.getUserPlace().set_placeX(location.getLatitude());
-                                    this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위도
+                                    UserLoc.getUserPlace().set_placeX(location.getLatitude());
+                                    UserLoc.getUserPlace().set_placeY(location.getLongitude());//위도
                                 }
                             }
                         }
@@ -162,7 +162,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     public void RefreshMarker() {
         System.out.print("5");
         this.userPoint.remove();
-        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
