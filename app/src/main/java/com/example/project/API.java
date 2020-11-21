@@ -127,7 +127,7 @@ public class API {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                if(getTagValue("gubun",eElement)=="검역"){
+                if(getTagValue("gubun",eElement).equals("검역")){
                     localList.add(new LocalStatistics(getTagValue("stdDay",eElement),Integer.parseInt(getTagValue("isolIngCnt",eElement))
                             ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("isolClearCnt",eElement))
                             ,getTagValue("gubun",eElement),Integer.parseInt(getTagValue("incDec",eElement))
