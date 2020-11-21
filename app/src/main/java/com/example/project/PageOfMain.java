@@ -61,7 +61,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces;
-    private GPSListener gpsListener;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
@@ -104,10 +103,9 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-        this.gpsListener = new GPSListener();
-        UserLoc.LocBy_gps(getContext(),this.gpsListener);
+        GPSListener gpsListener = new GPSListener();
+        UserLoc.LocBy_gps(getContext(),gpsListener);
     } // 유저 현위치에 마커 추가
-
     @Override
     public void onStart() {
         super.onStart();
