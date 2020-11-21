@@ -102,60 +102,59 @@ public class PageOfStatistics extends Fragment {
 
     public PageOfStatistics() throws ParserConfigurationException, SAXException, ParseException, IOException {
         this.nationStatistic = APIEntity.getNation();
-        if(userPlace.getUserPlace().get_placeAddress() == "제주"){
+        if(UserLoc.getUserPlace().get_placeAddress() == "제주"){
             localNum=1;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "경남"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "경남"){
             localNum=2;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "경북"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "경북"){
             localNum=3;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "전남"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "전남"){
             localNum=4;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "전북"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "전북"){
             localNum=5;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "충남"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "충남"){
             localNum=6;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "충북"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "충북"){
             localNum=7;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "강원"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "강원"){
             localNum=8;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "경기"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "경기"){
             localNum=9;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "세종"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "세종"){
             localNum=10;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "울산"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "울산"){
             localNum=11;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "대전"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "대전"){
             localNum=12;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "광주"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "광주"){
             localNum=13;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "인천"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "인천"){
             localNum=14;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "대구"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "대구"){
             localNum=15;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "부산"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "부산"){
             localNum=16;
         }
-        else if(userPlace.getUserPlace().get_placeAddress() == "서울"){
+        else if(UserLoc.getUserPlace().get_placeAddress() == "서울"){
             localNum=17;
         }
     }
 
-    private UserLoc userPlace;
     private NationStatistics nationStatistic;
 
     public void nationStatisticsPrint() {
