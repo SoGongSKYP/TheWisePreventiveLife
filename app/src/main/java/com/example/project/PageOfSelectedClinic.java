@@ -34,27 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-class Pair implements Comparable<Pair> {
-    double first;
-    SelectedClinic second;
-
-    Pair(double f, SelectedClinic s) {
-        this.first = f;
-        this.second = s;
-    }
-
-
-    public int compareTo(Pair p) {
-        if (this.first < p.first) {
-            return -1; // 오름차순
-        }
-        return 1; // 이미 this.first가 더 큰 것이 됐으므로, 1로 해준다. -1로
-        // -1로 하면 결과가 이상하게 출력됨.
-    }
-}
-/**
- *
- */
 public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
