@@ -1,63 +1,43 @@
 package com.example.project;
 
         import androidx.annotation.NonNull;
-        import androidx.annotation.Nullable;
         import androidx.appcompat.app.ActionBar;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.appcompat.widget.Toolbar;
         import androidx.cardview.widget.CardView;
-        import androidx.core.app.ActivityCompat;
-        import androidx.core.content.ContextCompat;
-        import androidx.fragment.app.Fragment;
         import androidx.fragment.app.FragmentManager;
         import androidx.fragment.app.FragmentTransaction;
 
-        import android.Manifest;
-        import android.app.Activity;
-        import android.content.Context;
         import android.content.Intent;
-        import android.content.pm.PackageManager;
-        import android.nfc.Tag;
         import android.os.Bundle;
-        import android.text.style.TtsSpan;
-        import android.util.Log;
         import android.view.MenuItem;
         import android.view.View;
         import android.widget.ImageButton;
         import android.widget.TextView;
-        import android.widget.Toast;
-        import static android.content.ContentValues.TAG;
-        import static android.content.Context.LOCATION_SERVICE;
 
-        import com.google.android.gms.common.api.Status;
-        import com.google.android.libraries.places.api.model.Place;
-        import com.google.android.libraries.places.widget.Autocomplete;
-        import com.google.android.libraries.places.widget.AutocompleteActivity;
         import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-        import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-        import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
 
         import org.xml.sax.SAXException;
 
         import java.io.IOException;
         import java.text.ParseException;
-        import java.util.Arrays;
-        import java.util.List;
+        import java.util.concurrent.locks.Lock;
+        import java.util.concurrent.locks.ReentrantLock;
 
         import javax.xml.parsers.ParserConfigurationException;
 
-        import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
 public class UserPages extends AppCompatActivity {
 
     /*Bottom Navigation Bar 관련 컴포넌트*/
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private PageOfMain pageOfMain = new PageOfMain();
-    private PageOfMyDanger pageOfMyDanger = new PageOfMyDanger();
-    private PageOfStatistics pageOfStatistics = new PageOfStatistics();
-    private PageOfSelfDiagnosis pageOfSelfDiagnosis = new PageOfSelfDiagnosis();
-    private PageOfSelectedClinic pageOfSelectedClinic = new PageOfSelectedClinic();
+
+    private PageOfMain pageOfMain;
+    private PageOfMyDanger pageOfMyDanger ;
+    private PageOfStatistics pageOfStatistics;
+    private PageOfSelfDiagnosis pageOfSelfDiagnosis ;
+    private PageOfSelectedClinic pageOfSelectedClinic;
 
     /*Tool Bar 관련 컴포넌트*/
     private Toolbar toolbar;
@@ -74,15 +54,37 @@ public class UserPages extends AppCompatActivity {
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
     public UserPages() throws ParserConfigurationException, SAXException, ParseException, IOException {
+        pageOfMain = new PageOfMain();
+        new Thread(){
+            public void run() {
+                pageOfMyDanger = new PageOfMyDanger();
+            }
+        }.start();
+        new Thread(){
+            public void run() {
+                pageOfSelectedClinic = new PageOfSelectedClinic();
+            }
+        }.start();
+        new Thread(){
+            public void run() {
+                try {
+                    pageOfStatistics = new PageOfStatistics();
+                } catch (ParserConfigurationException | SAXException | ParseException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+        new Thread(){
+            public void run() {
+                pageOfSelfDiagnosis = new PageOfSelfDiagnosis();
+            }
+        }.start();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_pages);
-
-        //LocPermission(this, getApplicationContext());
-
 
         /*Bottom Navigation 연결*/
         BottomNavigationView navigationView = findViewById(R.id.user_BottomNavigation);
