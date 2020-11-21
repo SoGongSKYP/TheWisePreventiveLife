@@ -30,28 +30,26 @@ import java.net.URLEncoder;
 
 
 public class UserLoc extends AppCompatActivity {
-
     /**
      * Default constructor
      */
     //private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
-    private Place userPlace;
+    private static Place userPlace = new Place("동국대학교 정보문화관", 37.559562, 126.998557);
 
     // 1: 사용자 위치정보 허용 상태, 2: 사용자 위치 정보 허용하지 않은 상태
     public UserLoc() {
-        this.userPlace = new Place("동국대학교 정보문화관", 37.559562, 126.998557);
     }
 
-    public Place getUserPlace() {
-        return this.userPlace;
+    public static Place getUserPlace() {
+        return userPlace;
     }
 
     public Integer getMode() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    public void setUser_place(Place place) {
-        this.userPlace = place;
+    public static void setUser_place(Place place) {
+        userPlace = place;
     }
 
     /*장소 검색*/
@@ -114,7 +112,6 @@ public class UserLoc extends AppCompatActivity {
             }
         }
     }
-
     private static String getTagValue(String tag, Element eElement) {
         NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
         Node nValue = (Node) nlList.item(0);
