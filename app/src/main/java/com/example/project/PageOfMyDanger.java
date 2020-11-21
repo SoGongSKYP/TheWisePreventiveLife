@@ -100,58 +100,9 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-        this.LocBy_gps(getContext());
+        GPSListener gpsListener = new GPSListener();
+        UserLoc.LocBy_gps(getContext(),gpsListener);
     } // 유저 현위치에 마커 추가
-
-    public void LocBy_gps(Context context) {
-        PageOfMyDanger.GPSListener gpsListener = new PageOfMyDanger.GPSListener();
-        try {
-            System.out.println("1");
-            LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            Location location = null;
-            if (!isGPSEnabled && !isNetworkEnabled) {
-            } else {
-                System.out.println("2");
-                int hasFineLocationPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-                System.out.println("hasFineLocationPermission: " + Integer.toString(hasFineLocationPermission));
-                if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
-                    if (isNetworkEnabled) {
-                        System.out.println("3");
-                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
-                        if (locationManager != null) {
-                            System.out.println("4");
-                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (location != null) {
-                                System.out.println("5");
-                                UserLoc.getUserPlace().set_placeX(location.getLatitude());
-                                UserLoc.getUserPlace().set_placeY(location.getLongitude());//위
-                            }
-                        }
-                    }
-                    if (isGPSEnabled) {
-                        System.out.println("6");
-                        if (location == null) {
-                            System.out.println("7");
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) gpsListener);
-                            if (locationManager != null) {
-                                System.out.println("8");
-                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                if (location != null) {
-                                    System.out.println("9");
-                                    UserLoc.getUserPlace().set_placeX(location.getLatitude());
-                                    UserLoc.getUserPlace().set_placeY(location.getLongitude());//위도
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.d("@@@", "" + e.toString());
-        }
-    }
 
     public void RefreshMarker() {
         System.out.print("5");
