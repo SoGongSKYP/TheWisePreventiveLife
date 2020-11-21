@@ -58,13 +58,12 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private LatLng myLatLng;
     private MapView mapView;
-
-    private UserLoc userLoc;
+    
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
 
     public PageOfMain() {
@@ -77,7 +76,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
 
         /*UserLoc 클래스와 연결*/
-        userLoc = new UserLoc();            // 디폴트 좌표
 
         /*맵 컴포넌트 연결*/
         mapView = v.findViewById(R.id.user_main_Map);
@@ -95,14 +93,10 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //LocPermission(getActivity(),getContext());
         this.mMap = googleMap;
-        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
@@ -122,6 +116,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         mapView.onStop();
+
     }
 
     @Override
@@ -156,7 +151,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     public void RefreshMarker() {
         this.userPoint.remove();
-        this.myLatLng = new LatLng(this.userLoc.getUserPlace().get_placeX(), this.userLoc.getUserPlace().get_placeY());
+        this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
@@ -182,8 +177,8 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
-                                this.userLoc.getUserPlace().set_placeX(location.getLatitude());
-                                this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위
+                                UserLoc.getUserPlace().set_placeX(location.getLatitude());
+                                UserLoc.getUserPlace().set_placeY(location.getLongitude());//위
                             }
                         }
                     }
@@ -193,8 +188,8 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
                             if (locationManager != null) {
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
-                                    this.userLoc.getUserPlace().set_placeX(location.getLatitude());
-                                    this.userLoc.getUserPlace().set_placeY(location.getLongitude());//위도
+                                    UserLoc.getUserPlace().set_placeX(location.getLatitude());
+                                    UserLoc.getUserPlace().set_placeY(location.getLongitude());//위도
                                 }
                             }
                         }
@@ -234,8 +229,8 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         for (int a = 0; a < this.patient.size(); a++) {
             for (int b = 0; b < this.patient.get(a).getVisitPlaceList().size(); b++) {
                 if (this.patient.get(a).getVisitPlaceList().get(b).
-                        Distance(this.userLoc.getUserPlace().get_placeX(),
-                                this.userLoc.getUserPlace().get_placeX(), "kilometer") <= 1) {
+                        Distance(UserLoc.getUserPlace().get_placeX(),
+                                UserLoc.getUserPlace().get_placeX(), "kilometer") <= 1) {
                     this.nearPlaces.add(this.patient.get(a).getVisitPlaceList().get(b));
                 }
             }
