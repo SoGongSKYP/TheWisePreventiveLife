@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: artifacts:ODsayAndroidSDK:unspecified@jar">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/ODsayAndroidSDK/build/.transforms/1e8a34cb8c80698d4c7c59be805bf53e/jetified-ODsayAndroidSDK/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/ODsayAndroidSDK/build/.transforms/1e8a34cb8c80698d4c7c59be805bf53e/jetified-ODsayAndroidSDK/res" />
+      <root url="jar://$PROJECT_DIR$/ODsayAndroidSDK/build/.transforms/2a725df6de430bcc837db46377397033/jetified-ODsayAndroidSDK/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/ODsayAndroidSDK/build/.transforms/2a725df6de430bcc837db46377397033/jetified-ODsayAndroidSDK/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

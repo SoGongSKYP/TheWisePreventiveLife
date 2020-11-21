@@ -24,8 +24,8 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
     private ArrayList<String> questionList;
-    private ArrayList<Integer> yesList = new ArrayList<Integer>(Arrays.asList(2, 2, 2, 2, 2, 2, 2));
-    private int count=0;
+    private ArrayList<Integer> yesList;
+    private int count;
 
     public static class DiagnosisViewHolder extends RecyclerView.ViewHolder {
         public Button YesButton;
@@ -33,6 +33,7 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TextView QuestionTextView;
         public DiagnosisViewHolder(View v) {
             super(v);
+            Log.d("ViewHolder 생성자", ": 1");
             YesButton = v.findViewById(R.id.selfdiagnosis_YES_Button);
             NoButton = v.findViewById(R.id.selfdiagnosis_NO_Button);
             QuestionTextView = v.findViewById(R.id.selfdiagnosis_question_TextView);
@@ -48,6 +49,8 @@ public class AdapterOfDiagnosis extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public AdapterOfDiagnosis(ArrayList<String> data){
+        yesList = new ArrayList<>(Arrays.asList(2, 2, 2, 2, 2, 2, 2));
+        count=0;
         this.questionList = data;
     }
 
