@@ -1,8 +1,9 @@
 package com.example.project;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class RowOfPatient {
+public class RowOfPatient implements Serializable {
 
 
     public RowOfPatient(String patientNum, String confirmDate, int bigLocalNum, int smallLocalNum) {

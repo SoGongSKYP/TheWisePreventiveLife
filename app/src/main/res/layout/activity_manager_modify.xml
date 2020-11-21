@@ -53,26 +53,30 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:weightSum="2">
-        <Spinner
-            android:id="@+id/modify_big_Spinner"
+        <TextView
+            android:id="@+id/modify_big_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/edittext_outline_design"
-            android:padding="10dp"
-            android:entries="@array/big_location_array"/>
-        <Spinner
-            android:id="@+id/modify_small_Spinner"
+            android:text="서울특별시"
+            android:textSize="17dp"
+            android:textColor="@color/colorMiddleGrey"
+            android:padding="12dp"/>
+        <TextView
+            android:id="@+id/modify_small_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/edittext_outline_design"
-            android:padding="10dp"
-            android:entries="@array/array_0"/>
+            android:text="ㅡ"
+            android:textSize="17dp"
+            android:textColor="@color/colorMiddleGrey"
+            android:padding="12dp"/>
     </LinearLayout>
 
     <EditText
@@ -84,7 +88,9 @@
         android:layout_marginBottom="10dp"
         android:padding="12dp"
         android:hint="확진자 번호"
-        android:background="@drawable/edittext_outline_design"/>
+        android:textColor="@color/colorMiddleGrey"
+        android:background="@drawable/edittext_outline_design"
+        android:enabled="false"/>
 
     <EditText
         android:id="@+id/modify_time_EditText"
@@ -95,7 +101,9 @@
         android:layout_marginBottom="15dp"
         android:padding="12dp"
         android:hint="확진 판정 시간"
-        android:background="@drawable/edittext_outline_design"/>
+        android:textColor="@color/colorMiddleGrey"
+        android:background="@drawable/edittext_outline_design"
+        android:enabled="false"/>
 
     <View
         android:layout_width="match_parent"

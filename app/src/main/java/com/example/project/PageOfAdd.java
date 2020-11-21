@@ -59,8 +59,6 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
 
 
 
-
-
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_manager_add, container, false);
 
@@ -123,11 +121,15 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
             @Override
             public void onClick(View view) {
                 if(dupleCheck == false && saveCheck == false){
-                    dupleCheckTextView.setText("중복 확인! 아래에서 확진자 동선을 추가하세요");
-                    dupleCheckTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
-                    dupleCheck = true;
-                    dupleButton.setText("저    장");
-                    dupleButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_full_green));
+                    if(patientNumEditText.getText() != null && patientDateEditText.getText() !=null){
+                        dupleCheckTextView.setText("중복 확인! 아래에서 확진자 동선을 추가하세요");
+                        dupleCheckTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                        dupleCheck = true;
+                        dupleButton.setText("저    장");
+                        dupleButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_full_green));
+                    }else{
+                        Toast.makeText(getContext(), "확진자 기본 정보를 모두 입력하세요", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else if(dupleCheck == true && saveCheck == false){
                     GetDataFromUI();
@@ -176,8 +178,6 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         smallLocSpinner.setAdapter(smallAdapter);
     }
 
-
-
     private void BigSpinnerAction(){
         bigLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -185,7 +185,6 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                 String index = Integer.toString(i);
                 int resId = getResources().getIdentifier("array_"+index, "array", getContext().getPackageName());
                 smallAdapter = ArrayAdapter.createFromResource(getContext(), resId, android.R.layout.simple_spinner_dropdown_item);
-
 
                 pBigLocal = Integer.toString(i);
                 Log.d("ADD 큰 도시 : ", pBigLocal);
