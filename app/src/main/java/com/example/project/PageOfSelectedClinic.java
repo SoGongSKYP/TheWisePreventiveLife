@@ -46,7 +46,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     private ArrayList<Marker> clinicsMarker;
     private UserLoc userPlace;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
