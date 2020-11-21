@@ -44,7 +44,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
 
     private ArrayList<SelectedClinic> clinics;
     private ArrayList<Marker> clinicsMarker;
-    private UserLoc userPlace;
+    //private UserLoc userPlace;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
@@ -56,21 +56,23 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     }
     public PageOfSelectedClinic() {
         this.clinicsMarker=new ArrayList<Marker>();
-        this.userPlace =new UserLoc();
         this.clinics = new ArrayList<SelectedClinic>();
         this.clinics = clinicAPIEntity.getClinicsList();
     }
 
-    public void RefreshMarker() {
-        this.userPoint.remove();
-        this.myLatLng = new LatLng(this.userPlace.getUserPlace().get_placeX(), this.userPlace.getUserPlace().get_placeY());
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.mMap = googleMap;
+        this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-    }
+        this.LocBy_gps(getContext());
+
+    } // 유저 현위치에 마커 추가
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -85,8 +87,8 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         java.util.Map<Double, SelectedClinic> nearClinics = new LinkedHashMap<>();
         ArrayList<SelectedClinic> fiveNearClinics = new ArrayList<SelectedClinic>();
         for (int i = 0; i < this.clinics.size(); i++) {
-            double dis = this.clinics.get(i).Distance(this.userPlace.getUserPlace().get_placeX(),
-                    this.userPlace.getUserPlace().get_placeY(), "kilometer"); // 현재 위치와 병원과의 직선 거리
+            double dis = this.clinics.get(i).Distance(UserLoc.getUserPlace().get_placeX(),
+                    UserLoc.getUserPlace().get_placeY(), "kilometer"); // 현재 위치와 병원과의 직선 거리
             nearClinics.put(dis,clinics.get(i));
         }
         Object[] mapkey = nearClinics.keySet().toArray();
@@ -117,19 +119,16 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.mMap = googleMap;
-        this.myLatLng = new LatLng(this.userPlace.getUserPlace().get_placeX(), this.userPlace.getUserPlace().get_placeY());
+    public void RefreshMarker() {
+        this.userPoint.remove();
+        this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-        this.LocBy_gps(getContext());
-
-    } // 유저 현위치에 마커 추가
+    }
 
     @Override
     public void onStart() {
@@ -189,8 +188,8 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
-                                this.userPlace.getUserPlace().set_placeX(location.getLatitude());
-                                this.userPlace.getUserPlace().set_placeY(location.getLongitude());//위
+                                UserLoc.getUserPlace().set_placeX(location.getLatitude());
+                                UserLoc.getUserPlace().set_placeY(location.getLongitude());//위
                             }
                         }
                     }
@@ -200,8 +199,8 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
                             if (locationManager != null) {
                                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
-                                    this.userPlace.getUserPlace().set_placeX(location.getLatitude());
-                                    this.userPlace.getUserPlace().set_placeY(location.getLongitude());//위도
+                                    UserLoc.getUserPlace().set_placeX(location.getLatitude());
+                                    UserLoc.getUserPlace().set_placeY(location.getLongitude());//위도
                                 }
                             }
                         }
@@ -212,7 +211,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             Log.d("@@@", "" + e.toString());
         }
     }
-
 
     private class GPSListener implements LocationListener {
 
