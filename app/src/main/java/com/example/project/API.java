@@ -79,16 +79,20 @@ public class API {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                //string을 date로 변환
 
-                nation=new NationStatistics(getTagValue("stateDt",eElement),Integer.parseInt(getTagValue("decideCnt",eElement))
+                String from = getTagValue("stateDt",eElement) + getTagValue("stateTime",eElement);
+                SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHH:mm");
+                Date to = transFormat.parse(from);
+                SimpleDateFormat transFormat2 = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 기준");
+                String stateDate = transFormat2.format(to);
+
+                nation=new NationStatistics(stateDate,Integer.parseInt(getTagValue("decideCnt",eElement))
                         ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("clearCnt",eElement)),
                         Integer.parseInt(getTagValue("examCnt",eElement)),localList,Integer.parseInt(getTagValue("careCnt",eElement)),
                         Integer.parseInt(getTagValue("resutlNegCnt",eElement)), Integer.parseInt(getTagValue("accExamCnt",eElement))
                         , Integer.parseInt(getTagValue("accExamCompCnt",eElement)), Double.parseDouble(getTagValue("accDefRate",eElement)));
             }
         }
-
         //전국통계 객체 생성
         return nation;
     }
