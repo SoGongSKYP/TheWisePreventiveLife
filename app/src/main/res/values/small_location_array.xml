@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="seoul_array">
+    <string-array name="array_0">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="busan_array">
+    <string-array name="array_1">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="daegu_array">
+    <string-array name="array_2">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="incheon_array">
+    <string-array name="array_3">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="gwangju_array">
+    <string-array name="array_4">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="daejeon_array">
+    <string-array name="array_5">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="ulsan_array">
+    <string-array name="array_6">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="sejong_array">
+    <string-array name="array_7">
         <item>ㅡ</item>
     </string-array>
-    <string-array name="gyeonggi_array">
+    <string-array name="array_8">
         <item>수원시</item>
         <item>성남시</item>
         <item>안양시</item>
@@ -57,7 +57,7 @@
         <item>연천군</item>
         <item>가평군</item>
     </string-array>
-    <string-array name="gangwondo_array">
+    <string-array name="array_9">
         <item>춘천시</item>
         <item>원주시</item>
         <item>강릉시</item>
@@ -77,7 +77,7 @@
         <item>고성군</item>
         <item>양양군</item>
     </string-array>
-    <string-array name="chungcheongbukdo_array">
+    <string-array name="array_10">
         <item>청주시</item>
         <item>충주시</item>
         <item>제천시</item>
@@ -90,7 +90,7 @@
         <item>음성군</item>
         <item>단양군</item>
     </string-array>
-    <string-array name="chungcheongnamdo_array">
+    <string-array name="array_11">
         <item>천안시</item>
         <item>공주시</item>
         <item>보령시</item>
@@ -107,7 +107,7 @@
         <item>예산군</item>
         <item>태안군</item>
     </string-array>
-    <string-array name="jeollabukdo_array">
+    <string-array name="array_12">
         <item>전주시</item>
         <item>군산시</item>
         <item>익산시</item>
@@ -123,7 +123,7 @@
         <item>고창군</item>
         <item>부안군</item>
     </string-array>
-    <string-array name="jeollanamdo_array">
+    <string-array name="array_13">
         <item>목포시</item>
         <item>여수시</item>
         <item>순천시</item>
@@ -147,7 +147,7 @@
         <item>진도군</item>
         <item>신안군</item>
     </string-array>
-    <string-array name="gyeongsasngbukdo_array">
+    <string-array name="array_14">
         <item>포항시</item>
         <item>경주시</item>
         <item>김천시</item>
@@ -172,7 +172,7 @@
         <item>울진군</item>
         <item>울릉군</item>
     </string-array>
-    <string-array name="gyeongsangnamdo_array">
+    <string-array name="array_15">
         <item>창원시</item>
         <item>진주시</item>
         <item>통영시</item>
@@ -192,7 +192,7 @@
         <item>거창군</item>
         <item>합천군</item>
     </string-array>
-    <string-array name="jeju_array">
+    <string-array name="array_16">
         <item>제주시</item>
         <item>서귀포시</item>
     </string-array>

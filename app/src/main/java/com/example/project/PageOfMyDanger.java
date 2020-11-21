@@ -57,9 +57,13 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         return v;
     }
 
-    /**
-     * Default constructor
-     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mapView != null) {
+            mapView.onCreate(savedInstanceState);
+        }
+    }
     public PageOfMyDanger() {
         //this.userLoc=new UserLoc();
         this.patient =new ArrayList<Patient>();

@@ -12,14 +12,34 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHolder>{
+
+    public interface OnListClickListener{
+        void onListItemCick(View v, int pos);
+    }
+    private OnListClickListener listClickListener = null;
+    public void setOnListClickListenter(OnListClickListener listenter){
+        this.listClickListener = listenter;
+    }
+
     private ArrayList<RowOfPatient> datalist;
 
-    public static class ListViewHolder extends RecyclerView.ViewHolder{
+    public class ListViewHolder extends RecyclerView.ViewHolder{
         private TextView patientNumTextView, patientDateTextView;
         public ListViewHolder(@NonNull View v) {
             super(v);
             patientNumTextView = v.findViewById(R.id.patient_num_TextView);
             patientDateTextView = v.findViewById(R.id.patient_date_TextView);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(listClickListener != null){
+                            listClickListener.onListItemCick(view, pos);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -40,10 +60,11 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
     public void onBindViewHolder(@NonNull AdapterOfList.ListViewHolder holder, int position) {
         holder.patientNumTextView.setText("확진자 "+ datalist.get(position).getPatientNum());
 
-        String date = datalist.get(position).getConfirmDate();
+        String dateFromData = datalist.get(position).getConfirmDate();
+        String date = "20"+dateFromData.substring(0, 2)+"년 "+dateFromData.substring(2, 4)+"월 "+dateFromData.substring(4)+"일";
         //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 mm월 dd일");
-
-        holder.patientDateTextView.setText(datalist.get(position).getConfirmDate());
+        //holder.patientDateTextView.setText(datalist.get(position).getConfirmDate());
+        holder.patientDateTextView.setText(date);
     }
 
     @Override

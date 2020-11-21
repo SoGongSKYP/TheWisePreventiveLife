@@ -166,20 +166,12 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
     private void SetSpinnerAdapter(){
         bigAdapter = ArrayAdapter.createFromResource(getContext(), R.array.big_location_array, android.R.layout.simple_spinner_dropdown_item);
         bigAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bigLocSpinner.setAdapter(bigAdapter);
 
-        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.seoul_array, android.R.layout.simple_spinner_dropdown_item);
+        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.array_0, android.R.layout.simple_spinner_dropdown_item);
         smallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         smallLocSpinner.setAdapter(smallAdapter);
     }
@@ -190,59 +182,11 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         bigLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch(i){
-                    case 0:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.seoul_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 1:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.busan_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 2:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.daegu_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 3:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.incheon_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 4:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gwangju_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 5:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.daejeon_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 6:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.ulsan_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 7:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.sejong_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 8:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gyeonggi_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 9:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gangwondo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 10:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.chungcheongbukdo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 11:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.chungcheongnamdo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 12:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.jeollabukdo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 13:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.jeollanamdo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 14:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gyeongsasngbukdo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 15:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.gyeongsangnamdo_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                    case 16:
-                        smallAdapter = ArrayAdapter.createFromResource(getContext(), R.array.jeju_array, android.R.layout.simple_spinner_dropdown_item);
-                        break;
-                }
+                String index = Integer.toString(i);
+                int resId = getResources().getIdentifier("array_"+index, "array", getContext().getPackageName());
+                smallAdapter = ArrayAdapter.createFromResource(getContext(), resId, android.R.layout.simple_spinner_dropdown_item);
+
+
                 pBigLocal = Integer.toString(i);
                 Log.d("ADD 큰 도시 : ", pBigLocal);
                 smallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

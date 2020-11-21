@@ -64,7 +64,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:background="@drawable/edittext_outline_design"
-            android:entries="@array/seoul_array"/>
+            android:entries="@array/array_0"/>
     </LinearLayout>
 
     <EditText
