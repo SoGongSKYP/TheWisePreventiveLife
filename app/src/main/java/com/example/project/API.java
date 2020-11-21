@@ -123,33 +123,11 @@ public class API {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                String localName;
-                Place localPosition=null;
-
-                localName=getTagValue("gubun",eElement);
-
-                //localPosition;
-                if(localName.equals("대구")) localPosition=new Place("대구광역시청",35.871577, 128.601842);
-                else if(localName.equals("서울")) localPosition=new Place("서울시청", 37.566317, 126.977949);
-                else if(localName.equals("경기")) localPosition=new Place("경기도청",37.275052,127.009447);
-                else if(localName.equals("검역")) localPosition=new Place("검역(해외)",0,0);
-                else if(localName.equals("경북")) localPosition=new Place("경상북도청",36.576184, 128.505596);
-                else if(localName.equals("인천")) localPosition=new Place("인천광역시청",37.455877, 126.705562);
-                else if(localName.equals("충남")) localPosition=new Place("충청남도청",36.659001, 126.672866 );
-                else if(localName.equals("부산")) localPosition=new Place("부산광역시청",35.179848, 129.074874);
-                else if(localName.equals("광주")) localPosition=new Place("광주광역시청",35.160059, 126.851422);
-                else if(localName.equals("대전")) localPosition=new Place("대전광역시청",36.350429, 127.384937);
-                else if(localName.equals("경남")) localPosition=new Place("경상남도청",35.238273, 128.692334);
-                else if(localName.equals("강원")) localPosition=new Place("강원도청",37.885368, 127.729823);
-                else if(localName.equals("충북")) localPosition=new Place("충청북도청",36.635820, 127.491334);
-                else if(localName.equals("전남")) localPosition=new Place("전라남도청",34.816201, 126.462913);
-                else if(localName.equals("전북")) localPosition=new Place("전라북도청",35.820345, 127.108735);
-                else if(localName.equals("울산")) localPosition=new Place("울산광역시청",35.539620, 129.311527);
-                else if(localName.equals("세종")) localPosition=new Place("세종특별자치시청",36.480131, 127.289033);
-                //지역통계
-                localList.add(new LocalStatistics(getTagValue("stdDay",eElement),Integer.parseInt(getTagValue("defCnt",eElement))
+                localList.add(new LocalStatistics(getTagValue("stdDay",eElement),Integer.parseInt(getTagValue("isolIngCnt",eElement))
                         ,Integer.parseInt(getTagValue("deathCnt",eElement)),Integer.parseInt(getTagValue("isolClearCnt",eElement))
-                        ,getTagValue("gubun",eElement),localPosition,Integer.parseInt(getTagValue("incDec",eElement))));
+                        ,getTagValue("gubun",eElement),Integer.parseInt(getTagValue("incDec",eElement))
+                        ,Integer.parseInt(getTagValue("localOccCnt",eElement)),Integer.parseInt(getTagValue("overFlowCnt",eElement))
+                        ,Double.parseDouble(getTagValue("qurRate",eElement))));
             }
         }
         return localList;
