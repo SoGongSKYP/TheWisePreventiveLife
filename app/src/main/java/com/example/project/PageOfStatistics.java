@@ -323,8 +323,13 @@ class geoThread implements Runnable{
             }
             Document doc= null;
             try {
-                assert dBuilder != null;
-                doc = dBuilder.parse(parsingUrl);
+                if(dBuilder != null){
+                    doc = dBuilder.parse(parsingUrl);
+                }
+                else{
+                    page.getUserPlace().getUserPlace().set_placeAddress("서울");
+                    return;
+                }//지역을 못 찾았을시 서울로 지역을 기본 값으로 고정해준다.
             } catch (IOException | SAXException e) {
                 e.printStackTrace();
             }
