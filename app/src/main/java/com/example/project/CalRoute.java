@@ -1,5 +1,13 @@
 package com.example.project;
 
+import android.content.Context;
+
+import com.odsay.odsayandroidsdk.API;
+import com.odsay.odsayandroidsdk.ODsayData;
+import com.odsay.odsayandroidsdk.ODsayService;
+import com.odsay.odsayandroidsdk.OnResultCallbackListener;
+
+import org.json.JSONException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,12 +31,14 @@ public class CalRoute implements Runnable{
     private String desPoint;
     private ArrayList<SearchPath> searchResultPath;
     private final Lock lock;
+    private Context thisContext;
 
-    CalRoute(String startPoint, String desPoint, Lock lock){
+    CalRoute(Context context,String startPoint, String desPoint, Lock lock){
         this.startPoint=startPoint;
         this.desPoint=desPoint;
         this.lock = lock;
         this.searchResultPath = new ArrayList<SearchPath>();
+        this.thisContext=context;
     }
 
     private static String getTagValue(String tag, Element eElement) {
@@ -74,11 +84,32 @@ public class CalRoute implements Runnable{
         }
         return searchLoc;
     }
-    private ArrayList<SearchPath> calRoute1(Place startPoint, Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
+    private ArrayList<SearchPath> calRoute1(Context context, Place startPoint, Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
+        ODsayService oDsayService=ODsayService.init(context,"cDSdUY9qLmrLpcqsJL3zPvgpx3IgkOf4sLsbkzSOZ2Y");
+        OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
+            @Override
+            public void onSuccess(ODsayData oDsayData, API api) {
+                try{
+                    if(api==API.SEARCH_PUB_TRANS_PATH){
+                        String stationName = oDsayData.getJson().getJSONObject("result").getString("stationName");
+                    }
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(int i, String s, API api) {
+                if(api==API.SEARCH_PUB_TRANS_PATH){
+                }
+            }
+        };
+        oDsayService.requestSearchPubTransPath(Double.toString(startPoint.get_placeX()),Double.toString(startPoint.get_placeY()),Double.toString(desPoint.get_placeX())
+        ,Double.toString(desPoint.get_placeY()),"0","0","0",onResultCallbackListener);
+
         String parsingUrl="";
         ArrayList<SearchPath> resultSearchPath=null;
         StringBuilder urlBuilder = new StringBuilder("https://api.odsay.com/v1/api/searchPubTransPath"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("output","UTF-8") + "=" + URLEncoder.encode("XML", "UTF-8")); /*출력형태*/
+        urlBuilder.append("?" + URLEncoder.encode("output","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8")); /*출력형태*/
         urlBuilder.append("&" + URLEncoder.encode("SX","UTF-8") + "=" + URLEncoder.encode(Double.toString(startPoint.get_placeX()), "UTF-8")); /*출발지 경도좌표*/
         urlBuilder.append("&" + URLEncoder.encode("SY","UTF-8") + "=" + URLEncoder.encode(Double.toString(startPoint.get_placeY()), "UTF-8")); /*출발지 위도좌표*/
         urlBuilder.append("&" + URLEncoder.encode("EX","UTF-8") + "=" + URLEncoder.encode(Double.toString(desPoint.get_placeX()), "UTF-8")); /*도착지 경도좌표*/
@@ -88,6 +119,7 @@ public class CalRoute implements Runnable{
         URL url = new URL(urlBuilder.toString());
 
         parsingUrl=url.toString();
+        System.out.println("주소: "+parsingUrl);
         DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
         Document doc=dBuilder.parse(parsingUrl);
@@ -246,7 +278,7 @@ public class CalRoute implements Runnable{
         try {
             this.startPlace =searchPlace(startPoint);
             this.endPlace =searchPlace(desPoint);
-            this.searchResultPath=calRoute1(this.startPlace,this.endPlace);//경로 검색
+            this.searchResultPath=calRoute1(thisContext,this.startPlace,this.endPlace);//경로 검색
         } catch (IOException | SAXException | ParserConfigurationException e) {
             e.printStackTrace();
         }finally {
