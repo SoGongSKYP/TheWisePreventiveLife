@@ -40,14 +40,17 @@ public class CalRoute implements Runnable{
 
     public Place searchPlace(String startPoint) throws IOException, ParserConfigurationException, SAXException {
         String parsingUrl="";
-        Place searchLoc=null;
-
-        StringBuilder urlBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/"); /*URL*/
-        urlBuilder.append("xml?" + URLEncoder.encode("input","UTF-8") + "="+URLEncoder.encode(startPoint, "UTF-8")); /*장소 text*/
-        urlBuilder.append("&" + URLEncoder.encode("inputtype","UTF-8") + "="+ URLEncoder.encode("textquery", "UTF-8")); /*입력 형식 text로 설정*/
-        urlBuilder.append("&" + URLEncoder.encode("language","UTF-8") + "=" + URLEncoder.encode("ko", "UTF-8")); /*리턴 정보 한국어로 리턴*/
-        urlBuilder.append("&" + URLEncoder.encode("fields","UTF-8") + "=" + URLEncoder.encode("formatted_address,name,geometry", "UTF-8")); /*반환 받을 값들*/
-        urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode("AIzaSyCjdZL_BjLqCcj0PBKGcUP6kteb5tV2syE", "UTF-8")); /*키 값*/
+        String key= "340FCCC5-C1C9-31D4-B7D8-56BC7558298A";
+        Place searchLoc=new Place("",0.0,0.0);
+        StringBuilder urlBuilder = new StringBuilder("http://api.vworld.kr/req/search?"); /*URL*/
+        urlBuilder.append(URLEncoder.encode("service","UTF-8") + "="+URLEncoder.encode("search", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("request","UTF-8") + "="+ URLEncoder.encode("search", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("version","UTF-8") + "=" + URLEncoder.encode("2.0", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("query","UTF-8") + "=" + URLEncoder.encode(startPoint, "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("type","UTF-8") + "=" + URLEncoder.encode("place", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("format","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("errorformat","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8"));
+        urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode(key, "UTF-8"));
 
         URL url = new URL(urlBuilder.toString());
         parsingUrl=url.toString();
@@ -56,39 +59,17 @@ public class CalRoute implements Runnable{
         DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
         Document doc=dBuilder.parse(parsingUrl);
-
         doc.getDocumentElement().normalize();
-        //System.out.println("Root element : "+doc.getDocumentElement().getNodeName());
 
-        NodeList nList=doc.getElementsByTagName("candidates"); //장소 전체 노드
-
-        NodeList geoList=null;//doc.getElementsByTagName("geometry"); // 지역 노드
-        NodeList locList=null;//doc.getElementsByTagName("location"); // 지역 노드
-
-        NodeList openTimeList=null;//doc.getElementsByTagName("opening_hours"); // 지역 노드
-        //System.out.println("파싱할 리스트 수 : "+nList.getLength());
+        NodeList nList=doc.getElementsByTagName("item"); //장소 전체 노드
 
         for(int i=0; i<nList.getLength(); i++) {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                searchLoc.set_placeAddress(getTagValue("name",eElement));
-                System.out.println("장소 주소"+getTagValue("formatted_address",eElement));
-
-                geoList = eElement.getElementsByTagName("geometry");
-                for(int g =0; g<geoList.getLength();g++){
-                    Node geoNode=geoList.item(g);
-                    if(geoNode.getNodeType()==Node.ELEMENT_NODE){
-                        Element geoElement=(Element) geoNode;
-                        locList = geoElement.getElementsByTagName("location");
-                        Node locNode=locList.item(0);
-                        if(locNode.getNodeType()==Node.ELEMENT_NODE){
-                            Element locElement=(Element) locNode;
-                            searchLoc.set_placeX(Double.parseDouble(getTagValue("lat",locElement)));//경도
-                            searchLoc.set_placeY(Double.parseDouble(getTagValue("lng",locElement)));//위도
-                        }
-                    }
-                }
+                searchLoc.set_placeAddress(getTagValue("road",eElement));
+                searchLoc.set_placeX(Double.parseDouble(getTagValue("y",eElement)));
+                searchLoc.set_placeY(Double.parseDouble(getTagValue("x",eElement)));
             }
         }
         return searchLoc;
