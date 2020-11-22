@@ -5,8 +5,20 @@ package com.example.project;
 */
 public class ExtendNode {
 
-    ExtendNode(){
-
+    ExtendNode(double trafficDistance,int totalWalk,int totalTime,int payment,int busTransitCount
+    ,int subwayTransitCount,String mapObj,String firstStartStation,String lastEndStation,int totalStationCount
+    ,double totalDistance){
+        this.trafficDistance=trafficDistance;
+        this.totalWalk =totalWalk;
+        this.totalTime =totalTime;
+        this.payment=payment;
+        this.busTransitCount=busTransitCount;
+        this.subwayTransitCount=subwayTransitCount;
+        this.mapObj=mapObj;
+        this.firstStartStation=firstStartStation;
+        this.lastEndStation=lastEndStation;
+        this.totalStationCount=totalStationCount;
+        this.totalDistance=totalDistance;
     }
     private double trafficDistance; //도보를 제외한 총 이동 거리
     private int totalWalk; //총 도보 이동 거리
