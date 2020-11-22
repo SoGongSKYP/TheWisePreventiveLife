@@ -159,14 +159,16 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    RefreshMarker();
-                    calNearPlace();
-                    addNearPlaceMaker();
-                }
-            });
+            if(getActivity() != null){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RefreshMarker();
+                        calNearPlace();
+                        addNearPlaceMaker();
+                    }
+                });
+            }
         }
         public void onProviderDisabled(String provider) {
         }
