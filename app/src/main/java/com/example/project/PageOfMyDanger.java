@@ -106,6 +106,17 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener = new GPSListener();
         UserLoc.LocBy_gps(getContext(),gpsListener);
+
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    printRoute();
+                } catch (ParserConfigurationException | SAXException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     } // 유저 현위치에 마커 추가
 
     public void RefreshMarker() {
@@ -337,7 +348,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         String startPoint = "화서역";
         String desPoint  = "서울역";
         final Lock lock = new ReentrantLock(); // lock instance
-        CalRoute cl = new CalRoute(startPoint,desPoint,lock);
+        CalRoute cl = new CalRoute(getContext(),startPoint,desPoint,lock);
         Thread thread =new Thread(cl);
         thread.start();
         Place startPlace = cl.getStartPlace();
