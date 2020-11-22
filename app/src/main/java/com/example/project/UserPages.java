@@ -13,6 +13,7 @@ package com.example.project;
         import android.content.Context;
         import android.content.Intent;
         import android.os.Bundle;
+        import android.os.Parcelable;
         import android.view.MenuItem;
         import android.view.View;
         import android.widget.ImageButton;
@@ -25,6 +26,7 @@ package com.example.project;
 
         import java.io.IOException;
         import java.text.ParseException;
+        import java.util.ArrayList;
         import java.util.Calendar;
         import java.util.concurrent.locks.Lock;
         import java.util.concurrent.locks.ReentrantLock;
@@ -54,6 +56,7 @@ public class UserPages extends AppCompatActivity {
     private CardView searchCardView;
     private static int AUTOCOMPLETE_REQUEST_CODE = 1;
     private Intent intent;
+    private Intent alarmIntent;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
@@ -115,7 +118,6 @@ public class UserPages extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         /*구글 맵 서치바 연결*/
         searchCardView = findViewById(R.id.search_CardView);
         /*
@@ -202,25 +204,16 @@ public class UserPages extends AppCompatActivity {
         }
     };
 
-    private void ToolbarInfoButtonAction(){
-
-    }
     @Override
     protected void onDestroy() {
+        System.out.println("프로그램 종료");
+        alarmIntent = new Intent(this,AlramService.class);
+        alarmIntent.putExtra("patientList",DBEntity.getPatientList());
+        startService(alarmIntent);
         super.onDestroy();
-        if (intent!=null) {
-            stopService(intent);
-            intent = null;
-        }
     }
-    protected void setAlarmTimer() {
-        final Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        c.add(Calendar.SECOND, 1);
-        Intent intent = new Intent(this, Alarm.class);
-        PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
 
-        AlarmManager mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        mAlarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+    private void ToolbarInfoButtonAction(){
+
     }
 }
