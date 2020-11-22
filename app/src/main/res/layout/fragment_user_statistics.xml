@@ -25,10 +25,13 @@
                 android:layout_height="170dp"
                 android:orientation="horizontal">
 
-                <View
+                <com.github.mikephil.charting.charts.PieChart
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorMiddleGrey" />
+                    android:layout_height="match_parent"
+                    android:id="@+id/piechart">
+
+                </com.github.mikephil.charting.charts.PieChart>
+
 
             </LinearLayout>
             <LinearLayout
