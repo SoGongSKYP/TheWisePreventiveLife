@@ -1,19 +1,14 @@
 package com.example.project;
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
+
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,7 +27,6 @@ import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import static android.content.Context.LOCATION_SERVICE;
 
 public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback {
 
@@ -44,7 +38,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
 
     private ArrayList<SelectedClinic> clinics;
     private ArrayList<Marker> clinicsMarker;
-    //private UserLoc userPlace;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
