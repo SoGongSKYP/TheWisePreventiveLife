@@ -7,6 +7,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -79,6 +82,11 @@ public class clinicAPIEntity implements Runnable{
         } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
-        this.clinicsList.addAll(tempClinicsList);
+        clinicsList.addAll(tempClinicsList);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
