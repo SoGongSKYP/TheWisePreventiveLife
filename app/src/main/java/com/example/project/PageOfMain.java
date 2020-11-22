@@ -74,14 +74,9 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
-
-        /*UserLoc 클래스와 연결*/
-
         /*맵 컴포넌트 연결*/
         mapView = v.findViewById(R.id.user_main_Map);
         mapView.getMapAsync(this);
-
-
         return v;
     }
 
@@ -116,7 +111,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         mapView.onStop();
-
     }
 
     @Override
@@ -165,11 +159,15 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
-            RefreshMarker();
-            calNearPlace();
-            addNearPlaceMaker();
+            new Thread(){
+                @Override
+                public void run() {
+                    RefreshMarker();
+                    calNearPlace();
+                    addNearPlaceMaker();
+                }
+            }.start();
         }
-
         public void onProviderDisabled(String provider) {
         }
 
