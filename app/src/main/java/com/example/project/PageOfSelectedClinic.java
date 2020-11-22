@@ -176,17 +176,19 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    page.RefreshMarker();
-                    try {
-                        page.addMarker(mMap);
-                    } catch (IOException | ParserConfigurationException | SAXException e) {
-                        e.printStackTrace();
+            if(getActivity()!=null){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page.RefreshMarker();
+                        try {
+                            page.addMarker(mMap);
+                        } catch (IOException | ParserConfigurationException | SAXException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         public void onProviderDisabled(String provider) {
