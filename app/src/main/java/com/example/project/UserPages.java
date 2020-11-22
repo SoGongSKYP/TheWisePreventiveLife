@@ -116,8 +116,12 @@ public class UserPages extends AppCompatActivity {
             public void onClick(View view) {
                 intent = new Intent(getApplicationContext(), PageOfToManager.class);
                 startActivity(intent);
+
+
             }
         });
+
+
         /*구글 맵 서치바 연결*/
         searchCardView = findViewById(R.id.search_CardView);
         /*
@@ -206,10 +210,16 @@ public class UserPages extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        System.out.println("프로그램 종료");
-        alarmIntent = new Intent(this,AlramService.class);
-        alarmIntent.putExtra("patientList",DBEntity.getPatientList());
-        startService(alarmIntent);
+        new Thread(){
+            @Override
+            public void run() {
+                System.out.println("프로그램 종료");
+                alarmIntent = new Intent(getApplicationContext(),AlramService.class);
+                alarmIntent.putExtra("patientList",DBEntity.getPatientList());
+                startService(alarmIntent);
+            }
+        }.start();
+
         super.onDestroy();
     }
 
