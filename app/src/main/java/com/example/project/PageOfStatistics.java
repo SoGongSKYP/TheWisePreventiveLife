@@ -1,4 +1,5 @@
 package com.example.project;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 /**
  * 
@@ -39,8 +49,54 @@ public class PageOfStatistics extends Fragment {
             btn2_gyeongbuk, btn1_gyeongnam, btn2_gyeongnam, btn_jeju;
     int localNum = 17;
 
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
+
+        PieChart pieChart;
+
+        pieChart = (PieChart) v.findViewById(R.id.piechart);
+
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setExtraOffsets(3, 8, 3, 3);
+
+        pieChart.setDragDecelerationFrictionCoef(0.95f);
+
+        pieChart.setDrawHoleEnabled(false);
+        pieChart.setHoleColor(Color.BLACK);
+        pieChart.setTransparentCircleRadius(61f);
+
+
+        ArrayList<PieEntry> values = new ArrayList<PieEntry>();
+        for(int i=0; i<this.nationStatistic.getLocalStatistics().size()-1; i++) {
+            values.add(new PieEntry(this.nationStatistic.getLocalStatistics().get(i).patientNum, this.nationStatistic.getLocalStatistics().get(i).getLocalName()));
+        }
+
+        Description description = new Description();
+        description.setText("지역별 확진자수 비율"); //라벨
+        description.setTextSize(13);
+        pieChart.setDescription(description);
+
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
+
+        PieDataSet dataSet = new PieDataSet(values,"local");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+
+        PieData data = new PieData((dataSet));
+        data.setValueTextSize(10f);
+        data.setValueTextColor(Color.BLACK);
+
+        pieChart.setData(data);
+
+
+
         btn_gyeonggido = v.findViewById(R.id.gyeonggi_Button);
         btn_gangwondo = v.findViewById(R.id.gangwondo_Button);
         btn_chungbuk = v.findViewById(R.id.chungBuk_Button);
