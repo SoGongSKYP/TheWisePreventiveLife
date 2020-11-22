@@ -13,8 +13,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import static android.widget.Toast.*;
 
 public class PageOfToManager extends AppCompatActivity {
 
@@ -89,19 +92,33 @@ public class PageOfToManager extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    String sendmsg="test_write";//어떠한 동작을 수행시키고 싶은지 지. db의 생성자에 넣을 스트링 값, 서버로 보내는 메세
+                    String sendmsg="login";//어떠한 동작을 수행시키고 싶은지 지. db의 생성자에 넣을 스트링 값, 서버로 보내는 메세
                     String result;//서버로부터 받고 싶은 값-> 지금은 일단 스트링 값으로 "회원가입 완료!" 리턴 받
                     managerID = managerIDEditText.getText().toString();
                     managerPW = managerPWEditText.getText().toString();
                     DB task = new DB(sendmsg);
                     result = task.execute(managerID,managerPW,sendmsg).get();
-
                     Log.i("Servertest", "서버에서 받은 값"+result);
+                    if(result.equals("success")) {
+                        makeText(PageOfToManager.this,"로그인", LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
+                        startActivity(intent);
+                        finish();
+                    } else if(result.equals("failed")) {
+                        makeText(PageOfToManager.this,"아이디 또는 비밀번호가 틀렸음", LENGTH_SHORT).show();
+                        managerIDEditText.setText("");
+                        managerPWEditText.setText("");
+                    }
+                    else if(result.equals("noId")) {
+                        Toast.makeText(PageOfToManager.this,"존재하지 않는 아이디",Toast.LENGTH_SHORT).show();
+                        managerIDEditText.setText("");
+                        managerPWEditText.setText("");
+                    }
                 } catch (Exception e) {
                     Log.i("DBtest", ".....ERROR.....!");
                 }
-                Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
-                startActivity(intent);
+              //  Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
+             //   startActivity(intent);
                 loginDialog.dismiss();
             }
         });
