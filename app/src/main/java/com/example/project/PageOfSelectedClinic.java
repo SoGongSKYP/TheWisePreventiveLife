@@ -45,8 +45,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     private ArrayList<SelectedClinic> clinics;
     private ArrayList<Marker> clinicsMarker;
     //private UserLoc userPlace;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
@@ -91,9 +89,9 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
                     UserLoc.getUserPlace().get_placeY(), "kilometer"); // 현재 위치와 병원과의 직선 거리
             nearClinics.put(dis,clinics.get(i));
         }
-        Object[] mapkey = nearClinics.keySet().toArray();
-        Arrays.sort(mapkey);
-        for (Object nKey : mapkey)
+        Object[] mapKey = nearClinics.keySet().toArray();
+        Arrays.sort(mapKey);
+        for (Object nKey : mapKey)
         {
             fiveNearClinics.add(nearClinics.get(nKey));
             if(fiveNearClinics.size() >= 5){
@@ -185,12 +183,17 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
-            this.page.RefreshMarker();
-            try {
-                this.page.addMarker(this.mMap);
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                e.printStackTrace();
-            }
+            new Thread(){
+                @Override
+                public void run() {
+                    page.RefreshMarker();
+                    try {
+                        page.addMarker(mMap);
+                    } catch (IOException | ParserConfigurationException | SAXException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
         }
 
         public void onProviderDisabled(String provider) {
