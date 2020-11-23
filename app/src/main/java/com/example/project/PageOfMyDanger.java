@@ -1,13 +1,8 @@
 package com.example.project;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,8 +32,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import static android.content.Context.LOCATION_SERVICE;
-
 /**
  *
  */
@@ -49,7 +41,9 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     Button findRouteButton;
     ImageButton startSearchImageButton, finishSearchImageButton;
     String start, finish;
-
+    Place startPlace;
+    Place endPlace;
+    FindPlace fp;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_danger, container, false);
         startEditText = v.findViewById(R.id.starting_point_EditText);
@@ -76,8 +70,20 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 start = startEditText.getText().toString();
                 if(start != null){
                     //여기서 검색 기능
-
-
+                    ArrayList<Place> startPlaceList = new ArrayList<Place>();
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            try {
+                                fp = new FindPlace(start);
+                                fp.searchPlace();
+                                startPlace=fp.getSearchLocList().get(0);//임시로 리스트중 가장 첫번째 값 사용
+                            } catch (ParserConfigurationException | SAXException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }.start();
+                    Toast.makeText(getContext(), "출발지 입력 완료", Toast.LENGTH_SHORT).show();
                     //검색 결과의 주소 제목은 아래 setText()의 매개변수로 넣어주세요
                     //startEditText.setText();
                 }else{
@@ -94,8 +100,19 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 finish = finishEditText.getText().toString();
                 if(finish != null){
                     //여기서 검색 기능
-
-
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            try {
+                                fp = new FindPlace(finish);
+                                fp.searchPlace();
+                                endPlace=fp.getSearchLocList().get(0);//임시로 리스트중 가장 첫번째 값 사용
+                            } catch (ParserConfigurationException | SAXException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }.start();
+                    Toast.makeText(getContext(), "도착지 입력 완료", Toast.LENGTH_SHORT).show();
                     //검색 결과의 주소 제목은 아래 setText()의 매개변수로 넣어주세요
                     //finishEditText.setText();
                 }else{
@@ -106,11 +123,24 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }
     /*경로 검색 버튼 누르면 실행되는 함수*/
     void SearchRouteButtonAction(){
+        Toast.makeText(getContext(), "동선 검색중 입니다.", Toast.LENGTH_SHORT).show();
         findRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(start != null && finish != null){
                     //동선 검색 기능
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            try {
+                                System.out.println("동선 검색중");
+                                printRoute(startPlace,endPlace);
+                            } catch (ParserConfigurationException | SAXException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }.start();
+                    Toast.makeText(getContext(), "동선 검색완료", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getContext(), "출발지와 도착지를 입력했는지 확인하세요", Toast.LENGTH_SHORT).show();
@@ -128,6 +158,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }
     public PageOfMyDanger() {
         //this.userLoc=new UserLoc();
+        this.startPlace = new Place(null,0,0);
+        this.endPlace = new Place(null,0,0);
         this.patient =new ArrayList<Patient>();
         this.nearPlaces =new ArrayList<VisitPlace>();
         this.searchResultPath = new ArrayList<SearchPath>();
@@ -169,16 +201,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         GPSListener gpsListener = new GPSListener();
         UserLoc.LocBy_gps(getContext(),gpsListener);
 
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    printRoute();
-                } catch (ParserConfigurationException | SAXException | IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     } // 유저 현위치에 마커 추가
 
     public void RefreshMarker() {
@@ -406,20 +428,29 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         }//안전
     }
 
-    public void printRoute() throws ParserConfigurationException, SAXException, IOException {
-        String startPoint = startEditText.getText().toString();
-        String desPoint  = finishEditText.getText().toString();
-        final Lock lock = new ReentrantLock(); // lock instance
-        CalRoute cl = new CalRoute(getContext(),startPoint,desPoint,lock);
-        Thread thread =new Thread(cl);
-        thread.start();
-        Place startPlace = cl.getStartPlace();
-        Place desPlace = cl.getEndPlace();
-        this.searchResultPath= cl.getSearchResultPath();
-        for(int i =0 ;i <searchResultPath.size();i++){
-            printPath(i,startPlace,desPlace);
-        }
-
+    public void printRoute(final Place startPoint, final Place desPoint) throws ParserConfigurationException, SAXException, IOException {
+        new Thread(){
+            @Override
+            public void run() {
+                System.out.println("검색 시작");
+                CalRoute cl = new CalRoute(getContext(),startPoint,desPoint);
+                try {
+                    cl.calRoute1();
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("검색 완료");
+                searchResultPath= cl.getSearchResultPath();
+                System.out.println("사이즈: "+searchResultPath.size());
+                for(int i =0 ;i <searchResultPath.size();i++){
+                    try {
+                        printPath(i,startPlace,endPlace);
+                    } catch (ParserConfigurationException | SAXException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
     }//여러개의 path 모두다 출력
 
     public int printDanger(ArrayList<SearchPath> searchPath) {
