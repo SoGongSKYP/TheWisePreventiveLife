@@ -146,7 +146,7 @@ public class UserPages extends AppCompatActivity {
         });
     }
 
-    
+
     /* 일반사용자 페이지 네비게이션 바 연결*/
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
