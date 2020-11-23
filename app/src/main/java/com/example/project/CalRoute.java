@@ -113,16 +113,16 @@ public class CalRoute implements Runnable{
                             for(int i =0; i < totalCount;i++){
                                 JSONObject path = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(i);
                                 ExtendNode t = new ExtendNode(path.getJSONObject("info").getDouble("trafficDistance")
-                                        ,path.getJSONObject("Info").getInt("totalWalk")
-                                        ,path.getJSONObject("Info").getInt("totalTime")
-                                        ,path.getJSONObject("Info").getInt("payment")
-                                        ,path.getJSONObject("Info").getInt("busTransitCount")
-                                        ,path.getJSONObject("Info").getInt("subwayTransitCount")
-                                        ,path.getJSONObject("Info").getString("mapObj")
-                                        ,path.getJSONObject("Info").getString("firstStartStation")
-                                        ,path.getJSONObject("Info").getString("lastEndStation")
-                                        ,path.getJSONObject("Info").getInt("totalStationCount")
-                                        ,path.getJSONObject("Info").getInt("totalDistance"));
+                                        ,path.getJSONObject("info").getInt("totalWalk")
+                                        ,path.getJSONObject("info").getInt("totalTime")
+                                        ,path.getJSONObject("info").getInt("payment")
+                                        ,path.getJSONObject("info").getInt("busTransitCount")
+                                        ,path.getJSONObject("info").getInt("subwayTransitCount")
+                                        ,path.getJSONObject("info").getString("mapObj")
+                                        ,path.getJSONObject("info").getString("firstStartStation")
+                                        ,path.getJSONObject("info").getString("lastEndStation")
+                                        ,path.getJSONObject("info").getInt("totalStationCount")
+                                        ,path.getJSONObject("info").getInt("totalDistance"));
                                 JSONArray subPathList = path.getJSONArray("subPath");
 
                                 for(int s =0 ; s<subPathList.length();s++){
