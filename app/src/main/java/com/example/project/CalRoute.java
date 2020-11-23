@@ -90,6 +90,7 @@ public class CalRoute implements Runnable{
         ODsayService oDsayService=ODsayService.init(context,"cDSdUY9qLmrLpcqsJL3zPvgpx3IgkOf4sLsbkzSOZ2Y");
         final ArrayList<SearchPath> resultSearchPath=new ArrayList<SearchPath>();
         final ArrayList<SubPath> temp =new ArrayList<SubPath>();
+
         OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
             @Override
             public void onSuccess(ODsayData oDsayData, API api) {
@@ -111,6 +112,26 @@ public class CalRoute implements Runnable{
                                         ,path.getJSONObject("Info").getString("lastEndStation")
                                         ,path.getJSONObject("Info").getInt("totalStationCount")
                                         ,path.getJSONObject("Info").getInt("totalDistance"));
+                                JSONArray subPathList = path.getJSONArray("subPath");
+                                for(int s =0 ; s<subPathList.length();s++){
+                                    JSONObject subPath = subPathList.getJSONObject(s);
+                                    int trafficType = subPath.getInt("trafficType");
+                                    double distance= subPath.getDouble("distance");
+                                    int sectionTime=subPath.getInt("sectionTime");
+                                    if(trafficType==3){
+                                        SubPath sp = new SubPath();
+                                        sp.setTrafficType(trafficType);
+                                        sp.setDistance(distance);
+                                        sp.setSectionTime(sectionTime);
+                                        temp.add(sp);
+                                    }
+                                    else if(trafficType==2){
+                                        SubPath sp = new SubPath();
+                                    }
+                                    else if(trafficType==1){
+
+                                    }
+                                }
                             }
                         }// 경로 탐색 결과 있음 X좌표 Y좌표 바뀌어있으니 조심
                     }
