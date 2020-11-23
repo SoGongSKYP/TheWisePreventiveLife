@@ -87,7 +87,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
         android:padding="12dp"
-        android:hint="확진자 번호"
+        android:hint="확진자 번호 : 15"
         android:textColor="@color/colorMiddleGrey"
         android:background="@drawable/edittext_outline_design"
         android:enabled="false"/>
@@ -100,7 +100,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="15dp"
         android:padding="12dp"
-        android:hint="확진 판정 시간"
+        android:hint="확진 판정 시간 : YYYYMMDD"
         android:textColor="@color/colorMiddleGrey"
         android:background="@drawable/edittext_outline_design"
         android:enabled="false"/>

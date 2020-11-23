@@ -102,6 +102,8 @@ public class PageOfToManager extends AppCompatActivity {
                     if(result.equals("success")) {
                         makeText(PageOfToManager.this,"로그인", LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
+                        intent.putExtra("managerID", managerID);
+                        intent.putExtra("managerPW", managerPW);
                         startActivity(intent);
                         finish();
                     } else if(result.equals("failed")) {

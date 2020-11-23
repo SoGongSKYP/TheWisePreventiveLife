@@ -19,32 +19,207 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/statistic_nation_LinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="match_parent"
+                android:background="@color/colorWhite">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorLightGrey" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:text="전국 수준 통계"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"/>
+                <LinearLayout
+                    android:id="@+id/nation_title_LinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/nation_value_LinearLayout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="5dp">
 
-            </LinearLayout>
-            <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="누적 확진환자"
+                        android:textColor="@color/colorTitleGrey"
+                        android:textSize="15dp"
+                        android:layout_marginBottom="3dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="격리중"
+                        android:textColor="@color/colorTitleGrey"
+                        android:textSize="15dp"
+                        android:layout_marginBottom="3dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="누적 격리해재"
+                        android:textColor="@color/colorTitleGrey"
+                        android:textSize="15dp"
+                        android:layout_marginBottom="3dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="사망자"
+                        android:textColor="@color/colorTitleGrey"
+                        android:textSize="15dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/nation_value_LinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/nation_title_LinearLayout"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="5dp"
+                    android:layout_toRightOf="@id/nation_title_LinearLayout">
+                    <TextView
+                        android:id="@+id/nation_1_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0000명"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="15dp"
+                        android:layout_marginBottom="3dp"/>
+                    <TextView
+                        android:id="@+id/nation_2_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0000명"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="15dp"
+                        android:layout_marginBottom="3dp"/>
+                    <TextView
+                        android:id="@+id/nation_3_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0000명"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="15dp"
+                        android:layout_marginBottom="3dp"/>
+                    <TextView
+                        android:id="@+id/nation_4_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0000명"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="15dp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorLightGrey"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/statistic_local_LinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:orientation="vertical">
-
+                android:layout_height="170dp">
+                <TextView
+                    android:id="@+id/local_title_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:text="서울"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp" />
                 <com.github.mikephil.charting.charts.PieChart
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/piechart">
+                    android:id="@+id/piechart"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/local_statistics_LinearLayout"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                <LinearLayout
+                    android:id="@+id/local_statistics_LinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/piechart"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="누적확진자"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="12dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/user_statistics_1_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="00명"
+                        android:textSize="15dp"
+                        android:textColor="@color/colorNewBlue"
+                        android:layout_marginBottom="5dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="완치자"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="12dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/user_statistics_2_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="00명"
+                        android:textSize="15dp"
+                        android:textColor="@color/colorNewBlue"
+                        android:layout_marginBottom="5dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="치료 중(격리)"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="12dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/user_statistics_3_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="00명"
+                        android:textSize="15dp"
+                        android:textColor="@color/colorNewBlue"
+                        android:layout_marginBottom="5dp"/>
+                </LinearLayout>
 
-                </com.github.mikephil.charting.charts.PieChart>
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorLightGrey"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/statistic_map_LinearLayout"
                 android:layout_width="400dp"

@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import java.util.*;
 public class PageOfManager extends Fragment {
 
     Button switchButton;
+    TextView idTextView, pwTextView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_manager_info, container, false);
@@ -32,6 +35,12 @@ public class PageOfManager extends Fragment {
             }
         });
 
+        idTextView = v.findViewById(R.id.manager_id_TextView);
+        pwTextView = v.findViewById(R.id.manager_pw_TextView);
+
+        // ManagerPages에서 관리자 ID, PW 가져옴
+        idTextView.setText(((ManagerPages)getActivity()).ID);
+        pwTextView.setText(((ManagerPages)getActivity()).PW);
         return v;
     }
 

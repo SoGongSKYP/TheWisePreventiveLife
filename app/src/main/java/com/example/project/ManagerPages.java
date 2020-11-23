@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -20,10 +21,13 @@ public class ManagerPages extends AppCompatActivity {
     private PageOfList pageOfList = new PageOfList();
     private PageOfAdd pageOfAdd = new PageOfAdd();
     private PageOfManager pageOfManager = new PageOfManager();
+
     /*Tool Bar 관련 컴포넌트*/
     private Toolbar toolbar;
     private ActionBar actionBar;
     private TextView TitleTextView;
+
+    String ID, PW;
 
 
     @Override
@@ -47,6 +51,12 @@ public class ManagerPages extends AppCompatActivity {
 
         TitleTextView = findViewById(R.id.manager_Title_TextView);
         TitleTextView.setText("확진자 정보 추가");
+
+        Intent intent = getIntent();
+        ID = intent.getExtras().getString("managerID");
+        PW = intent.getExtras().getString("managerPW");
+
+
     }
 
     /* 일반사용자 페이지 네비게이션 바 연결*/
