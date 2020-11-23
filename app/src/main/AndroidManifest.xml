@@ -18,10 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service
-            android:name=".Alram"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <activity android:name=".PageOfIntro">
             <intent-filter>
@@ -38,9 +34,7 @@
 
         <service android:name=".UserPages" />
         <service android:name=".RestartService" />
-
-        <receiver android:name=".Alarm" />
-
+        
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyClU3_hw0XUV2WbzG24hhZ91iKXB1SwCGI" />
