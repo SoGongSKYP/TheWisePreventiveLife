@@ -72,14 +72,14 @@ public class PageOfStatistics extends Fragment {
         value.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
 
         Description description = new Description();
-        description.setText("지역별 확진자수 비율(%)");
+        description.setText("");
         description.setTextSize(13);
         pieC.setDescription(description);
 
         pieC.setEntryLabelColor(Color.BLACK);
         pieC.animateY(1000, Easing.EasingOption.EaseInOutCubic);
 
-        PieDataSet dataSet = new PieDataSet(value,"local");
+        PieDataSet dataSet = new PieDataSet(value,"");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(4f);
         dataSet.setColors(ColorTemplate.PASTEL_COLORS);
