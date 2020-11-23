@@ -7,7 +7,7 @@ import java.util.*;
 public class Patient {
 
 
-    public Patient(int smallLocalNum, int bigLocalNum, String patientNum, Date confirmDate, ArrayList<VisitPlace> visitPlaceList) {
+    public Patient(int smallLocalNum, int bigLocalNum, String patientNum, String confirmDate, ArrayList<VisitPlace> visitPlaceList) {
         this.smallLocalNum = smallLocalNum;
         this.bigLocalNum = bigLocalNum;
         this.patientNum = patientNum;
@@ -39,11 +39,11 @@ public class Patient {
         this.patientNum = patientNum;
     }
 
-    public Date getConfirmDate() {
+    public String getConfirmDate() {
         return confirmDate;
     }
 
-    public void setConfirmDate(Date confirmDate) {
+    public void setConfirmDate(String confirmDate) {
         this.confirmDate = confirmDate;
     }
 
@@ -58,8 +58,7 @@ public class Patient {
     private int smallLocalNum;
     private int bigLocalNum;
     private String patientNum;
-    private Date confirmDate;
+    private String confirmDate;
     private ArrayList<VisitPlace> visitPlaceList;
-
 
 }

@@ -22,7 +22,7 @@ public class DialogOfPlace extends Dialog {
     private Context mContext;
     ImageButton dialogDismissButton;
     Button placeAddButton;
-    EditText visitDateEditText, visitTimeEditText;
+    EditText visitDateEditText;
     TextView visitPlaceTextView, visitDetailTextView;
 
     public DialogOfPlace(@NonNull Context context) {
@@ -39,7 +39,6 @@ public class DialogOfPlace extends Dialog {
         dialogDismissButton = findViewById(R.id.dialog_dismiss_Button);
         placeAddButton = findViewById(R.id.dialog_add_Button);
         visitDateEditText = findViewById(R.id.dialog_visit_date_EditText);
-        visitTimeEditText = findViewById(R.id.dialog_visit_time_EditText);
         visitPlaceTextView = findViewById(R.id.dialog_visit_select_title);
         visitDetailTextView = findViewById(R.id.dialog_visit_select_detail);
 

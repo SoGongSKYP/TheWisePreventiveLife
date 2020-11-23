@@ -24,7 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ManagerModify extends AppCompatActivity {
 
@@ -80,8 +82,9 @@ public class ManagerModify extends AppCompatActivity {
 
         Intent intent = getIntent();
         RowOfPatient data = (RowOfPatient) intent.getSerializableExtra("row");
+
         patientDateEditText.setText(data.getConfirmDate());
-        patientNumEditText.setText(data.getPatientNum());
+        patientNumEditText.setText(Integer.toString(data.getPatientNum()));
         pBigLocal = data.getBigLocalNum();
         pSmallLocal = data.getSmallLocalNum();
 

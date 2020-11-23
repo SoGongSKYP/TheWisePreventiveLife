@@ -7,10 +7,10 @@ import java.util.*;
 public class VisitPlace {
 
     private Place visitPlace;
-    private Date visitDate;
+    private String visitDate;
 
     //Constructor
-    public VisitPlace(Place place, Date date) {
+    public VisitPlace(Place place, String date) {
         this.visitDate=date;
         this.visitPlace=place;
     }
@@ -19,7 +19,7 @@ public class VisitPlace {
     public Place getVisitPlace(){
         return this.visitPlace;
     }
-    public Date getVisitDate(){
+    public String getVisitDate(){
         return this.visitDate;
     }
     //--------------------------------
@@ -28,7 +28,7 @@ public class VisitPlace {
     public void setVisitPlace(Place place){
         this.visitPlace=place;
     }
-    public void setVisitDate(Date date){
+    public void setVisitDate(String date){
         this.visitDate =date;
     }
     //--------------------------------

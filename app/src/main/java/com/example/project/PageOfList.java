@@ -92,13 +92,13 @@ public class PageOfList extends Fragment {
     }
 
     private void MakeTempArray() {
-        RowOfPatient rowOfPatient00 = new RowOfPatient("1", "201113", 0, 0);
-        RowOfPatient rowOfPatient01 = new RowOfPatient("2", "201112", 0, 0);
-        RowOfPatient rowOfPatient02 = new RowOfPatient("3", "201111", 0, 0);
-        RowOfPatient rowOfPatient03  = new RowOfPatient("4", "201114", 0, 0);
-        RowOfPatient rowOfPatient1 = new RowOfPatient("2", "201114", 1, 0);
-        RowOfPatient rowOfPatient2 = new RowOfPatient("3", "201115", 12, 8);
-        RowOfPatient rowOfPatient3 = new RowOfPatient("4", "201116", 2, 0);
+        RowOfPatient rowOfPatient00 = new RowOfPatient(1, "2020-11-15", 0, 0);
+        RowOfPatient rowOfPatient01 = new RowOfPatient(2, "2020-11-16", 0, 0);
+        RowOfPatient rowOfPatient02 = new RowOfPatient(3, "2020-11-13", 0, 0);
+        RowOfPatient rowOfPatient03  = new RowOfPatient(4, "2020-11-14", 0, 0);
+        RowOfPatient rowOfPatient1 = new RowOfPatient(5, "2020-11-15", 1, 0);
+        RowOfPatient rowOfPatient2 = new RowOfPatient(6, "2020-11-13", 12, 8);
+        RowOfPatient rowOfPatient3 = new RowOfPatient(7, "2020-11-15", 2, 0);
         totalArrayList.add(rowOfPatient00);
         totalArrayList.add(rowOfPatient01);
         totalArrayList.add(rowOfPatient02);

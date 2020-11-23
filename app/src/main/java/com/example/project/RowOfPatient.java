@@ -6,18 +6,18 @@ import java.util.Date;
 public class RowOfPatient implements Serializable {
 
 
-    public RowOfPatient(String patientNum, String confirmDate, int bigLocalNum, int smallLocalNum) {
+    public RowOfPatient(int patientNum, String confirmDate, int bigLocalNum, int smallLocalNum) {
         this.patientNum = patientNum;
         this.confirmDate = confirmDate;
         this.bigLocalNum = bigLocalNum;
         this.smallLocalNum = smallLocalNum;
     }
 
-    public String getPatientNum() {
+    public int getPatientNum() {
         return patientNum;
     }
 
-    public void setPatientNum(String patientNum) {
+    public void setPatientNum(int patientNum) {
         this.patientNum = patientNum;
     }
 
@@ -45,7 +45,7 @@ public class RowOfPatient implements Serializable {
         this.smallLocalNum = smallLocalNum;
     }
 
-    String patientNum;
+    int patientNum;
     String confirmDate;
     int bigLocalNum;
     int smallLocalNum;

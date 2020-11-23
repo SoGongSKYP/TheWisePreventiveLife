@@ -61,9 +61,7 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
         holder.patientNumTextView.setText("확진자 "+ datalist.get(position).getPatientNum());
 
         String dateFromData = datalist.get(position).getConfirmDate();
-        String date = "20"+dateFromData.substring(0, 2)+"년 "+dateFromData.substring(2, 4)+"월 "+dateFromData.substring(4)+"일";
-        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 mm월 dd일");
-        //holder.patientDateTextView.setText(datalist.get(position).getConfirmDate());
+        String date = dateFromData.substring(0, 4)+"년 "+dateFromData.substring(5, 7)+"월 "+dateFromData.substring(8,10)+"일";
         holder.patientDateTextView.setText(date);
     }
 

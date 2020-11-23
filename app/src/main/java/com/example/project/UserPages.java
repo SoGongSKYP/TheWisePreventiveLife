@@ -215,7 +215,7 @@ public class UserPages extends AppCompatActivity {
             public void run() {
                 System.out.println("프로그램 종료");
                 alarmIntent = new Intent(getApplicationContext(),AlramService.class);
-                alarmIntent.putExtra("patientList",DBEntity.getPatientList());
+                //alarmIntent.putExtra("patientList",DBEntity.getPatientList());
                 startService(alarmIntent);
             }
         }.start();
