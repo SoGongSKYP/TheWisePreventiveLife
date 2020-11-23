@@ -79,7 +79,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         ArrayList<SelectedClinic> fiveNearClinics = new ArrayList<SelectedClinic>();
         for (int i = 0; i < this.clinics.size(); i++) {
             double dis = this.clinics.get(i).Distance(UserLoc.getUserPlace().get_placeX(),
-                    UserLoc.getUserPlace().get_placeY(), "kilometer"); // 현재 위치와 병원과의 직선 거리
+                    UserLoc.getUserPlace().get_placeY()); // 현재 위치와 병원과의 직선 거리
             nearClinics.put(dis,clinics.get(i));
         }
         Object[] mapKey = nearClinics.keySet().toArray();
