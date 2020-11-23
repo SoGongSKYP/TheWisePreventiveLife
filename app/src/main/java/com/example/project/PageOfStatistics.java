@@ -67,7 +67,7 @@ public class PageOfStatistics extends Fragment {
         PieDataSet dataSet = new PieDataSet(value,"local");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
-        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        dataSet.setColors(ColorTemplate.PASTEL_COLORS);
 
         PieData data = new PieData((dataSet));
         data.setValueTextSize(10f);
@@ -342,11 +342,8 @@ public class PageOfStatistics extends Fragment {
                     dataView(pieChart,values);
                     break;
             }
-
         }
     };
-
-
 
     private void LocalButtonAction(){
         btn_gyeonggido.setOnClickListener(localClickListener);
