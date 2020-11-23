@@ -183,51 +183,104 @@
                     android:orientation="vertical"
                     android:padding="10dp"
                     android:gravity="center">
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="누적확진자"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/user_statistics_1_TextView"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="누적확진자"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/user_statistics_1_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="00명"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorNewBlue"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="00명"
-                        android:textSize="15dp"
-                        android:textColor="@color/colorNewBlue"
-                        android:layout_marginBottom="5dp"/>
-                    <TextView
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="신규확진자"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/user_statistics_4_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="00명"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorNewBlue"
+                            android:layout_marginBottom="5dp"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="완치자"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/user_statistics_2_TextView"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="완치자"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/user_statistics_2_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="00명"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorNewBlue"
+                            android:layout_marginBottom="5dp"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="00명"
-                        android:textSize="15dp"
-                        android:textColor="@color/colorNewBlue"
-                        android:layout_marginBottom="5dp"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="치료 중(격리)"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/user_statistics_3_TextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="00명"
-                        android:textSize="15dp"
-                        android:textColor="@color/colorNewBlue"
-                        android:layout_marginBottom="5dp"/>
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="치료(격리)"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/user_statistics_3_TextView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:text="00명"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorNewBlue"
+                            android:layout_marginBottom="5dp"/>
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
