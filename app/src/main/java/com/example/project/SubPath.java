@@ -7,28 +7,28 @@ import java.util.ArrayList;
  * 1-9-3 이동 교통 수단 정보 확장 노드 1..n
  */
 public class SubPath {
-    SubPath(int trafficType, double distance, int sectionTime, int stationCount, ArrayList<SubwayLane> subwayLanes,
-            ArrayList<BusLane> busLanes, Place startStation, Place endStation, String way,
-            int wayCode, String door, int startID, int endID, Place startExitNo, Place endExitNo,
-            ArrayList<Stations> stations){
-        this.trafficType =trafficType;
-        this.distance=distance;
-        this.sectionTime=sectionTime;
-        this.stationCount=stationCount;
-        this.subwayLanes=subwayLanes;
-        this.busLanes=busLanes;
-        this.startStation =startStation;
-        this.endStation=endStation;
-        this.way=way;
-        this.wayCode=wayCode;
-        this.door=door;
-        this.startID=startID;
-        this.endID=endID;
-        this.startExitNo=startExitNo;
-        this.endExitNo=endExitNo;
-        this.stations=stations;
+    SubPath(){
+        this.trafficType = 0;
+        this.distance=0.0;
+        this.sectionTime=0;
+        this.stationCount=0;
 
+        this.subwayLanes=new ArrayList<SubwayLane>();
+        this.busLanes=new ArrayList<BusLane>();
+
+        this.startStation = null;
+        this.endStation = null;
+        this.way = "";
+        this.wayCode = 0;
+        this.door = "";
+        this.startID = 0;
+        this.endID = 0;
+
+        this.startExitNo = null;
+        this.endExitNo = null;
+        this.stations = new ArrayList<Stations>();
     }
+
     private int trafficType; //이동 수단 종류 (도보, 버스, 지하철) 1-지하철, 2-버스, 3-도보
     private double distance; //이동 거리
     private int sectionTime; //이동 소요시간
