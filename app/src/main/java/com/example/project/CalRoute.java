@@ -154,16 +154,17 @@ public class CalRoute implements Runnable{
                                             sp.setWay(subPath.getString("way"));
                                             sp.setWayCode(subPath.getInt("wayCode"));
                                             sp.setDoor(subPath.getString("door"));
-                                            if(subPath.getString("startExitNo") != null){
+                                            if(!subPath.isNull("startExitNo")){
                                                 sp.setStartExitNo(new Place(subPath.getString("startExitNo")
                                                         ,subPath.getDouble("startExitY")
                                                         ,subPath.getDouble("startExitX")));
                                             }
-                                            if(subPath.getString("endExitNo")!=null){
+                                            if(!subPath.isNull("endExitNo")){
                                                 sp.setStartExitNo(new Place(subPath.getString("endExitNo")
                                                         ,subPath.getDouble("endExitY")
                                                         ,subPath.getDouble("endExitX")));
                                             }
+
                                         }
                                         sp.setStartStation(new Place(subPath.getString("startName")
                                                 ,subPath.getDouble("startY")
