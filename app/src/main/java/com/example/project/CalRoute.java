@@ -86,7 +86,13 @@ public class CalRoute implements Runnable{
                 searchLocList.add(searchLoc);
             }
         }
-        return searchLoc;
+        findPlace(searchLocList);
+        return searchLocList.get(0);
+    }
+    private void findPlace(ArrayList<Place> searchLocList){
+        for(int i =0 ; i <searchLocList.size();i++ ){
+            System.out.println(searchLocList.get(i).get_placeAddress());
+        }
     }
     private ArrayList<SearchPath> calRoute1(Context context, Place startPoint, Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
         ODsayService oDsayService=ODsayService.init(context,"cDSdUY9qLmrLpcqsJL3zPvgpx3IgkOf4sLsbkzSOZ2Y");
@@ -99,12 +105,14 @@ public class CalRoute implements Runnable{
                 SubPath sp=null;
                 try{
                     if(api==API.SEARCH_PUB_TRANS_PATH){
-                        int localSearch = oDsayData.getJson().getJSONObject("result").getInt("localSearch");
+                        int localSearch = oDsayData.getJson().getJSONObject("result").getInt("outTrafficCheck");
                         if(localSearch==1){
-                            int totalCount = oDsayData.getJson().getJSONObject("result").getInt("totalCount");//총 경로 결과 개수
+                            int totalCount = oDsayData.getJson().getJSONObject("result").getInt("busCount")
+                                    + oDsayData.getJson().getJSONObject("result").getInt("subwayCount")
+                                    + oDsayData.getJson().getJSONObject("result").getInt("subwayBusCount");//총 경로 결과 개수
                             for(int i =0; i < totalCount;i++){
                                 JSONObject path = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(i);
-                                ExtendNode t = new ExtendNode(path.getJSONObject("Info").getDouble("trafficDistance")
+                                ExtendNode t = new ExtendNode(path.getJSONObject("info").getDouble("trafficDistance")
                                         ,path.getJSONObject("Info").getInt("totalWalk")
                                         ,path.getJSONObject("Info").getInt("totalTime")
                                         ,path.getJSONObject("Info").getInt("payment")
@@ -180,9 +188,8 @@ public class CalRoute implements Runnable{
                 }
             }
         };
-        oDsayService.requestSearchPubTransPath(Double.toString(startPoint.get_placeX()),Double.toString(startPoint.get_placeY()),Double.toString(desPoint.get_placeX())
-        ,Double.toString(desPoint.get_placeY()),"0","0","0",onResultCallbackListener);
-
+        oDsayService.requestSearchPubTransPath(Double.toString(startPoint.get_placeY()),Double.toString(startPoint.get_placeX()),Double.toString(desPoint.get_placeY())
+                ,Double.toString(desPoint.get_placeX()),"0","0","0",onResultCallbackListener);
         return resultSearchPath;
     }
 
