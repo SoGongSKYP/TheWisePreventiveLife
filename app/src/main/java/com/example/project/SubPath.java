@@ -25,7 +25,6 @@ public class SubPath {
 
         this.startExitNo = null;
         this.endExitNo = null;
-        this.stations = new ArrayList<Stations>();
     }
 
     private int trafficType; //이동 수단 종류 (도보, 버스, 지하철) 1-지하철, 2-버스, 3-도보
@@ -50,11 +49,7 @@ public class SubPath {
     // endExitNo 지하철 들어가는 출구 번호 (지하철인 경우에만 사용되지만 해당 태그가 없을 수도 있다.)
     // endExitX 지하철 들어가는 출구 X좌표(지하철인 경우에 만 사용되지만 해당 태그가 없을 수도 있다.)
     // endExitY 지하철 들어가는 출구 Y좌표(지하철인 경우에 만 사용되지만 해당 태그가 없을 수도 있다.)
-    private ArrayList<Stations> stations; //정류장 정보 그룹노드
 
-    public ArrayList<Stations> getStations() {
-        return stations;
-    }
     public int getEndID() {
         return endID;
     }
@@ -99,8 +94,10 @@ public class SubPath {
     public int getTrafficType() {
         return trafficType;
     }
-    
 
+    public void addList(Lane lane){
+        laneList.add(lane);
+    }
     public void setDistance(double distance) {
         this.distance = distance;
     }
@@ -145,10 +142,6 @@ public class SubPath {
         this.stationCount = stationCount;
     }
 
-    public void setStations(ArrayList<Stations> stations) {
-        this.stations = stations;
-    }
-    
     public void setTrafficType(int trafficType) {
         this.trafficType = trafficType;
     }
