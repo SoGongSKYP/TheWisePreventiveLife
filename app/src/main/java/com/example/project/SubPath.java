@@ -103,7 +103,7 @@ public class SubPath {
     public void setEndExitNo(Place endExitNo) {
         this.endExitNo = endExitNo;
     }
-    
+
 
     public void setEndStation(Place endStation) {
         this.endStation = endStation;
@@ -116,7 +116,7 @@ public class SubPath {
     public void setStartExitNo(Place startExitNo) {
         this.startExitNo = startExitNo;
     }
-    
+
 
     public void setStartStation(Place startStation) {
         this.startStation = startStation;
