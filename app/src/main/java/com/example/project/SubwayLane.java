@@ -4,14 +4,14 @@ import java.util.ArrayList;
 /*
  * 1-9-3-5 교통 수단 정보 확장 노드 지하철용 1..n
  */
-public class SubwayLane {
-    SubwayLane(String name, int subwayCode, int subwayCityCode,int index){
+public class SubwayLane extends Lane{
+    SubwayLane(String name, int subwayCode, int subwayCityCode){
         this.name =name;
         this.subwayCode = subwayCode;
         this.subwayCityCode =subwayCityCode;
-        this.index = index;
+
     }
-    private int index;
+
     private String name; //지하철 노선명 (지하철인 경우에만 필수)
     private int subwayCode; //지하철 노선 번호 (지하철인 경우에만 필수)
     private int subwayCityCode; //지하철 도시코드 (지하철인 경우에만 필수)
@@ -26,13 +26,6 @@ public class SubwayLane {
         return name;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
     public void setName(String name) {
         this.name = name;
     }
