@@ -344,7 +344,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }
 
     public void printRoute() throws ParserConfigurationException, SAXException, IOException {
-
         String startPoint = startEditText.getText().toString();
         String desPoint  = finishEditText.getText().toString();
         final Lock lock = new ReentrantLock(); // lock instance
