@@ -94,6 +94,7 @@ public class CalRoute implements Runnable{
         OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
             @Override
             public void onSuccess(ODsayData oDsayData, API api) {
+                SubPath sp=null;
                 try{
                     if(api==API.SEARCH_PUB_TRANS_PATH){
                         int localSearch = oDsayData.getJson().getJSONObject("result").getInt("localSearch");
@@ -113,25 +114,57 @@ public class CalRoute implements Runnable{
                                         ,path.getJSONObject("Info").getInt("totalStationCount")
                                         ,path.getJSONObject("Info").getInt("totalDistance"));
                                 JSONArray subPathList = path.getJSONArray("subPath");
+
                                 for(int s =0 ; s<subPathList.length();s++){
                                     JSONObject subPath = subPathList.getJSONObject(s);
                                     int trafficType = subPath.getInt("trafficType");
-                                    double distance= subPath.getDouble("distance");
-                                    int sectionTime=subPath.getInt("sectionTime");
-                                    if(trafficType==3){
-                                        SubPath sp = new SubPath();
-                                        sp.setTrafficType(trafficType);
-                                        sp.setDistance(distance);
-                                        sp.setSectionTime(sectionTime);
-                                        temp.add(sp);
+                                    sp = new SubPath();
+                                    sp.setTrafficType(trafficType);
+                                    sp.setDistance(subPath.getDouble("distance"));
+                                    sp.setSectionTime(subPath.getInt("sectionTime"));
+                                    if(trafficType != 3){
+                                        JSONArray laneList = subPath.getJSONArray("lane");
+                                        for(int l =0 ; l < laneList.length();l++){
+                                            JSONObject lane = laneList.getJSONObject(l);
+                                            if(trafficType==2){
+                                                Lane busLane =new Lane(lane.getString("busNo")
+                                                        ,lane.getInt("type")
+                                                        ,lane.getInt("busID"));
+                                                sp.addList(busLane);
+                                            } // 버스
+                                            else if(trafficType==1){
+                                                Lane subwayLane = new Lane(lane.getString("name")
+                                                        ,lane.getInt("subwayCode")
+                                                        ,lane.getInt("subwayCityCode"));
+                                                sp.addList(subwayLane);
+                                            }//지하철
+                                        }
+                                        sp.setStationCount(subPath.getInt("stationCount"));
+                                        if(trafficType==1){
+                                            sp.setWay(subPath.getString("way"));
+                                            sp.setWayCode(subPath.getInt("wayCode"));
+                                            sp.setDoor(subPath.getString("door"));
+                                            if(subPath.getString("startExitNo") != null){
+                                                sp.setStartExitNo(new Place(subPath.getString("startExitNo")
+                                                        ,subPath.getDouble("startExitY")
+                                                        ,subPath.getDouble("startExitX")));
+                                            }
+                                            if(subPath.getString("endExitNo")!=null){
+                                                sp.setStartExitNo(new Place(subPath.getString("endExitNo")
+                                                        ,subPath.getDouble("endExitY")
+                                                        ,subPath.getDouble("endExitX")));
+                                            }
+                                        }
+                                        sp.setStartStation(new Place(subPath.getString("startName")
+                                                ,subPath.getDouble("startY")
+                                                ,subPath.getDouble("startX")));
+                                        sp.setEndStation(new Place(subPath.getString("endName")
+                                                ,subPath.getDouble("endY")
+                                                ,subPath.getDouble("endX")));
                                     }
-                                    else if(trafficType==2){
-                                        SubPath sp = new SubPath();
-                                    }
-                                    else if(trafficType==1){
-
-                                    }
+                                    temp.add(sp);
                                 }
+                                resultSearchPath.add(new SearchPath(path.getInt("pathType"),t,temp));
                             }
                         }// 경로 탐색 결과 있음 X좌표 Y좌표 바뀌어있으니 조심
                     }
