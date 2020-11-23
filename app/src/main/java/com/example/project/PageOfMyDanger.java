@@ -53,7 +53,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
         mapView = v.findViewById(R.id.danger_MapView);
         mapView.getMapAsync(this);
-
         return v;
     }
 
@@ -256,8 +255,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 if(subPath.getEndExitNo()!=null){
                     System.out.println("지하철 출구: "+subPath.getEndExitNo().get_placeAddress());
                 }
-                for(int sub = 0; sub < subPath.getSubwayLanes().size();sub++){
-                    SubwayLane temp = subPath.getSubwayLanes().get(sub);
+                for(int sub = 0; sub < subPath.getLaneList().size();sub++){
+                    Lane temp = subPath.getLaneList().get(sub);
                     System.out.println("지하철 노선: "+temp.getName());
                 }
             }
@@ -266,55 +265,55 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 System.out.println("이동 정거장 수: "+subPath.getStationCount());
                 System.out.println("승차 정류장: "+subPath.getStartStation().get_placeAddress());
                 System.out.println("하차 정류장: "+subPath.getEndStation().get_placeAddress());
-                for(int sub = 0; sub < subPath.getBusLanes().size();sub++){
-                    BusLane temp = subPath.getBusLanes().get(sub);
-                    System.out.println("버스 번호: "+temp.getBusNo());
-                    if(temp.getType() == 1){
+                for(int sub = 0; sub < subPath.getLaneList().size();sub++){
+                    Lane temp = subPath.getLaneList().get(sub);
+                    System.out.println("버스 번호: "+temp.getName());
+                    if(temp.getSubwayCodeORtype() == 1){
                         System.out.println("일반");
                     }
-                    else if(temp.getType() == 2){
+                    else if(temp.getSubwayCodeORtype() == 2){
                         System.out.println("좌석");
                     }
-                    else if(temp.getType() == 3){
+                    else if(temp.getSubwayCodeORtype() == 3){
                         System.out.println("마을 버스");
                     }
-                    else if(temp.getType() == 4){
+                    else if(temp.getSubwayCodeORtype() == 4){
                         System.out.println("직행 좌석");
                     }
-                    else if(temp.getType() == 5){
+                    else if(temp.getSubwayCodeORtype() == 5){
                         System.out.println("공항 버스");
                     }
-                    else if(temp.getType() == 6){
+                    else if(temp.getSubwayCodeORtype() == 6){
                         System.out.println("간선 급행");
                     }
-                    else if(temp.getType() == 10){
+                    else if(temp.getSubwayCodeORtype() == 10){
                         System.out.println("외곽 ");
                     }
-                    else if(temp.getType() == 11){
+                    else if(temp.getSubwayCodeORtype() == 11){
                         System.out.println("간선");
                     }
-                    else if(temp.getType() == 12){
+                    else if(temp.getSubwayCodeORtype() == 12){
                         System.out.println("지선");
                     }
-                    else if(temp.getType() == 13){
+                    else if(temp.getSubwayCodeORtype() == 13){
                         System.out.println("순환");
                     }
-                    else if(temp.getType() == 14){
+                    else if(temp.getSubwayCodeORtype() == 14){
                         System.out.println("광역");
                     }
-                    else if(temp.getType() == 15){
+                    else if(temp.getSubwayCodeORtype() == 15){
                         System.out.println("급행");
                     }
-                    else if(temp.getType() == 20){
+                    else if(temp.getSubwayCodeORtype() == 20){
                         System.out.println("농어촌 버스");
                     }
-                    else if(temp.getType() == 21){
+                    else if(temp.getSubwayCodeORtype() == 21){
                         System.out.println("제주도 시외형 버스");
                     }
-                    else if(temp.getType() == 22){
+                    else if(temp.getSubwayCodeORtype() == 22){
                         System.out.println("경기도 시외형 버스");
                     }
-                    else if(temp.getType() == 26){
+                    else if(temp.getSubwayCodeORtype() == 26){
                         System.out.println("급행 간선");
                     }
                 }
@@ -345,8 +344,9 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }
 
     public void printRoute() throws ParserConfigurationException, SAXException, IOException {
-        String startPoint = "화서역";
-        String desPoint  = "서울역";
+
+        String startPoint = startEditText.getText().toString();
+        String desPoint  = finishEditText.getText().toString();
         final Lock lock = new ReentrantLock(); // lock instance
         CalRoute cl = new CalRoute(getContext(),startPoint,desPoint,lock);
         Thread thread =new Thread(cl);
