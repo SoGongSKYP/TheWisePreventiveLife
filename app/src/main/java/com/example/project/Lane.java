@@ -6,7 +6,6 @@ public class Lane {
         this.name =name;
         this.subwayCodeORtype = subwayCodeORtype;
         this.subwayCityCodeORBusId =subwayCityCodeORBusId;
-
     }
 
     private String name; //지하철 노선명 (지하철인 경우에만 필수)
@@ -28,7 +27,6 @@ public class Lane {
     public void setSubwayCityCodeORBusId(int subwayCityCodeORBusId) {
         this.subwayCityCodeORBusId = subwayCityCodeORBusId;
     }
-
     public String getName() {
         return name;
     }
