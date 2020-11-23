@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="10"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="20dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,22 +40,56 @@
                 android:textColor="@color/colorWhite"
                 android:background="@drawable/button_full_design"/>
         </LinearLayout>
-        <EditText
-            android:id="@+id/starting_point_editText"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="출발지"
-            android:background="@drawable/edittext_outline_design"
-            android:padding="12dp"
-            android:layout_margin="5dp"/>
-        <EditText
-            android:id="@+id/destination_editText"
+            android:layout_height="50dp">
+            <EditText
+                android:id="@+id/starting_point_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="출발지"
+                android:textSize="17dp"
+                android:textColor="@color/colorDarkGrey"
+                android:paddingLeft="15dp"
+                android:paddingRight="30dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/button_outline_design"/>
+            <ImageButton
+                android:id="@+id/start_search_ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/search"
+                android:background="@null"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_alignRight="@id/starting_point_EditText"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="도착지"
-            android:background="@drawable/edittext_outline_design"
-            android:padding="12dp"
-            android:layout_margin="5dp"/>
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp">
+            <EditText
+                android:id="@+id/finish_point_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="도착지"
+                android:textSize="17dp"
+                android:textColor="@color/colorDarkGrey"
+                android:paddingLeft="15dp"
+                android:paddingRight="30dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/button_outline_design"/>
+            <ImageButton
+                android:id="@+id/finish_search_ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/search"
+                android:background="@null"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_alignRight="@id/finish_point_EditText"/>
+        </RelativeLayout>
+
     </LinearLayout>
     <com.google.android.gms.maps.MapView
         android:id="@+id/danger_MapView"

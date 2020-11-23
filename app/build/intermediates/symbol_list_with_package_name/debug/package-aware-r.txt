@@ -2750,13 +2750,12 @@ id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
 id scrollable
-id search_CardView
+id search_RelativeLayout
 id search_badge
 id search_bar
 id search_button
 id search_close_btn
 id search_edit_frame
-id search_fragment
 id search_go_btn
 id search_mag_icon
 id search_plate
@@ -2888,6 +2887,8 @@ id user_info_ImageButton
 id user_info_LinearLayout
 id user_locOK_TextView
 id user_main_Map
+id user_search_bar
+id user_search_button
 id user_statistics_1_TextView
 id user_statistics_2_TextView
 id user_statistics_3_TextView

@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,15 +47,76 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
     EditText startEditText, finishEditText;
     Button findRouteButton;
+    ImageButton startSearchImageButton, finishSearchImageButton;
+    String start, finish;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_danger, container, false);
-        startEditText = v.findViewById(R.id.starting_point_editText);
-        finishEditText = v.findViewById(R.id.destination_editText);
+        startEditText = v.findViewById(R.id.starting_point_EditText);
+        finishEditText = v.findViewById(R.id.finish_point_EditText);
         findRouteButton = v.findViewById(R.id.search_route_Button);
+
+        startSearchImageButton = v.findViewById(R.id.start_search_ImageButton);
+        finishSearchImageButton = v.findViewById(R.id.finish_search_ImageButton);
+
+        StartSearchAction();
+        FinishSearchAction();
+        SearchRouteButtonAction();
 
         mapView = v.findViewById(R.id.danger_MapView);
         mapView.getMapAsync(this);
         return v;
+    }
+
+    /*출발지 검색 버튼 누르면 실행되는 함수*/
+    void StartSearchAction(){
+        startSearchImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start = startEditText.getText().toString();
+                if(start != null){
+                    //여기서 검색 기능
+
+
+                    //검색 결과의 주소 제목은 아래 setText()의 매개변수로 넣어주세요
+                    //startEditText.setText();
+                }else{
+                    Toast.makeText(getContext(), "검색할 출발지를 입력하세요", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    /*도착지 검색 버튼 누르면 실행되는 함수*/
+    void FinishSearchAction(){
+        finishSearchImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish = finishEditText.getText().toString();
+                if(finish != null){
+                    //여기서 검색 기능
+
+
+                    //검색 결과의 주소 제목은 아래 setText()의 매개변수로 넣어주세요
+                    //finishEditText.setText();
+                }else{
+                    Toast.makeText(getContext(), "검색할 도착지를 입력하세요", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    /*경로 검색 버튼 누르면 실행되는 함수*/
+    void SearchRouteButtonAction(){
+        findRouteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(start != null && finish != null){
+                    //동선 검색 기능
+                }
+                else{
+                    Toast.makeText(getContext(), "출발지와 도착지를 입력했는지 확인하세요", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

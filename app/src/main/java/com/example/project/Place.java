@@ -8,12 +8,21 @@ import java.util.*;
 public class Place {
 
     private String placeAddress;
+    private String placeDetailAddress;
     private double placeX;
     private double placeY;
 
     //Constructor
-    public Place(String place_address, double placeX,double placeY ) {
+    public Place(String place_address, double placeX, double placeY ) {
         this.placeAddress=place_address;
+        this.placeDetailAddress = "";
+        this.placeX=placeX;
+        this.placeY=placeY;
+    }
+
+    public Place(String place_address, String detail_address, double placeX, double placeY ) {
+        this.placeAddress=place_address;
+        this.placeDetailAddress = detail_address;
         this.placeX=placeX;
         this.placeY=placeY;
     }

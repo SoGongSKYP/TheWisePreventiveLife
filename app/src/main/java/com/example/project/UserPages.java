@@ -16,8 +16,11 @@ package com.example.project;
         import android.os.Parcelable;
         import android.view.MenuItem;
         import android.view.View;
+        import android.widget.EditText;
         import android.widget.ImageButton;
+        import android.widget.RelativeLayout;
         import android.widget.TextView;
+        import android.widget.Toast;
 
         import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -51,12 +54,11 @@ public class UserPages extends AppCompatActivity {
     private TextView TitleTextView;
     private ImageButton InfoImageButton;
 
-    /*구글 search bar 관련 컴포넌트*/
-    private AutocompleteSupportFragment searchBar;
-    private CardView searchCardView;
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-    private Intent intent;
-    private Intent alarmIntent;
+    /*search bar 관련 컴포넌트*/
+    private EditText searchBar;
+    private ImageButton searchButton;
+    private RelativeLayout searchLayout;
+    String searchPlace;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
@@ -110,68 +112,41 @@ public class UserPages extends AppCompatActivity {
         TitleTextView = findViewById(R.id.user_Title_TextView);
         TitleTextView.setText("주변 확진자 현황");
 
+        /*서치바 컴포넌트 연결*/
+        searchBar = findViewById(R.id.user_search_bar);
+        searchButton = findViewById(R.id.user_search_button);
+        searchLayout = findViewById(R.id.search_RelativeLayout);
+        SearchAction();
+
         InfoImageButton = findViewById(R.id.user_info_ImageButton);
         InfoImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                intent = new Intent(getApplicationContext(), PageOfToManager.class);
+                Intent intent = new Intent(getApplicationContext(), PageOfToManager.class);
                 startActivity(intent);
 
-
             }
         });
+    }
 
-
-        /*구글 맵 서치바 연결*/
-        searchCardView = findViewById(R.id.search_CardView);
-        /*
-        searchBar = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.search_fragment);
-
-        searchBar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-        searchBar.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    /*검색 바 구현*/
+    void SearchAction(){
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
+            public void onClick(View view) {
+                searchPlace = searchBar.getText().toString();
+                if(searchPlace!=null){
+                    // 검색 기능 구현
 
 
-            @Override
-            public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
+                }else{
+                    Toast.makeText(getParent(), "검색할 장소를 입력하세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this);
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-        */
-
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
-                Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-    */
 
+    
     /* 일반사용자 페이지 네비게이션 바 연결*/
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -181,27 +156,27 @@ public class UserPages extends AppCompatActivity {
                 case R.id.user_Home:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfMain).commit();
                     TitleTextView.setText("주변 확진자 현황");
-                    searchCardView.setVisibility(View.VISIBLE);
+                    searchLayout.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.user_Danger:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfMyDanger).commit();
                     TitleTextView.setText("나의 동선 위험도");
-                    searchCardView.setVisibility(View.GONE);
+                    searchLayout.setVisibility(View.GONE);
                     return true;
                 case R.id.user_Statistics:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfStatistics).commit();
                     TitleTextView.setText("전국 통계");
-                    searchCardView.setVisibility(View.GONE);
+                    searchLayout.setVisibility(View.GONE);
                     return true;
                 case R.id.user_SelfDiagnosis:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfSelfDiagnosis).commit();
                     TitleTextView.setText("자가 진단");
-                    searchCardView.setVisibility(View.GONE);
+                    searchLayout.setVisibility(View.GONE);
                     return true;
                 case R.id.user_Clinics:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfSelectedClinic).commit();
                     TitleTextView.setText("주변 선별 진료소");
-                    searchCardView.setVisibility(View.VISIBLE);
+                    searchLayout.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;
@@ -210,16 +185,6 @@ public class UserPages extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        new Thread(){
-            @Override
-            public void run() {
-                System.out.println("프로그램 종료");
-                alarmIntent = new Intent(getApplicationContext(),AlramService.class);
-                //alarmIntent.putExtra("patientList",DBEntity.getPatientList());
-                startService(alarmIntent);
-            }
-        }.start();
-
         super.onDestroy();
     }
 
