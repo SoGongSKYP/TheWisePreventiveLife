@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
@@ -36,7 +35,7 @@ public class UserLoc extends AppCompatActivity {
     //private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
     private static Place userPlace = new Place("동국대학교 정보문화관", 37.559562, 126.998557);
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 10 * 1;
 
     // 1: 사용자 위치정보 허용 상태, 2: 사용자 위치 정보 허용하지 않은 상태
     public UserLoc() {
