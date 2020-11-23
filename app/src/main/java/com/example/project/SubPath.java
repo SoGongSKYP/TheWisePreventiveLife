@@ -13,8 +13,7 @@ public class SubPath {
         this.sectionTime=0;
         this.stationCount=0;
 
-        this.subwayLanes=new ArrayList<SubwayLane>();
-        this.busLanes=new ArrayList<BusLane>();
+        this.laneList = null;
 
         this.startStation = null;
         this.endStation = null;
@@ -32,8 +31,7 @@ public class SubPath {
     private int trafficType; //이동 수단 종류 (도보, 버스, 지하철) 1-지하철, 2-버스, 3-도보
     private double distance; //이동 거리
     private int sectionTime; //이동 소요시간
-    private ArrayList<SubwayLane> subwayLanes; //1-9-3-5 교통 수단 정보 확장 노드 지하철 용
-    private ArrayList<BusLane> busLanes; //1-9-3-5 교통 수단 정보 확장 노드 버스 용
+    private ArrayList<Lane> laneList;
 
     private int stationCount; //이동 정거장 수(지하철, 버스 경우만 필수)
     private Place startStation; // 승차정류장 역명 , 역 x(경도)좌표, 역 Y(위도 좌표)
@@ -84,12 +82,11 @@ public class SubPath {
     public int getWayCode() {
         return wayCode;
     }
-    public ArrayList<BusLane> getBusLanes() {
-        return busLanes;
+
+    public ArrayList<Lane> getLaneList() {
+        return laneList;
     }
-    public ArrayList<SubwayLane> getSubwayLanes() {
-        return subwayLanes;
-    }
+
     public double getDistance() {
         return distance;
     }
@@ -102,10 +99,7 @@ public class SubPath {
     public int getTrafficType() {
         return trafficType;
     }
-
-    public void setBusLanes(ArrayList<BusLane> busLanes) {
-        this.busLanes = busLanes;
-    }
+    
 
     public void setDistance(double distance) {
         this.distance = distance;
@@ -113,6 +107,10 @@ public class SubPath {
 
     public void setDoor(String door) {
         this.door = door;
+    }
+
+    public void setLaneList(ArrayList<Lane> laneList) {
+        this.laneList = laneList;
     }
 
     public void setEndExitNo(Place endExitNo) {
@@ -150,11 +148,7 @@ public class SubPath {
     public void setStations(ArrayList<Stations> stations) {
         this.stations = stations;
     }
-
-    public void setSubwayLanes(ArrayList<SubwayLane> subwayLanes) {
-        this.subwayLanes = subwayLanes;
-    }
-
+    
     public void setTrafficType(int trafficType) {
         this.trafficType = trafficType;
     }
