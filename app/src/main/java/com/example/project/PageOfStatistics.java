@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,43 +49,22 @@ public class PageOfStatistics extends Fragment {
             btn_gyeonggido, btn_gangwondo, btn_chungbuk, btn_chungnam, btn_jeonbuk, btn_jeonnam, btn1_gyeongbuk,
             btn2_gyeongbuk, btn1_gyeongnam, btn2_gyeongnam, btn_jeju;
     int localNum = 17;
+    ArrayList<PieEntry> values = new ArrayList<PieEntry>();
+    PieChart pieChart;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
-
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
-
-        PieChart pieChart;
-
-        pieChart = (PieChart) v.findViewById(R.id.piechart);
-
-        pieChart.setUsePercentValues(true);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.setExtraOffsets(3, 8, 3, 3);
-
-        pieChart.setDragDecelerationFrictionCoef(0.95f);
-
-        pieChart.setDrawHoleEnabled(false);
-        pieChart.setHoleColor(Color.BLACK);
-        pieChart.setTransparentCircleRadius(61f);
-
-
-        ArrayList<PieEntry> values = new ArrayList<PieEntry>();
-        for(int i=0; i<this.nationStatistic.getLocalStatistics().size()-1; i++) {
-            values.add(new PieEntry(this.nationStatistic.getLocalStatistics().get(i).patientNum, this.nationStatistic.getLocalStatistics().get(i).getLocalName()));
-        }
-
+    public void dataView(PieChart pieC, ArrayList<PieEntry> value){
         Description description = new Description();
         description.setText("지역별 확진자수 비율"); //라벨
         description.setTextSize(13);
-        pieChart.setDescription(description);
+        pieC.setDescription(description);
 
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
+        pieC.setEntryLabelColor(Color.BLACK);
+        pieC.animateY(1000, Easing.EasingOption.EaseInOutCubic);
 
-        PieDataSet dataSet = new PieDataSet(values,"local");
+        PieDataSet dataSet = new PieDataSet(value,"local");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
@@ -94,8 +74,27 @@ public class PageOfStatistics extends Fragment {
         data.setValueTextColor(Color.BLACK);
 
         pieChart.setData(data);
+    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+        View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
+        values.removeAll(values);
 
+        pieChart = (PieChart) v.findViewById(R.id.piechart);
 
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setExtraOffsets(0, 8, 3, 3);
+
+        pieChart.setDragDecelerationFrictionCoef(0.95f);
+
+        pieChart.setDrawHoleEnabled(false);
+        pieChart.setHoleColor(Color.BLACK);
+        pieChart.setTransparentCircleRadius(61f);
+
+        for(int i=0; i<this.nationStatistic.getLocalStatistics().size()-1; i++) {
+            values.add(new PieEntry(this.nationStatistic.getLocalStatistics().get(i).patientNum, this.nationStatistic.getLocalStatistics().get(i).getLocalName()));
+        }
+        dataView(pieChart,values);
 
         btn_gyeonggido = v.findViewById(R.id.gyeonggi_Button);
         btn_gangwondo = v.findViewById(R.id.gangwondo_Button);
@@ -206,7 +205,12 @@ public class PageOfStatistics extends Fragment {
                 case R.id.seoul_Button:
                     Toast.makeText(getContext(), "서울 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 17;
-                    break;
+
+                    values.removeAll(values);
+                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
+                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"기타"));
+                    dataView(pieChart,values);
+
                 case R.id.busan_Button:
                     Toast.makeText(getContext(), "부산 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 16;
@@ -274,8 +278,11 @@ public class PageOfStatistics extends Fragment {
                     localNum = 1;
                     break;
             }
+
         }
     };
+
+
 
     private void LocalButtonAction(){
         btn_gyeonggido.setOnClickListener(localClickListener);
