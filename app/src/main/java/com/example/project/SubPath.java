@@ -20,8 +20,6 @@ public class SubPath {
         this.way = "";
         this.wayCode = 0;
         this.door = "";
-        this.startID = 0;
-        this.endID = 0;
 
         this.startExitNo = null;
         this.endExitNo = null;
@@ -38,8 +36,6 @@ public class SubPath {
     private String way; // 방면 정보
     private int wayCode; // 방면 정보 코드 1: 상행 2: 하행
     private String door; // 지하철 빠른 환승 위치
-    private int startID; //출발 정류장/역코드
-    private int endID; //도착 정류장/역코드
 
     private Place startExitNo;
     // startExitNo 지하철 들어가는 출구 번호 (지하철인 경우에만 사용되지만 해당 태그가 없을 수도 있다.)
@@ -50,12 +46,6 @@ public class SubPath {
     // endExitX 지하철 들어가는 출구 X좌표(지하철인 경우에 만 사용되지만 해당 태그가 없을 수도 있다.)
     // endExitY 지하철 들어가는 출구 Y좌표(지하철인 경우에 만 사용되지만 해당 태그가 없을 수도 있다.)
 
-    public int getEndID() {
-        return endID;
-    }
-    public int getStartID() {
-        return startID;
-    }
     public Place getEndStation() {
         return endStation;
     }
@@ -113,10 +103,7 @@ public class SubPath {
     public void setEndExitNo(Place endExitNo) {
         this.endExitNo = endExitNo;
     }
-
-    public void setEndID(int endID) {
-        this.endID = endID;
-    }
+    
 
     public void setEndStation(Place endStation) {
         this.endStation = endStation;
@@ -129,10 +116,7 @@ public class SubPath {
     public void setStartExitNo(Place startExitNo) {
         this.startExitNo = startExitNo;
     }
-
-    public void setStartID(int startID) {
-        this.startID = startID;
-    }
+    
 
     public void setStartStation(Place startStation) {
         this.startStation = startStation;
