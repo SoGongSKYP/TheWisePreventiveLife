@@ -53,6 +53,7 @@ public class CalRoute implements Runnable{
     public Place searchPlace(String startPoint) throws IOException, ParserConfigurationException, SAXException {
         String parsingUrl="";
         String key= "340FCCC5-C1C9-31D4-B7D8-56BC7558298A";
+        ArrayList<Place> searchLocList =new ArrayList<Place>();
         Place searchLoc=new Place("",0.0,0.0);
         StringBuilder urlBuilder = new StringBuilder("http://api.vworld.kr/req/search?"); /*URL*/
         urlBuilder.append(URLEncoder.encode("service","UTF-8") + "="+URLEncoder.encode("search", "UTF-8"));
@@ -82,6 +83,7 @@ public class CalRoute implements Runnable{
                 searchLoc.set_placeAddress(getTagValue("road",eElement));
                 searchLoc.set_placeX(Double.parseDouble(getTagValue("y",eElement)));
                 searchLoc.set_placeY(Double.parseDouble(getTagValue("x",eElement)));
+                searchLocList.add(searchLoc);
             }
         }
         return searchLoc;
