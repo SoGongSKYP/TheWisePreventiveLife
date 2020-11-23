@@ -55,9 +55,24 @@ public class PageOfStatistics extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
-    public void dataView(PieChart pieC, ArrayList<PieEntry> value){
+    public void dataView(PieChart pieC, ArrayList<PieEntry> value,int localNum){
+        value.removeAll(value);
+
+        pieC.setUsePercentValues(true);
+        pieC.getDescription().setEnabled(false);
+        pieC.setExtraOffsets(0, 1, 0, 0);
+
+        pieC.setDragDecelerationFrictionCoef(0.95f);
+
+        pieC.setDrawHoleEnabled(false);
+        pieC.setHoleColor(Color.BLACK);
+        pieC.setTransparentCircleRadius(65f);
+
+        value.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
+        value.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
+
         Description description = new Description();
-        description.setText("지역별 확진자수 비율"); //라벨
+        description.setText("지역별 확진자수 비율(%)");
         description.setTextSize(13);
         pieC.setDescription(description);
 
@@ -66,36 +81,19 @@ public class PageOfStatistics extends Fragment {
 
         PieDataSet dataSet = new PieDataSet(value,"local");
         dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
+        dataSet.setSelectionShift(4f);
         dataSet.setColors(ColorTemplate.PASTEL_COLORS);
 
         PieData data = new PieData((dataSet));
-        data.setValueTextSize(10f);
+        data.setValueTextSize(15f);
         data.setValueTextColor(Color.BLACK);
 
         pieChart.setData(data);
     }
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_statistics, container, false);
-        values.removeAll(values);
-
         pieChart = (PieChart) v.findViewById(R.id.piechart);
-
-        pieChart.setUsePercentValues(true);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.setExtraOffsets(0, 1, 0, 0);
-
-        pieChart.setDragDecelerationFrictionCoef(0.95f);
-
-        pieChart.setDrawHoleEnabled(false);
-        pieChart.setHoleColor(Color.BLACK);
-        pieChart.setTransparentCircleRadius(65f);
-
-        for(int i=0; i<this.nationStatistic.getLocalStatistics().size()-1; i++) {
-            values.add(new PieEntry(this.nationStatistic.getLocalStatistics().get(i).patientNum, this.nationStatistic.getLocalStatistics().get(i).getLocalName()));
-        }
-        dataView(pieChart,values);
-
+        dataView(pieChart,values,17);
         btn_gyeonggido = v.findViewById(R.id.gyeonggi_Button);
         btn_gangwondo = v.findViewById(R.id.gangwondo_Button);
         btn_chungbuk = v.findViewById(R.id.chungBuk_Button);
@@ -205,142 +203,90 @@ public class PageOfStatistics extends Fragment {
                 case R.id.seoul_Button:
                     Toast.makeText(getContext(), "서울 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 17;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
-
                 case R.id.busan_Button:
                     Toast.makeText(getContext(), "부산 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 16;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.daegu_Button:
                     Toast.makeText(getContext(), "대구 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 15;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.incheon_Button:
                     Toast.makeText(getContext(), "인천 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 14;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.gwangju_Button:
                     Toast.makeText(getContext(), "광주 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 13;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.daejeon_Button:
                     Toast.makeText(getContext(), "대전 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 12;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.ulsan_Button:
                     Toast.makeText(getContext(), "울산 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 11;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.sejong_Button:
                     Toast.makeText(getContext(), "세종 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 10;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.gyeonggi_Button:
                     Toast.makeText(getContext(), "경기 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 9;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.gangwondo_Button:
                     Toast.makeText(getContext(), "강원 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 8;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.chungBuk_Button:
                     Toast.makeText(getContext(), "충북 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 7;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.chungNam_Button:
                     Toast.makeText(getContext(), "충남 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 6;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.jeonBuk_Button:
                     Toast.makeText(getContext(), "전북 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 5;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.jeonNam_Button:
                     Toast.makeText(getContext(), "전남 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 4;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.gyeongBuk1_Button:
                 case R.id.gyeongBuk2_Button:
                     Toast.makeText(getContext(), "경북 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 3;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.gyeongNam1_Button:
                 case R.id.gyeongNam2_Button:
                     Toast.makeText(getContext(), "경남 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 2;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
+                    dataView(pieChart,values,localNum);
                     break;
                 case R.id.jeju_Button:
                     Toast.makeText(getContext(), "제주 클릭", Toast.LENGTH_SHORT).show();
                     localNum = 1;
-                    values.removeAll(values);
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(localNum).getPatientNum(), nationStatistic.getLocalStatistics().get(localNum).getLocalName()));
-                    values.add(new PieEntry(nationStatistic.getLocalStatistics().get(18).getPatientNum()-nationStatistic.getLocalStatistics().get(localNum).getPatientNum(),"그 외 지역"));
-                    dataView(pieChart,values);
-                    break;
+                    dataView(pieChart,values,localNum);
+                     break;
             }
         }
     };
