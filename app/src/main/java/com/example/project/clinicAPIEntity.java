@@ -7,13 +7,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,20 +34,16 @@ public class clinicAPIEntity implements Runnable{
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(Integer.toString(index), "UTF-8")); /*페이지번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("50", "UTF-8")); /*한 페이지 결과 수*/ /*총 데이터 수*/
         URL url = new URL(urlBuilder.toString());
-        //System.out.println(sb.toString());
 
         parsingUrl=url.toString();
-        //System.out.println(parsingUrl);
 
         DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
         Document doc=dBuilder.parse(parsingUrl);
 
         doc.getDocumentElement().normalize();
-        //System.out.println("Root element : "+doc.getDocumentElement().getNodeName());
 
         NodeList nList=doc.getElementsByTagName("item");
-        //System.out.println("파싱할 리스트 수 : "+nList.getLength());
 
         for(int i=0; i<nList.getLength(); i++) {
             Node nNode=nList.item(i);
@@ -84,7 +76,7 @@ public class clinicAPIEntity implements Runnable{
         }
         clinicsList.addAll(tempClinicsList);
         try {
-            Thread.sleep(300);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

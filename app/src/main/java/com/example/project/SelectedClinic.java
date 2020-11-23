@@ -73,7 +73,7 @@ public class SelectedClinic {
     }
 
     /*직선거리 구하기 위한 함수*/
-    public double Distance(double lat1, double lon1, String unit) {
+    public double Distance(double lat1, double lon1) {
 
         double theta = lon1 - place.get_placeY();
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(place.get_placeX())) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(place.get_placeX())) * Math.cos(deg2rad(theta));
@@ -81,12 +81,7 @@ public class SelectedClinic {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-
-        if (unit == "kilometer") {
-            dist = dist * 1.609344;
-        } else if(unit == "meter"){
-            dist = dist * 1609.344;
-        }
+        dist = dist * 1.609344;
         return (dist);
     }
 

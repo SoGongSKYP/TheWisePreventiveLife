@@ -1,5 +1,6 @@
 package com.example.project;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -13,7 +14,7 @@ public class SubPath {
         this.sectionTime=0;
         this.stationCount=0;
 
-        this.laneList = null;
+        this.laneList =new ArrayList<Lane>();
 
         this.startStation = null;
         this.endStation = null;

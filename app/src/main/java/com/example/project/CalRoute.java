@@ -86,7 +86,13 @@ public class CalRoute implements Runnable{
                 searchLocList.add(searchLoc);
             }
         }
-        return searchLoc;
+        findPlace(searchLocList);
+        return searchLocList.get(0);
+    }
+    private void findPlace(ArrayList<Place> searchLocList){
+        for(int i =0 ; i <searchLocList.size();i++ ){
+            System.out.println(searchLocList.get(i).get_placeAddress());
+        }
     }
     private ArrayList<SearchPath> calRoute1(Context context, Place startPoint, Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
         ODsayService oDsayService=ODsayService.init(context,"cDSdUY9qLmrLpcqsJL3zPvgpx3IgkOf4sLsbkzSOZ2Y");
@@ -99,22 +105,24 @@ public class CalRoute implements Runnable{
                 SubPath sp=null;
                 try{
                     if(api==API.SEARCH_PUB_TRANS_PATH){
-                        int localSearch = oDsayData.getJson().getJSONObject("result").getInt("localSearch");
+                        int localSearch = oDsayData.getJson().getJSONObject("result").getInt("outTrafficCheck");
                         if(localSearch==1){
-                            int totalCount = oDsayData.getJson().getJSONObject("result").getInt("totalCount");//총 경로 결과 개수
+                            int totalCount = oDsayData.getJson().getJSONObject("result").getInt("busCount")
+                                    + oDsayData.getJson().getJSONObject("result").getInt("subwayCount")
+                                    + oDsayData.getJson().getJSONObject("result").getInt("subwayBusCount");//총 경로 결과 개수
                             for(int i =0; i < totalCount;i++){
                                 JSONObject path = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(i);
-                                ExtendNode t = new ExtendNode(path.getJSONObject("Info").getDouble("trafficDistance")
-                                        ,path.getJSONObject("Info").getInt("totalWalk")
-                                        ,path.getJSONObject("Info").getInt("totalTime")
-                                        ,path.getJSONObject("Info").getInt("payment")
-                                        ,path.getJSONObject("Info").getInt("busTransitCount")
-                                        ,path.getJSONObject("Info").getInt("subwayTransitCount")
-                                        ,path.getJSONObject("Info").getString("mapObj")
-                                        ,path.getJSONObject("Info").getString("firstStartStation")
-                                        ,path.getJSONObject("Info").getString("lastEndStation")
-                                        ,path.getJSONObject("Info").getInt("totalStationCount")
-                                        ,path.getJSONObject("Info").getInt("totalDistance"));
+                                ExtendNode t = new ExtendNode(path.getJSONObject("info").getDouble("trafficDistance")
+                                        ,path.getJSONObject("info").getInt("totalWalk")
+                                        ,path.getJSONObject("info").getInt("totalTime")
+                                        ,path.getJSONObject("info").getInt("payment")
+                                        ,path.getJSONObject("info").getInt("busTransitCount")
+                                        ,path.getJSONObject("info").getInt("subwayTransitCount")
+                                        ,path.getJSONObject("info").getString("mapObj")
+                                        ,path.getJSONObject("info").getString("firstStartStation")
+                                        ,path.getJSONObject("info").getString("lastEndStation")
+                                        ,path.getJSONObject("info").getInt("totalStationCount")
+                                        ,path.getJSONObject("info").getInt("totalDistance"));
                                 JSONArray subPathList = path.getJSONArray("subPath");
 
                                 for(int s =0 ; s<subPathList.length();s++){
@@ -146,16 +154,17 @@ public class CalRoute implements Runnable{
                                             sp.setWay(subPath.getString("way"));
                                             sp.setWayCode(subPath.getInt("wayCode"));
                                             sp.setDoor(subPath.getString("door"));
-                                            if(subPath.getString("startExitNo") != null){
+                                            if(!subPath.isNull("startExitNo")){
                                                 sp.setStartExitNo(new Place(subPath.getString("startExitNo")
                                                         ,subPath.getDouble("startExitY")
                                                         ,subPath.getDouble("startExitX")));
                                             }
-                                            if(subPath.getString("endExitNo")!=null){
+                                            if(!subPath.isNull("endExitNo")){
                                                 sp.setStartExitNo(new Place(subPath.getString("endExitNo")
                                                         ,subPath.getDouble("endExitY")
                                                         ,subPath.getDouble("endExitX")));
                                             }
+
                                         }
                                         sp.setStartStation(new Place(subPath.getString("startName")
                                                 ,subPath.getDouble("startY")
@@ -180,9 +189,8 @@ public class CalRoute implements Runnable{
                 }
             }
         };
-        oDsayService.requestSearchPubTransPath(Double.toString(startPoint.get_placeX()),Double.toString(startPoint.get_placeY()),Double.toString(desPoint.get_placeX())
-        ,Double.toString(desPoint.get_placeY()),"0","0","0",onResultCallbackListener);
-
+        oDsayService.requestSearchPubTransPath(Double.toString(startPoint.get_placeY()),Double.toString(startPoint.get_placeX()),Double.toString(desPoint.get_placeY())
+                ,Double.toString(desPoint.get_placeX()),"0","0","0",onResultCallbackListener);
         return resultSearchPath;
     }
 
