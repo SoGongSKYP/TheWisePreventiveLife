@@ -141,23 +141,11 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 if(startPlace != null && finishPlace != null){
                     //동선 검색 기능
                     cl = new CalRoute(getContext(),startPlace,finishPlace);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                cl.calRoute1();
-                            } catch (IOException | ParserConfigurationException | SAXException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    thread.start();
                     try {
-                        thread.join();
+                        searchResultPath=cl.calRoute1();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    searchResultPath = cl.getSearchResultPath();
                     System.out.println("사이즈: "+searchResultPath.size());
                     for(int i =0 ;i <searchResultPath.size();i++){
                         try {
