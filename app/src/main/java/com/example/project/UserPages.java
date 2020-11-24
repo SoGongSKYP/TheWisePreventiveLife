@@ -134,8 +134,7 @@ public class UserPages extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchPlace = searchBar.getText().toString();
-                if(searchPlace!=null){
+                if(!searchBar.getText().toString().equals("")){
                     // 검색 기능 구현
 
 

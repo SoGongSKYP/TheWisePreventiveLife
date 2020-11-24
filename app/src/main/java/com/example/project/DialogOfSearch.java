@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,12 +60,27 @@ public class DialogOfSearch extends Dialog {
         setContentView(R.layout.dialog_search_place);
         Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        searchEditText = findViewById(R.id.dialog_search_bar_EditText);
-        searchButton = findViewById(R.id.dialog_search_button);
+        searchEditText = findViewById(R.id.dialog_place_search_bar_EditText);
+        searchButton = findViewById(R.id.dialog_place_search_button);
         placeTitleTextView = findViewById(R.id.dialog_search_select_title);
         placeDetailTextView = findViewById(R.id.dialog_search_select_detail);
         dismissButton = findViewById(R.id.dialog_search_dismiss_Button);
         okButton = findViewById(R.id.search_dialog_OK_Button);
+
+        // 검색 버튼
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(searchEditText.getText().toString().equals("") || searchEditText.getText().toString() == null){
+                    Toast.makeText(getContext(), "검색어를 입력하세요", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // 여기에서 검색 구현
+                    // 검색 결과는 resultPlaces 배열에 넣으면 됩니다. (지금은 dummyData()로 더미 데이터 넣음)
+                    String searchPlace = searchEditText.getText().toString();
+                }
+            }
+        });
 
 
         searchRecyclerView = findViewById(R.id.dialog_search_RecyclerView);
@@ -79,13 +95,15 @@ public class DialogOfSearch extends Dialog {
         adapter.setOnSearchClickListenter(new AdapterOfSearch.OnSearchClickListener() {
             @Override
             public void onSearchItemCick(View v, int pos) {
-                // 다이얼로그 내에 있는 주소 TextView에 선택된 장소 보여줌
+                // 연관 장소 리스트 중에서 클릭해서 선택
+                // 선택한 Place 객체가 selectedRow
                 selectedRow = resultPlaces.get(pos);
                 placeTitleTextView.setText(selectedRow.get_placeAddress());
                 placeDetailTextView.setText(selectedRow.get_placeDetailAddress());
             }
         });
 
+        // 확인 버튼
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
