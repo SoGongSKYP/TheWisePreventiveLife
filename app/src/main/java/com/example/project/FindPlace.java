@@ -59,7 +59,8 @@ public class FindPlace {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
-                searchLoc.set_placeAddress(getTagValue("road",eElement));
+                searchLoc.set_placeAddress(this.placeName);
+                searchLoc.set_placeDetailAddress(getTagValue("road",eElement));
                 searchLoc.set_placeX(Double.parseDouble(getTagValue("y",eElement)));
                 searchLoc.set_placeY(Double.parseDouble(getTagValue("x",eElement)));
                 this.searchLocList.add(searchLoc);
