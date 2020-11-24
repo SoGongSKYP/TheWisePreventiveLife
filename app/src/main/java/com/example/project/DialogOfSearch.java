@@ -116,8 +116,6 @@ public class DialogOfSearch extends Dialog {
                             placeDetailTextView.setText(selectedRow.get_placeDetailAddress());
                         }
                     });
-
-                    System.out.println("안 사이즈:" + resultPlaces.size());
                 }
             }
         });
