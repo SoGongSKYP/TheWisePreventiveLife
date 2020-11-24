@@ -72,6 +72,12 @@ public class DialogOfSearch extends Dialog {
         dismissButton = findViewById(R.id.dialog_search_dismiss_Button);
         okButton = findViewById(R.id.search_dialog_OK_Button);
 
+        searchRecyclerView = findViewById(R.id.dialog_search_RecyclerView);
+
+        layoutManager = new LinearLayoutManager(getContext());
+        searchRecyclerView.setLayoutManager(layoutManager);
+        searchRecyclerView.setHasFixedSize(true);
+
         // 검색 버튼
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,28 +103,28 @@ public class DialogOfSearch extends Dialog {
                         e.printStackTrace();
                     }
                     resultPlaces = fp.getSearchLocList();
+
+                    adapter = new AdapterOfSearch(resultPlaces);
+                    searchRecyclerView.setAdapter(adapter);
+                    adapter.setOnSearchClickListenter(new AdapterOfSearch.OnSearchClickListener() {
+                        @Override
+                        public void onSearchItemCick(View v, int pos) {
+                            // 연관 장소 리스트 중에서 클릭해서 선택
+                            // 선택한 Place 객체가 selectedRow
+                            selectedRow = resultPlaces.get(pos);
+                            placeTitleTextView.setText(selectedRow.get_placeAddress());
+                            placeDetailTextView.setText(selectedRow.get_placeDetailAddress());
+                        }
+                    });
+
+                    System.out.println("안 사이즈:" + resultPlaces.size());
                 }
             }
         });
 
-        searchRecyclerView = findViewById(R.id.dialog_search_RecyclerView);
 
-        layoutManager = new LinearLayoutManager(getContext());
-        searchRecyclerView.setLayoutManager(layoutManager);
-        searchRecyclerView.setHasFixedSize(true);
 
-        adapter = new AdapterOfSearch(resultPlaces);
-        searchRecyclerView.setAdapter(adapter);
-        adapter.setOnSearchClickListenter(new AdapterOfSearch.OnSearchClickListener() {
-            @Override
-            public void onSearchItemCick(View v, int pos) {
-                // 연관 장소 리스트 중에서 클릭해서 선택
-                // 선택한 Place 객체가 selectedRow
-                selectedRow = resultPlaces.get(pos);
-                placeTitleTextView.setText(selectedRow.get_placeAddress());
-                placeDetailTextView.setText(selectedRow.get_placeDetailAddress());
-            }
-        });
+
 
         // 확인 버튼
         okButton.setOnClickListener(new View.OnClickListener() {
