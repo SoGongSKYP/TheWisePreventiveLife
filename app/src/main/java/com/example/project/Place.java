@@ -37,6 +37,7 @@ public class Place {
     public String get_placeAddress(){
         return this.placeAddress;
     }
+    public String get_placeDetailAddress() {return this.placeDetailAddress;}
     //----------------------------
 
     // set -------------------------
@@ -49,5 +50,6 @@ public class Place {
     public void set_placeAddress(String placeAddress){
         this.placeAddress = placeAddress;
     }
+    public void set_placeDetailAddress(String placeDetailAddress) {this.placeDetailAddress = placeDetailAddress;}
     //--------------------------------
 }

@@ -3,6 +3,8 @@ package com.example.project;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -45,22 +47,53 @@ import static android.content.Context.LOCATION_SERVICE;
  */
 public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
-    EditText startEditText, finishEditText;
+    Button startButton, finishButton;
     Button findRouteButton;
-    ImageButton startSearchImageButton, finishSearchImageButton;
-    String start, finish;
+    DialogOfSearch dialog;
+    Place startPlace, finishPlace;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_user_danger, container, false);
-        startEditText = v.findViewById(R.id.starting_point_EditText);
-        finishEditText = v.findViewById(R.id.finish_point_EditText);
+        startButton = v.findViewById(R.id.starting_point_Button);
+        finishButton = v.findViewById(R.id.finish_point_Button);
         findRouteButton = v.findViewById(R.id.search_route_Button);
 
-        startSearchImageButton = v.findViewById(R.id.start_search_ImageButton);
-        finishSearchImageButton = v.findViewById(R.id.finish_search_ImageButton);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new DialogOfSearch(getContext());
+                dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener() {
+                    @Override
+                    public void onOKCliked(Place place) {
+                        startPlace = place;
+                        startButton.setText(startPlace.get_placeAddress());
+                    }
+                });
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new DialogOfSearch(getContext());
+                dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener() {
+                    @Override
+                    public void onOKCliked(Place place) {
+                        finishPlace = place;
+                        finishButton.setText(finishPlace.get_placeAddress());
+                    }
+                });
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
 
-        StartSearchAction();
-        FinishSearchAction();
         SearchRouteButtonAction();
 
         mapView = v.findViewById(R.id.danger_MapView);
@@ -68,48 +101,12 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         return v;
     }
 
-    /*출발지 검색 버튼 누르면 실행되는 함수*/
-    void StartSearchAction(){
-        startSearchImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start = startEditText.getText().toString();
-                if(start != null){
-                    //여기서 검색 기능
-
-
-                    //검색 결과의 주소 제목은 아래 setText()의 매개변수로 넣어주세요
-                    //startEditText.setText();
-                }else{
-                    Toast.makeText(getContext(), "검색할 출발지를 입력하세요", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    /*도착지 검색 버튼 누르면 실행되는 함수*/
-    void FinishSearchAction(){
-        finishSearchImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish = finishEditText.getText().toString();
-                if(finish != null){
-                    //여기서 검색 기능
-
-
-                    //검색 결과의 주소 제목은 아래 setText()의 매개변수로 넣어주세요
-                    //finishEditText.setText();
-                }else{
-                    Toast.makeText(getContext(), "검색할 도착지를 입력하세요", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
     /*경로 검색 버튼 누르면 실행되는 함수*/
     void SearchRouteButtonAction(){
         findRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(start != null && finish != null){
+                if(startPlace != null && finishPlace != null){
                     //동선 검색 기능
                 }
                 else{
@@ -407,8 +404,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }
 
     public void printRoute() throws ParserConfigurationException, SAXException, IOException {
-        String startPoint = startEditText.getText().toString();
-        String desPoint  = finishEditText.getText().toString();
+        String startPoint = startButton.getText().toString();
+        String desPoint  = finishButton.getText().toString();
         final Lock lock = new ReentrantLock(); // lock instance
         CalRoute cl = new CalRoute(getContext(),startPoint,desPoint,lock);
         Thread thread =new Thread(cl);
