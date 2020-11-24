@@ -26,79 +26,21 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class CalRoute implements Runnable{
+public class CalRoute {
     private Place startPlace;
     private Place endPlace;
-    private String startPoint;
-    private String desPoint;
     private ArrayList<SearchPath> searchResultPath;
-    private final Lock lock;
     private Context thisContext;
 
-    CalRoute(Context context,String startPoint, String desPoint, Lock lock){
-        this.startPoint=startPoint;
-        this.desPoint=desPoint;
-        this.lock = lock;
+    CalRoute(Context context,Place startPlace, Place endPlace){
+        this.startPlace = startPlace;
+        this.endPlace = endPlace;
         this.searchResultPath = new ArrayList<SearchPath>();
         this.thisContext=context;
     }
-
-    private static String getTagValue(String tag, Element eElement) {
-        NodeList nlList=eElement.getElementsByTagName(tag).item(0).getChildNodes();
-        Node nValue=(Node)nlList.item(0);
-        if(nValue==null) return null;
-        return nValue.getNodeValue();
-    }
-
-    public Place searchPlace(String startPoint) throws IOException, ParserConfigurationException, SAXException {
-        String parsingUrl="";
-        String key= "340FCCC5-C1C9-31D4-B7D8-56BC7558298A";
-        ArrayList<Place> searchLocList =new ArrayList<Place>();
-        Place searchLoc=new Place("",0.0,0.0);
-        StringBuilder urlBuilder = new StringBuilder("http://api.vworld.kr/req/search?"); /*URL*/
-        urlBuilder.append(URLEncoder.encode("service","UTF-8") + "="+URLEncoder.encode("search", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("request","UTF-8") + "="+ URLEncoder.encode("search", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("version","UTF-8") + "=" + URLEncoder.encode("2.0", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("query","UTF-8") + "=" + URLEncoder.encode(startPoint, "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("type","UTF-8") + "=" + URLEncoder.encode("place", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("format","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("errorformat","UTF-8") + "=" + URLEncoder.encode("xml", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("key","UTF-8") + "=" + URLEncoder.encode(key, "UTF-8"));
-
-        URL url = new URL(urlBuilder.toString());
-        parsingUrl=url.toString();
-        //System.out.println(parsingUrl);
-
-        DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
-        Document doc=dBuilder.parse(parsingUrl);
-        doc.getDocumentElement().normalize();
-
-        NodeList nList=doc.getElementsByTagName("item"); //장소 전체 노드
-
-        for(int i=0; i<nList.getLength(); i++) {
-            Node nNode=nList.item(i);
-            if(nNode.getNodeType()==Node.ELEMENT_NODE) {
-                Element eElement=(Element) nNode;
-                searchLoc.set_placeAddress(getTagValue("road",eElement));
-                searchLoc.set_placeX(Double.parseDouble(getTagValue("y",eElement)));
-                searchLoc.set_placeY(Double.parseDouble(getTagValue("x",eElement)));
-                searchLocList.add(searchLoc);
-            }
-        }
-        findPlace(searchLocList);
-        return searchLocList.get(0);
-    }
-    private void findPlace(ArrayList<Place> searchLocList){
-        for(int i =0 ; i <searchLocList.size();i++ ){
-            System.out.println(searchLocList.get(i).get_placeAddress());
-        }
-    }
-    private ArrayList<SearchPath> calRoute1(Context context, Place startPoint, Place desPoint ) throws IOException, ParserConfigurationException, SAXException {
-        ODsayService oDsayService=ODsayService.init(context,"cDSdUY9qLmrLpcqsJL3zPvgpx3IgkOf4sLsbkzSOZ2Y");
-        final ArrayList<SearchPath> resultSearchPath=new ArrayList<SearchPath>();
+    public void calRoute1() throws IOException, ParserConfigurationException, SAXException {
+        ODsayService oDsayService=ODsayService.init(thisContext,"cDSdUY9qLmrLpcqsJL3zPvgpx3IgkOf4sLsbkzSOZ2Y");
         final ArrayList<SubPath> temp =new ArrayList<SubPath>();
-
         OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
             @Override
             public void onSuccess(ODsayData oDsayData, API api) {
@@ -175,7 +117,7 @@ public class CalRoute implements Runnable{
                                     }
                                     temp.add(sp);
                                 }
-                                resultSearchPath.add(new SearchPath(path.getInt("pathType"),t,temp));
+                                searchResultPath.add(new SearchPath(path.getInt("pathType"),t,temp));
                             }
                         }// 경로 탐색 결과 있음 X좌표 Y좌표 바뀌어있으니 조심
                     }
@@ -189,23 +131,8 @@ public class CalRoute implements Runnable{
                 }
             }
         };
-        oDsayService.requestSearchPubTransPath(Double.toString(startPoint.get_placeY()),Double.toString(startPoint.get_placeX()),Double.toString(desPoint.get_placeY())
-                ,Double.toString(desPoint.get_placeX()),"0","0","0",onResultCallbackListener);
-        return resultSearchPath;
-    }
-
-    @Override
-    public void run() {
-        lock.lock();
-        try {
-            this.startPlace =searchPlace(startPoint);
-            this.endPlace =searchPlace(desPoint);
-            this.searchResultPath=calRoute1(thisContext,this.startPlace,this.endPlace);//경로 검색
-        } catch (IOException | SAXException | ParserConfigurationException e) {
-            e.printStackTrace();
-        }finally {
-            lock.unlock();
-        }
+        oDsayService.requestSearchPubTransPath(Double.toString(startPlace.get_placeY()),Double.toString(startPlace.get_placeX()),Double.toString(endPlace.get_placeY())
+                ,Double.toString(endPlace.get_placeX()),"0","0","0",onResultCallbackListener);
     }
 
     public Place getEndPlace() {

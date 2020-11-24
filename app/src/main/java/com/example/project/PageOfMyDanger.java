@@ -93,14 +93,12 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 dialog.show();
             }
         });
-
         SearchRouteButtonAction();
 
         mapView = v.findViewById(R.id.danger_MapView);
         mapView.getMapAsync(this);
         return v;
     }
-
     /*경로 검색 버튼 누르면 실행되는 함수*/
     void SearchRouteButtonAction(){
         findRouteButton.setOnClickListener(new View.OnClickListener() {
