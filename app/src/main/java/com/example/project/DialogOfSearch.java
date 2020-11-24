@@ -17,11 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+import javax.xml.parsers.ParserConfigurationException;
 
 
 public class DialogOfSearch extends Dialog {
@@ -38,6 +41,7 @@ public class DialogOfSearch extends Dialog {
     LinearLayoutManager layoutManager;
     SearchDialogListener searchDialogListener;
     Place selectedRow;
+    private FindPlace fp;
 
     interface SearchDialogListener{
         // 다이얼로그에서 Fragment로 Place객체 보내주기 위한 리스너
@@ -46,6 +50,7 @@ public class DialogOfSearch extends Dialog {
 
     public void setSearchDialogListener(SearchDialogListener searchDialogListener){
         this.searchDialogListener = searchDialogListener;
+        this.resultPlaces = new ArrayList<Place>();
     }
 
     public DialogOfSearch(@NonNull Context context) {
@@ -78,14 +83,26 @@ public class DialogOfSearch extends Dialog {
                     // 여기에서 검색 구현
                     // 검색 결과는 resultPlaces 배열에 넣으면 됩니다. (지금은 dummyData()로 더미 데이터 넣음)
                     String searchPlace = searchEditText.getText().toString();
+                    fp = new FindPlace(searchPlace);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fp.searchPlace();
+                        }
+                    });
+                    thread.start();
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    resultPlaces = fp.getSearchLocList();
                 }
             }
         });
 
-
         searchRecyclerView = findViewById(R.id.dialog_search_RecyclerView);
-        resultPlaces = new ArrayList<Place>();  // 연관 검색어 데이터 리스트 변수수
-       dummyData();
+
         layoutManager = new LinearLayoutManager(getContext());
         searchRecyclerView.setLayoutManager(layoutManager);
         searchRecyclerView.setHasFixedSize(true);
