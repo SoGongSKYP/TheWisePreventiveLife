@@ -50,7 +50,37 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     Button startButton, finishButton;
     Button findRouteButton;
     DialogOfSearch dialog;
-    Place startPlace, finishPlace;  // 검색한 결과 Place 객체
+    private Place startPlace, finishPlace;  // 검색한 결과 Place 객체
+    //private UserLoc userLoc;
+    private ArrayList<Patient> patient;
+    private ArrayList<VisitPlace> nearPlaces; // 경로 주변 확진자
+    private ArrayList<Place> visitPlaceList; // 출력 결과 경로 경유지
+    private ArrayList<Place> routeList; // 입력받은 출발 도착
+    private int danger; // 위험도
+
+    private ArrayList<SearchPath> searchResultPath;
+
+    public GoogleMap mMap;
+
+    private Marker userPoint;
+    private ArrayList<Marker> nearMaker;
+
+    private LatLng myLatLng;
+    private MapView mapView;
+    private CalRoute cl;
+
+    public PageOfMyDanger() {
+        //this.userLoc=new UserLoc();
+        this.patient =new ArrayList<Patient>();
+        this.nearPlaces =new ArrayList<VisitPlace>();
+        this.searchResultPath = new ArrayList<SearchPath>();
+        this.visitPlaceList = new ArrayList<Place>();
+        this.routeList =new ArrayList<Place>();
+        this.danger=0;
+        this.startPlace = new Place(null,0,0);
+        this.finishPlace= new Place(null,0,0);
+        this.searchResultPath =new ArrayList<SearchPath>();
+    }
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -110,9 +140,32 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             public void onClick(View view) {
                 if(startPlace != null && finishPlace != null){
                     //동선 검색 기능
-
-
-
+                    cl = new CalRoute(getContext(),startPlace,finishPlace);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                cl.calRoute1();
+                            } catch (IOException | ParserConfigurationException | SAXException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    thread.start();
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    searchResultPath = cl.getSearchResultPath();
+                    System.out.println("사이즈: "+searchResultPath.size());
+                    for(int i =0 ;i <searchResultPath.size();i++){
+                        try {
+                            printPath(i,startPlace,finishPlace);
+                        } catch (ParserConfigurationException | SAXException | IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 else{
                     Toast.makeText(getContext(), "출발지와 도착지를 입력했는지 확인하세요", Toast.LENGTH_SHORT).show();
@@ -128,35 +181,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             mapView.onCreate(savedInstanceState);
         }
     }
-    public PageOfMyDanger() {
-        //this.userLoc=new UserLoc();
-        this.patient =new ArrayList<Patient>();
-        this.nearPlaces =new ArrayList<VisitPlace>();
-        this.searchResultPath = new ArrayList<SearchPath>();
-        this.visitPlaceList = new ArrayList<Place>();
-        this.routeList =new ArrayList<Place>();
-        this.danger=0;
-    }
 
-    //private UserLoc userLoc;
-    private ArrayList<Patient> patient;
-    private ArrayList<VisitPlace> nearPlaces; // 경로 주변 확진자
-    private ArrayList<Place> visitPlaceList; // 출력 결과 경로 경유지
-    private ArrayList<Place> routeList; // 입력받은 출발 도착
-    private int danger; // 위험도
-
-    private ArrayList<SearchPath> searchResultPath;
-
-    public GoogleMap mMap;
-
-    private Marker userPoint;
-    private ArrayList<Marker> nearMaker;
-
-    private LatLng myLatLng;
-    private MapView mapView;
-
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 1;
 
     public void onMapReady(GoogleMap googleMap) {
         //LocPermission(getActivity(),getContext());
@@ -264,8 +289,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
 
     public void printPath(int i,Place startPlace,Place desPlace) throws ParserConfigurationException, SAXException, IOException {
-        String startPoint = null;
-        String desPoint  =null;
         SearchPath path = this.searchResultPath.get(i);
         ExtendNode exNode = path.getInfo();
         SubPath subPath=null;
@@ -397,32 +420,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             this.danger=1;
         }//안전
     }
-
-    public void printRoute(final Place startPoint, final Place desPoint) throws ParserConfigurationException, SAXException, IOException {
-        new Thread(){
-            @Override
-            public void run() {
-                System.out.println("검색 시작");
-                CalRoute cl = new CalRoute(getContext(),startPoint,desPoint);
-                try {
-                    cl.calRoute1();
-                } catch (IOException | ParserConfigurationException | SAXException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("검색 완료");
-                searchResultPath= cl.getSearchResultPath();
-                System.out.println("사이즈: "+searchResultPath.size());
-                for(int i =0 ;i <searchResultPath.size();i++){
-                    try {
-                        printPath(i,startPlace,finishPlace);
-                    } catch (ParserConfigurationException | SAXException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.start();
-    }//여러개의 path 모두다 출력
-
     public int printDanger(ArrayList<SearchPath> searchPath) {
         for(int i=0; i < searchPath.size();i++){
             for (int j=0;j<searchPath.get(i).getSubPaths().size();j++){
