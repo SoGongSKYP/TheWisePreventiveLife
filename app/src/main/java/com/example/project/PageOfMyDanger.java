@@ -50,7 +50,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     Button startButton, finishButton;
     Button findRouteButton;
     DialogOfSearch dialog;
-    Place startPlace, finishPlace;
+    Place startPlace, finishPlace;  // 검색한 결과 Place 객체
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -59,6 +59,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         finishButton = v.findViewById(R.id.finish_point_Button);
         findRouteButton = v.findViewById(R.id.search_route_Button);
 
+        // 출발지를 누르면 다이얼로그가 생성됨
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +67,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener() {
                     @Override
                     public void onOKCliked(Place place) {
+                        // 다이얼로그에서 결과 Place 객체 받아서 저장 (DialogOfSearch)
                         startPlace = place;
                         startButton.setText(startPlace.get_placeAddress());
                     }
@@ -76,6 +78,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 dialog.show();
             }
         });
+        // 도착지를 누르면 다이얼로그가 생성됨
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +86,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener() {
                     @Override
                     public void onOKCliked(Place place) {
+                        // 다이얼로그에서 결과 Place 객체 받아서 저장 (DialogOfSearch)
                         finishPlace = place;
                         finishButton.setText(finishPlace.get_placeAddress());
                     }
@@ -106,6 +110,9 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             public void onClick(View view) {
                 if(startPlace != null && finishPlace != null){
                     //동선 검색 기능
+
+
+
                 }
                 else{
                     Toast.makeText(getContext(), "출발지와 도착지를 입력했는지 확인하세요", Toast.LENGTH_SHORT).show();
@@ -164,16 +171,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         GPSListener gpsListener = new GPSListener();
         UserLoc.LocBy_gps(getContext(),gpsListener);
 
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    printRoute();
-                } catch (ParserConfigurationException | SAXException | IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     } // 유저 현위치에 마커 추가
 
     public void RefreshMarker() {
@@ -401,20 +398,29 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         }//안전
     }
 
-    public void printRoute() throws ParserConfigurationException, SAXException, IOException {
-        String startPoint = startButton.getText().toString();
-        String desPoint  = finishButton.getText().toString();
-        final Lock lock = new ReentrantLock(); // lock instance
-        CalRoute cl = new CalRoute(getContext(),startPoint,desPoint,lock);
-        Thread thread =new Thread(cl);
-        thread.start();
-        Place startPlace = cl.getStartPlace();
-        Place desPlace = cl.getEndPlace();
-        this.searchResultPath= cl.getSearchResultPath();
-        for(int i =0 ;i <searchResultPath.size();i++){
-            printPath(i,startPlace,desPlace);
-        }
-
+    public void printRoute(final Place startPoint, final Place desPoint) throws ParserConfigurationException, SAXException, IOException {
+        new Thread(){
+            @Override
+            public void run() {
+                System.out.println("검색 시작");
+                CalRoute cl = new CalRoute(getContext(),startPoint,desPoint);
+                try {
+                    cl.calRoute1();
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("검색 완료");
+                searchResultPath= cl.getSearchResultPath();
+                System.out.println("사이즈: "+searchResultPath.size());
+                for(int i =0 ;i <searchResultPath.size();i++){
+                    try {
+                        printPath(i,startPlace,finishPlace);
+                    } catch (ParserConfigurationException | SAXException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
     }//여러개의 path 모두다 출력
 
     public int printDanger(ArrayList<SearchPath> searchPath) {

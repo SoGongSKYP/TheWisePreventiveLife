@@ -20,7 +20,7 @@ public class AdapterOfSearch extends RecyclerView.Adapter<AdapterOfSearch.Search
         this.searchClickListener = listenter;
     }
 
-    ArrayList<Place> searchData = new ArrayList<Place>();
+    ArrayList<Place> searchData;
     public class SearchViewHolder extends RecyclerView.ViewHolder {
         TextView placeTitle, placeDetail;
 
@@ -63,7 +63,7 @@ public class AdapterOfSearch extends RecyclerView.Adapter<AdapterOfSearch.Search
 
     @Override
     public int getItemCount() {
-        return 0;
+        return ( searchData!=null ? searchData.size() : 0);
     }
 
 

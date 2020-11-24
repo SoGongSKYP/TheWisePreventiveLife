@@ -27,18 +27,19 @@ public class DialogOfSearch extends Dialog {
 
     private Context context;
     EditText searchEditText;
-    ImageButton searchButton;
+    ImageButton searchButton, dismissButton;
     Button okButton;
     TextView placeTitleTextView, placeDetailTextView;
 
     RecyclerView searchRecyclerView;
     AdapterOfSearch adapter;
-    ArrayList<Place> resultPlaces = new ArrayList<Place>();
+    ArrayList<Place> resultPlaces;
     LinearLayoutManager layoutManager;
     SearchDialogListener searchDialogListener;
     Place selectedRow;
 
     interface SearchDialogListener{
+        // 다이얼로그에서 Fragment로 Place객체 보내주기 위한 리스너
         void onOKCliked(Place place);
     }
 
@@ -62,10 +63,13 @@ public class DialogOfSearch extends Dialog {
         searchButton = findViewById(R.id.dialog_search_button);
         placeTitleTextView = findViewById(R.id.dialog_search_select_title);
         placeDetailTextView = findViewById(R.id.dialog_search_select_detail);
+        dismissButton = findViewById(R.id.dialog_search_dismiss_Button);
         okButton = findViewById(R.id.search_dialog_OK_Button);
 
+
         searchRecyclerView = findViewById(R.id.dialog_search_RecyclerView);
-        dummyData();
+        resultPlaces = new ArrayList<Place>();  // 연관 검색어 데이터 리스트 변수수
+       dummyData();
         layoutManager = new LinearLayoutManager(getContext());
         searchRecyclerView.setLayoutManager(layoutManager);
         searchRecyclerView.setHasFixedSize(true);
@@ -75,6 +79,7 @@ public class DialogOfSearch extends Dialog {
         adapter.setOnSearchClickListenter(new AdapterOfSearch.OnSearchClickListener() {
             @Override
             public void onSearchItemCick(View v, int pos) {
+                // 다이얼로그 내에 있는 주소 TextView에 선택된 장소 보여줌
                 selectedRow = resultPlaces.get(pos);
                 placeTitleTextView.setText(selectedRow.get_placeAddress());
                 placeDetailTextView.setText(selectedRow.get_placeDetailAddress());
@@ -84,13 +89,23 @@ public class DialogOfSearch extends Dialog {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 사용자가 선택한 Place 객체 반환
                 searchDialogListener.onOKCliked(selectedRow);
+                dismiss();
+            }
+        });
+
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
             }
         });
 
     }
 
     private void dummyData(){
+        // 검색 기능이 구현되지 않았기 때문에 우선 임시값 넣었음
         Place place1 = new Place("동국대학교 신공학관", "서울특별시 중구", 1.1, 1.5);
         Place place2 = new Place("동국대학교 원흥관", "서울특별시 중구", 1.5, 6.1);
         resultPlaces.add(place1);
