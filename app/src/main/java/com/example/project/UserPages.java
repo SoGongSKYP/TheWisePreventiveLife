@@ -12,6 +12,8 @@ package com.example.project;
         import android.app.PendingIntent;
         import android.content.Context;
         import android.content.Intent;
+        import android.graphics.Color;
+        import android.graphics.drawable.ColorDrawable;
         import android.os.Bundle;
         import android.os.Parcelable;
         import android.view.MenuItem;
@@ -56,6 +58,8 @@ public class UserPages extends AppCompatActivity {
 
     /*search bar 관련 컴포넌트*/
     private ImageButton searchButton;
+    DialogOfSearch dialog;
+    Place searchPlace;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
@@ -115,6 +119,22 @@ public class UserPages extends AppCompatActivity {
 
         /*서치바 컴포넌트 연결*/
         searchButton = findViewById(R.id.user_search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new DialogOfSearch(UserPages.this);
+                dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener(){
+                    @Override
+                    public void onOKCliked(Place place) {
+                        searchPlace = place;    // searchPlace가 검색된 장소, 이 장소 좌표로 이동
+                    }
+                });
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
 
         InfoImageButton = findViewById(R.id.user_info_ImageButton);
         InfoImageButton.setOnClickListener(new View.OnClickListener(){
