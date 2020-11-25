@@ -130,7 +130,7 @@ public class APIEntity implements Runnable{
         //System.out.println(sb.toString());
 
         parsingUrl=url.toString();
-        //System.out.println(parsingUrl);
+        System.out.println(parsingUrl);
 
         DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
@@ -142,7 +142,7 @@ public class APIEntity implements Runnable{
         NodeList nList=doc.getElementsByTagName("item");
         //System.out.println("파싱할 리스트 수 : "+nList.getLength());
 
-        for(int i=0; i<nList.getLength(); i++) {
+        for(int i=0; i<19; i++) {
             Node nNode=nList.item(i);
             if(nNode.getNodeType()==Node.ELEMENT_NODE) {
                 Element eElement=(Element) nNode;
