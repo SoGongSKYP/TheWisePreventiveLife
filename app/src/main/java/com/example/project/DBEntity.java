@@ -8,42 +8,97 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DBEntity{
+    /*DBEntity에서 계속 저장할 환자 리스트*/
     private static ArrayList<Patient> patientList;
 
+    /*DB 연동시 필요한 필드들*/
     private DB task;
     private String result="success";//일단 임시 success
     private String sendmsg;
-
+//-----------------------------------------------------------------------------------------------
     public DBEntity(){ }
+
     public void setPatientList(ArrayList<Patient> patientList){
         this.patientList = patientList;
     }
+
     public static ArrayList<Patient> getPatientList(){
         return patientList;
     }
 
-    /*인트로 때, 딱 한 번 불리는 함*/
+    /*인트로 때, 앱 실행시 한 번만 불리는 메소드드*/
     public ArrayList<Patient>  patient_info(){
         task= new DB("patients_info");
+        //박소영 놈이 제대로 DB연동하기 전까지 만든 임시 확진자 리스트--> 구축 후 삭제 예정
+
+        Place dumP1=new Place("파주",1.1,1.2);
+        Place dumP2=new Place("서울",2.1,2.2);
+
+        //3. 1,2로 확진자 방문장소 더미객체 생성
+        VisitPlace dumVP1=new VisitPlace(dumP1,"2020-12-23");
+        VisitPlace dumVP2=new VisitPlace(dumP2,"2020-9-3");
+        VisitPlace dumVP3=new VisitPlace(dumP1,"2020-9-3");
+        //4. 3으로 확진자 방문장소 리스트 더미객체 생
+        ArrayList<VisitPlace> dumVSP1=new ArrayList<VisitPlace>();
+        ArrayList<VisitPlace> dumVSP2=new ArrayList<VisitPlace>();
+        dumVSP1.add(dumVP1);
+        dumVSP1.add(dumVP2);
+        dumVSP2.add(dumVP2);
+        dumVSP2.add(dumVP3);
+        //5. 확진자 두명
+        Patient dumPatient1=new Patient(0,0,"1","2020-11-15",dumVSP1);
+        Patient dumPatient2=new Patient(0,0,"2","2020-11-16",dumVSP2);
+        Patient dumPatient3=new Patient(0,0,"3","2020-11-14",dumVSP1);
+        Patient dumPatient4=new Patient(0,0,"4","2020-11-15",dumVSP2);
+        Patient dumPatient5=new Patient(1,0,"5","2020-11-15",dumVSP1);
+        Patient dumPatient6=new Patient(12,8,"6","2020-11-13",dumVSP2);
+        Patient dumPatient7=new Patient(2,0,"7","2020-11-15",dumVSP2);
+        patientList.add(dumPatient1);
+        patientList.add(dumPatient2);
+        patientList.add(dumPatient3);
+        patientList.add(dumPatient4);
+        patientList.add(dumPatient5);
+        patientList.add(dumPatient6);
+        patientList.add(dumPatient7);
+
         return patientList;
     }
 
+    /*환자번호와 지역번호로 중복되는 환자가 있는지 확인하는 메소드*/
     public int check_patient(String pnum, String plocnum){
         if(result.equals("success")) return 1;
         else return 0;
     }
 
-    public int insert_patient(Patient patient){
+    /*관리자의 확진자 추가 페이지에서 확진자 정보를 추가하는 메소-동선 제외 */
+    public int insert_patient(String pnum, String plocnum, String confirmdate){
         if(result.equals("success")) return 1;
         else return 0;
     }
 
+    /*관리자의 확진자 추가 페이지에서 확진자 동선 정보 하나를 추가하는 메소드-무조건 해당 환자에 한 정보가 테이블에 저장되어 있어야 함. */
+    public int insert_pmoving(String pnum, String plocnum, String confirmdate, double PointX, double PointY){
+        if(result.equals("success")) return 1;
+        else return 0;
+    }
+
+    /*관리자의 확진자 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드 */
+    public int delete_pmoving(String pnum, String plocnum, String confirmdate, double PointX, double PointY){
+        if(result.equals("success")) return 1;
+        else return 0;
+    }
+
+    /*관리자의 확진자 추가, 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드-환자 정보를 삭제하면 관련 동선 정보도 싹다 삭제*/
     public int delete_patient(Patient patient){
         if(result.equals("success")) return 1;
         else return 0;
     }
 
+    /*로그인 메소드드*/
     public int login(String managerID, String managerPW){
+        if(result.equals("success")) return 1;
+        else return 0;
+        /* 밥소놈이랑 접선시 언롹
         try {
             sendmsg = "login";
             task = new DB(sendmsg);
@@ -56,6 +111,6 @@ public class DBEntity{
             else return -1;
         }catch (Exception e) {
             Log.i("DBtest", ".....ERROR.....!");
-            return -2;}
+            return -2;}*/
     }
 }
