@@ -55,10 +55,7 @@ public class UserPages extends AppCompatActivity {
     private ImageButton InfoImageButton;
 
     /*search bar 관련 컴포넌트*/
-    private EditText searchBar;
     private ImageButton searchButton;
-    private RelativeLayout searchLayout;
-    String searchPlace;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
@@ -66,7 +63,11 @@ public class UserPages extends AppCompatActivity {
         pageOfMain = new PageOfMain();
         new Thread(){
             public void run() {
-                pageOfMyDanger = new PageOfMyDanger();
+                try {
+                    pageOfMyDanger = new PageOfMyDanger();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
         new Thread(){
@@ -113,10 +114,7 @@ public class UserPages extends AppCompatActivity {
         TitleTextView.setText("주변 확진자 현황");
 
         /*서치바 컴포넌트 연결*/
-        searchBar = findViewById(R.id.user_search_bar);
         searchButton = findViewById(R.id.user_search_button);
-        searchLayout = findViewById(R.id.search_RelativeLayout);
-        SearchAction();
 
         InfoImageButton = findViewById(R.id.user_info_ImageButton);
         InfoImageButton.setOnClickListener(new View.OnClickListener(){
@@ -129,21 +127,7 @@ public class UserPages extends AppCompatActivity {
         });
     }
 
-    /*검색 바 구현*/
-    void SearchAction(){
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!searchBar.getText().toString().equals("")){
-                    // 검색 기능 구현
 
-
-                }else{
-                    Toast.makeText(getParent(), "검색할 장소를 입력하세요", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
 
     /* 일반사용자 페이지 네비게이션 바 연결*/
@@ -155,27 +139,27 @@ public class UserPages extends AppCompatActivity {
                 case R.id.user_Home:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfMain).commit();
                     TitleTextView.setText("주변 확진자 현황");
-                    searchLayout.setVisibility(View.VISIBLE);
+                    searchButton.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.user_Danger:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfMyDanger).commit();
                     TitleTextView.setText("나의 동선 위험도");
-                    searchLayout.setVisibility(View.GONE);
+                    searchButton.setVisibility(View.GONE);
                     return true;
                 case R.id.user_Statistics:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfStatistics).commit();
                     TitleTextView.setText("전국 통계");
-                    searchLayout.setVisibility(View.GONE);
+                    searchButton.setVisibility(View.GONE);
                     return true;
                 case R.id.user_SelfDiagnosis:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfSelfDiagnosis).commit();
                     TitleTextView.setText("자가 진단");
-                    searchLayout.setVisibility(View.GONE);
+                    searchButton.setVisibility(View.GONE);
                     return true;
                 case R.id.user_Clinics:
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfSelectedClinic).commit();
                     TitleTextView.setText("주변 선별 진료소");
-                    searchLayout.setVisibility(View.VISIBLE);
+                    searchButton.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;

@@ -51,7 +51,8 @@
             android:padding="12dp"
             android:gravity="center_vertical"
             android:background="@drawable/edittext_outline_design"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            style="?android:attr/borderlessButtonStyle"/>
         <Button
             android:id="@+id/finish_point_Button"
             android:layout_width="match_parent"
@@ -61,7 +62,8 @@
             android:textColor="@color/colorDarkGrey"
             android:padding="12dp"
             android:gravity="center_vertical"
-            android:background="@drawable/edittext_outline_design"/>
+            android:background="@drawable/edittext_outline_design"
+            style="?android:attr/borderlessButtonStyle"/>
 
     </LinearLayout>
     <com.google.android.gms.maps.MapView
