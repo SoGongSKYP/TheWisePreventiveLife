@@ -64,7 +64,7 @@ public class PageOfToManager extends AppCompatActivity {
 
         /*다이얼로그 버튼 연결*/
         toManagerButton = findViewById(R.id.switch_to_manager_Button);
-        toManagerButton.setOnClickListener(new View.OnClickListener(){
+        toManagerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 makeDialogAction();
@@ -74,7 +74,7 @@ public class PageOfToManager extends AppCompatActivity {
 
         /*임시 전환 버튼 (로그인 구현 완료시 삭제)*/
         tempButton = findViewById(R.id.temp_Button);
-        tempButton.setOnClickListener(new View.OnClickListener(){
+        tempButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
@@ -85,42 +85,36 @@ public class PageOfToManager extends AppCompatActivity {
     }
 
     /* 다이얼로그 기능 구현 메소드 */
-    private void makeDialogAction(){
+    private void makeDialogAction() {
         loginDialog.show();
 
-        loginButton.setOnClickListener(new View.OnClickListener(){
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    String sendmsg="login";//어떠한 동작을 수행시키고 싶은지 지. db의 생성자에 넣을 스트링 값, 서버로 보내는 메세
-                    String result;//서버로부터 받고 싶은 값-> 지금은 일단 스트링 값으로 "회원가입 완료!" 리턴 받
-                    managerID = managerIDEditText.getText().toString();
-                    managerPW = managerPWEditText.getText().toString();
-                    DB task = new DB(sendmsg);
-                    result = task.execute(managerID,managerPW,sendmsg).get();
-                    Log.i("Servertest", "서버에서 받은 값"+result);
-                    if(result.equals("success")) {
-                        makeText(PageOfToManager.this,"로그인", LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
-                        intent.putExtra("managerID", managerID);
-                        intent.putExtra("managerPW", managerPW);
-                        startActivity(intent);
-                        finish();
-                    } else if(result.equals("failed")) {
-                        makeText(PageOfToManager.this,"아이디 또는 비밀번호가 틀렸음", LENGTH_SHORT).show();
-                        managerIDEditText.setText("");
-                        managerPWEditText.setText("");
-                    }
-                    else if(result.equals("noId")) {
-                        Toast.makeText(PageOfToManager.this,"존재하지 않는 아이디",Toast.LENGTH_SHORT).show();
-                        managerIDEditText.setText("");
-                        managerPWEditText.setText("");
-                    }
-                } catch (Exception e) {
-                    Log.i("DBtest", ".....ERROR.....!");
+
+                managerID = managerIDEditText.getText().toString();
+                managerPW = managerPWEditText.getText().toString();
+                int dbtest = new DBEntity().login(managerID, managerPW);//DB함수 호출하기
+                if (dbtest == 1) {
+                    makeText(PageOfToManager.this, "로그인", LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
+                    intent.putExtra("managerID", managerID);
+                    intent.putExtra("managerPW", managerPW);
+                    startActivity(intent);
+                    finish();
+                } else if (dbtest == 0) {
+                    makeText(PageOfToManager.this, "아이디 또는 비밀번호가 틀렸음", LENGTH_SHORT).show();
+                    managerIDEditText.setText("");
+                    managerPWEditText.setText("");
+                } else if (dbtest == -1) {
+                    Toast.makeText(PageOfToManager.this, "존재하지 않는 아이디", Toast.LENGTH_SHORT).show();
+                    managerIDEditText.setText("");
+                    managerPWEditText.setText("");
+                }else{
+                    Toast.makeText(PageOfToManager.this, "서버 오류", Toast.LENGTH_SHORT).show();
+                    managerIDEditText.setText("");
+                    managerPWEditText.setText("");
                 }
-              //  Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
-             //   startActivity(intent);
                 loginDialog.dismiss();
             }
         });
