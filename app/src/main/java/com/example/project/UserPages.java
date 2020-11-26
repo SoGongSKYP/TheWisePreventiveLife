@@ -39,7 +39,7 @@ package com.example.project;
         import javax.xml.parsers.ParserConfigurationException;
 
 
-public class UserPages extends AppCompatActivity {
+public class UserPages<Private> extends AppCompatActivity {
 
     /*Bottom Navigation Bar 관련 컴포넌트*/
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -59,9 +59,8 @@ public class UserPages extends AppCompatActivity {
     /*search bar 관련 컴포넌트*/
     private ImageButton searchButton;
     DialogOfSearch dialog;
-    Place searchPlace;
 
-    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
+    private String nowPage="user_Home";
 
     public UserPages() throws ParserConfigurationException, SAXException, ParseException, IOException {
         pageOfMain = new PageOfMain();
@@ -126,7 +125,20 @@ public class UserPages extends AppCompatActivity {
                 dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener(){
                     @Override
                     public void onOKCliked(Place place) {
-                        searchPlace = place;    // searchPlace가 검색된 장소, 이 장소 좌표로 이동
+                        UserLoc.setUser_place(place);   // searchPlace가 검색된 장소, 이 장소 좌표로 이동
+                        if(nowPage.equals("user_Home")){
+                            pageOfMain.RefreshMarker();
+                            pageOfMain.calNearPlace();
+                            try {
+                                pageOfMain.addNearPlaceMaker();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(nowPage.equals("user_Clinics")){
+                            pageOfSelectedClinic.RefreshMarker();
+                            pageOfSelectedClinic.addMarker();
+                        }
                     }
                 });
                 dialog.setCancelable(true);
@@ -147,9 +159,6 @@ public class UserPages extends AppCompatActivity {
         });
     }
 
-
-
-
     /* 일반사용자 페이지 네비게이션 바 연결*/
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -157,6 +166,7 @@ public class UserPages extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch(item.getItemId()){
                 case R.id.user_Home:
+                    nowPage = "user_Home";
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfMain).commit();
                     TitleTextView.setText("주변 확진자 현황");
                     searchButton.setVisibility(View.VISIBLE);
@@ -177,6 +187,7 @@ public class UserPages extends AppCompatActivity {
                     searchButton.setVisibility(View.GONE);
                     return true;
                 case R.id.user_Clinics:
+                    nowPage = "user_Clinics";
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfSelectedClinic).commit();
                     TitleTextView.setText("주변 선별 진료소");
                     searchButton.setVisibility(View.VISIBLE);

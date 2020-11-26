@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -63,6 +64,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     public GoogleMap mMap;
 
     private Marker userPoint;
+    private ArrayList<Marker> visitPlacePoint;
     private ArrayList<Marker> nearMaker;
 
     private LatLng myLatLng;
@@ -72,6 +74,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
     public PageOfMyDanger() throws InterruptedException {
         //this.userLoc=new UserLoc();
+        this.visitPlacePoint = new ArrayList<Marker>();
+        this.nearMaker = new ArrayList<Marker>();
         this.patient =new ArrayList<Patient>();
         this.nearPlaces =new ArrayList<VisitPlace>();
         this.searchResultPath = new ArrayList<SearchPath>();
@@ -200,6 +204,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener = new GPSListener();
@@ -215,10 +220,46 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
 
+    public void addVisitNearMarker(){
+        calVisitPlace();
+        for(int i =0; i < visitPlacePoint.size();i++){
+            visitPlacePoint.get(i).remove();
+        }
+        visitPlacePoint.clear();
+        for(int i=0; i < visitPlaceList.size();i++){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(this.myLatLng);
+            markerOptions.title(visitPlaceList.get(i).get_placeAddress());
+            markerOptions.snippet(visitPlaceList.get(i).get_placeDetailAddress());
+            this.visitPlacePoint.add(this.mMap.addMarker(markerOptions));
+        }//우리가 다녀간 경유지
+        for(int i=0; i<nearMaker.size();i++){
+            nearMaker.get(i).remove();
+        }
+        nearMaker.clear();
+        for(int i =0 ; i<nearPlaces.size();i++){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(this.myLatLng);
+            markerOptions.title(nearPlaces.get(i).getVisitPlace().get_placeAddress());
+            markerOptions.snippet(nearPlaces.get(i).getVisitPlace().get_placeDetailAddress());
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.virus3));
+            this.nearMaker.add(this.mMap.addMarker(markerOptions));
+        }// 근처 확진자 동선
+    }
+
+    public void calVisitPlace() {
+        for(int i=0; i < searchResultPath.size();i++){
+            for (int j=0;j<searchResultPath.get(i).getSubPaths().size();j++){
+                this.visitPlaceList.add(searchResultPath.get(i).getSubPaths().get(j).getStartStation());
+                this.visitPlaceList.add(searchResultPath.get(i).getSubPaths().get(j).getEndStation());
+            }
+        } // 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
+    }
     public void calNearPlace() {
         this.nearPlaces.clear();
         for (int a = 0; a < this.patient.size(); a++) {
@@ -235,7 +276,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }//반경 1km이내 확진자 동선
 
     private class GPSListener implements LocationListener {
-
         public void onLocationChanged(Location location) {
             //capture location data sent by current provider
             Double latitude = location.getLatitude();
@@ -296,13 +336,19 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-
     public void printPath(Place startPlace,Place desPlace) throws ParserConfigurationException, SAXException, IOException {
         try {
             searchResultPath=cl.calRoute1().getResultPath();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                addVisitNearMarker();
+            }
+        }).start();
 
         System.out.println("사이즈: "+searchResultPath.size());
         for(int i =0; i < searchResultPath.size();i++){
@@ -439,14 +485,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             this.danger=1;
         }//안전
     }
-    public int printDanger(ArrayList<SearchPath> searchPath) {
-        for(int i=0; i < searchPath.size();i++){
-            for (int j=0;j<searchPath.get(i).getSubPaths().size();j++){
-                this.visitPlaceList.add(searchPath.get(i).getSubPaths().get(j).getStartStation());
-                this.visitPlaceList.add(searchPath.get(i).getSubPaths().get(j).getEndStation());
-            }
-        } // 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
-        return 0;
-    }
+
 
 }

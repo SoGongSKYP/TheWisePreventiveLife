@@ -1,50 +1,31 @@
 package com.example.project;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.common.api.Status;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
-import static android.content.Context.LOCATION_SERVICE;
-import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
 /**
  *
@@ -61,10 +42,6 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces;
-
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
-
 
     public PageOfMain() {
         this.nearPlaces = new ArrayList<VisitPlace>();
@@ -96,6 +73,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener = new GPSListener();
@@ -150,6 +128,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
@@ -164,8 +143,17 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void run() {
                         RefreshMarker();
+                    }
+                });
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         calNearPlace();
-                        addNearPlaceMaker();
+                        try {
+                            addNearPlaceMaker();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -193,21 +181,38 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         }
     }//반경 1km이내 확진자 동선
 
-    public void addNearPlaceMaker() {
+    public void addNearPlaceMaker() throws ParseException {
+        Date time = new Date();
         for (int a = 0; a < this.nearMaker.size(); a++) {
             this.nearMaker.get(a).remove();
         }
         if (this.nearMaker.size() != 0) {
             this.nearMaker.clear();
         }
-        for (int a = 0; a < this.nearPlaces.size(); a++) {
+        for (int a = 0; a < this.nearPlaces.size(); a++)
+        {
+            String from = nearPlaces.get(a).getVisitDate();
+            SimpleDateFormat transDate= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date to = transDate.parse(from);
+            long dateGap = (time.getTime()- to.getTime())/(1000*60*60*24);
             LatLng nearLatlng = new LatLng(this.nearPlaces.get(a).getVisitPlace().get_placeX(), this.nearPlaces.get(a).getVisitPlace().get_placeY());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(nearLatlng);
             markerOptions.title("확진자");
             SimpleDateFormat transFormat = new SimpleDateFormat("MM월dd일");
             markerOptions.snippet(transFormat.format(this.nearPlaces.get(a).getVisitDate()) + this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
+
+            if(dateGap < 2){
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.virus1));
+            }// 현재로부터 2일 이내에 다녀간 장소
+            else if(dateGap >= 2&&dateGap < 7){
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.virus2));
+            }// 현재로부터 2~7일 사이에 다녀간 장소
+            else{
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.virus3));
+            }// 현재로부터 7~14일 사이에 다녀간 장소
             this.nearMaker.add(this.mMap.addMarker(markerOptions));
+
         }
     } //주변 확진자 마커 추가
 }
