@@ -17,15 +17,12 @@ public class ResultCallbackListener implements OnResultCallbackListener {
     }
     public ArrayList<SearchPath> getResultPath() {
         return ResultPath;
-
     }
     @Override
     public void onSuccess(ODsayData oDsayData, API api) {
                 SubPath sp=null;
                 try{
                     if(api==API.SEARCH_PUB_TRANS_PATH){
-                        int localSearch = oDsayData.getJson().getJSONObject("result").getInt("outTrafficCheck");
-                        if(localSearch==1){
                             int totalCount = oDsayData.getJson().getJSONObject("result").getInt("busCount")
                                     + oDsayData.getJson().getJSONObject("result").getInt("subwayCount")
                                     + oDsayData.getJson().getJSONObject("result").getInt("subwayBusCount");//총 경로 결과 개수
@@ -95,7 +92,6 @@ public class ResultCallbackListener implements OnResultCallbackListener {
                                         ,path.getJSONObject("info").getInt("totalStationCount")
                                         ,path.getJSONObject("info").getInt("totalDistance")),temp));
                             }
-                        }// 경로 탐색 결과 있음 X좌표 Y좌표 바뀌어있으니 조심
                         System.out.println("안쪽에서의 사이즈1:"+ ResultPath.size());
                         //System.out.println("안쪽에서의 사이즈2:"+ ResultPath.size());
                     }
@@ -104,9 +100,8 @@ public class ResultCallbackListener implements OnResultCallbackListener {
                 }
                 System.out.println("드디어 끝났다");
                 System.out.println("중간쪽에서의 사이즈:"+ ResultPath.size());
+
             }
-
-
     @Override
     public void onError(int i, String s, API api) {
 
