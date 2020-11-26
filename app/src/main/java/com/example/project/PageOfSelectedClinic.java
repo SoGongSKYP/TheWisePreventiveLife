@@ -39,6 +39,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
 
     private ArrayList<SelectedClinic> clinics;
     private ArrayList<Marker> clinicsMarker;
+    private ArrayList<SelectedClinic> nearClinics;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_clinics, container, false);
@@ -50,6 +51,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         this.clinicsMarker=new ArrayList<Marker>();
         this.clinics = new ArrayList<SelectedClinic>();
         this.clinics = clinicAPIEntity.getClinicsList();
+        this.nearClinics =new ArrayList<SelectedClinic>();
     }
 
     @Override
@@ -83,7 +85,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             double dis = this.clinics.get(i).Distance(UserLoc.getUserPlace().get_placeX(),
                     UserLoc.getUserPlace().get_placeY()); // 현재 위치와 병원과의 직선 거리
             nearClinics.put(dis,clinics.get(i));
-        }
+        } // 거리대로 정렬
         Object[] mapKey = nearClinics.keySet().toArray();
         Arrays.sort(mapKey);
         for (Object nKey : mapKey)
@@ -92,12 +94,12 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             if(fiveNearClinics.size() >= 5){
                 return fiveNearClinics;
             }
-        }
+        } // 5개 고름
         return fiveNearClinics;
     }
 
-    public void addMarker(GoogleMap googleMap) throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<SelectedClinic> nearClinics = findClinic();
+    public void addMarker() throws IOException, SAXException, ParserConfigurationException {
+        nearClinics = findClinic();
         for(int i =0; i <clinicsMarker.size();i++ ){
             this.clinicsMarker.get(i).remove();
         }
@@ -109,7 +111,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             markerOptions.snippet("주소: " + nearClinics.get(i).getPlace().get_placeAddress() +
                     "전화번호: " + nearClinics.get(i).getPhoneNum());
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital1));
-            clinicsMarker.add(googleMap.addMarker(markerOptions));
+            clinicsMarker.add(mMap.addMarker(markerOptions));
         }
     }
 
@@ -191,7 +193,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
                     @Override
                     public void run() {
                         try {
-                            page.addMarker(mMap);
+                            page.addMarker();
                         } catch (IOException | ParserConfigurationException | SAXException e) {
                             e.printStackTrace();
                         }
