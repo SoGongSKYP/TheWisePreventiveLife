@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -62,14 +65,11 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
-
-
     public PageOfMain() {
         this.nearPlaces = new ArrayList<VisitPlace>();
         this.patient = new ArrayList<Patient>();
         this.nearMaker = new ArrayList<Marker>();
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,6 +96,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener = new GPSListener();
@@ -150,6 +151,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
@@ -205,6 +207,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(nearLatlng);
             markerOptions.title("확진자");
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.virus1));
             SimpleDateFormat transFormat = new SimpleDateFormat("MM월dd일");
             markerOptions.snippet(transFormat.format(this.nearPlaces.get(a).getVisitDate()) + this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
             this.nearMaker.add(this.mMap.addMarker(markerOptions));
