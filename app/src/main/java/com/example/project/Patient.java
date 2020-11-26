@@ -1,10 +1,11 @@
 package com.example.project;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * 
  */
-public class Patient {
+public class Patient implements Serializable {
 
 
     public Patient(int smallLocalNum, int bigLocalNum, String patientNum, String confirmDate, ArrayList<VisitPlace> visitPlaceList) {

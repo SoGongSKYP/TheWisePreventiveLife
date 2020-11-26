@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class ManagerPages extends AppCompatActivity {
 
     /*Bottom Navigation Bar 관련 컴포넌트*/
@@ -28,7 +30,8 @@ public class ManagerPages extends AppCompatActivity {
     private TextView TitleTextView;
 
     String ID, PW;
-
+    DBEntity entity = new DBEntity();
+    ArrayList<Patient> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +54,12 @@ public class ManagerPages extends AppCompatActivity {
 
         TitleTextView = findViewById(R.id.manager_Title_TextView);
         TitleTextView.setText("확진자 정보 추가");
-
+        
         Intent intent = getIntent();
         ID = intent.getExtras().getString("managerID");
         PW = intent.getExtras().getString("managerPW");
+
+        data = entity.patient_info();
 
 
     }
