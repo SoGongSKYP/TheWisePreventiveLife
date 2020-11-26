@@ -336,7 +336,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-
     public void printPath(Place startPlace,Place desPlace) throws ParserConfigurationException, SAXException, IOException {
         try {
             searchResultPath=cl.calRoute1().getResultPath();
