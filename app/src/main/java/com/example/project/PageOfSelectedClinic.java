@@ -57,6 +57,9 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mMap = googleMap;
+        GPSListener gpsListener =new GPSListener(this,mMap);
+        UserLoc.LocBy_gps(getContext(),gpsListener);
+        this.addMarker();
         this.myLatLng = new LatLng(UserLoc.getUserPlace().get_placeX(), UserLoc.getUserPlace().get_placeY());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(this.myLatLng);
@@ -65,10 +68,6 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
-        GPSListener gpsListener =new GPSListener(this,mMap);
-        UserLoc.LocBy_gps(getContext(),gpsListener);
-        this.addMarker();
-
     } // 유저 현위치에 마커 추가
 
     @Override
