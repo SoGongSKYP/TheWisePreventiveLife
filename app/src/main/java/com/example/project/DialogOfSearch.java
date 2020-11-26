@@ -143,11 +143,4 @@ public class DialogOfSearch extends Dialog {
 
     }
 
-    private void dummyData(){
-        // 검색 기능이 구현되지 않았기 때문에 우선 임시값 넣었음
-        Place place1 = new Place("동국대학교 신공학관", "서울특별시 중구", 1.1, 1.5);
-        Place place2 = new Place("동국대학교 원흥관", "서울특별시 중구", 1.5, 6.1);
-        resultPlaces.add(place1);
-        resultPlaces.add(place2);
-    }
 }

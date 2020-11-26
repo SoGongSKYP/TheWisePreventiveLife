@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class ManagerPages extends AppCompatActivity {
     String ID, PW;
     DBEntity entity = new DBEntity();
     ArrayList<Patient> data;
+    Patient deletePatient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +58,13 @@ public class ManagerPages extends AppCompatActivity {
         TitleTextView.setText("확진자 정보 추가");
 
         Intent intent = getIntent();
-        ID = intent.getExtras().getString("managerID");
-        PW = intent.getExtras().getString("managerPW");
+        if(ID == null && PW == null){
+            ID = intent.getExtras().getString("managerID");
+            PW = intent.getExtras().getString("managerPW");
+        }
 
-        data = entity.patient_info();
 
+        data = entity.patient_info();   // entity 클래스에서 데이터 받아옴
 
     }
 

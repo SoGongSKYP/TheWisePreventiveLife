@@ -7,7 +7,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -47,11 +49,14 @@ public class ManagerModify extends AppCompatActivity {
     private AdapterOfPlace adapter;
 
     /*데이터 관련 컴포넌트*/
-    private EditText patientNumEditText, patientDateEditText;
+    private TextView patientNumEditText, patientDateEditText;
     private TextView bigLocTextView, smallLocTextView;
     int pBigLocal, pSmallLocal;
     private ImageButton deleteButton;
     private TextView titleTextView;
+    private ArrayList<VisitPlace> deletePlaceArrayList;
+    Patient data;   // PageOfList에서 선택된 확진자 객체
+    int rowNum;      // PageOfList에서 선택된 확진자 번호
 
     enum MODE {DEF, EDIT};
     MODE now = MODE.DEF;
@@ -79,10 +84,12 @@ public class ManagerModify extends AppCompatActivity {
         /* 확진자 데이터 전체 삭제 */
         deleteButton = findViewById(R.id.modify_delete_Button);
         deleteButton.setVisibility(View.INVISIBLE);
-
-
-
-
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TotalDeleteButtonAction();
+            }
+        });
 
         //--------------------------------------------------------------------------------------
         titleTextView = findViewById(R.id.modify_next_to_button_TextView);
@@ -93,7 +100,8 @@ public class ManagerModify extends AppCompatActivity {
         smallLocTextView = findViewById(R.id.modify_small_TextView);
 
         Intent intent = getIntent();
-        Patient data = (Patient) intent.getSerializableExtra("row");
+        data = (Patient) intent.getSerializableExtra("row");
+        rowNum = intent.getIntExtra("rowNum", 100);
 
         patientDateEditText.setText(data.getConfirmDate());
         patientNumEditText.setText(data.getPatientNum());
@@ -118,6 +126,7 @@ public class ManagerModify extends AppCompatActivity {
         adapter = new AdapterOfPlace(visitPlaceArrayList, 0);
         patientRecyclerView.setAdapter(adapter);
 
+        deletePlaceArrayList = new ArrayList<VisitPlace>(); // DB에서 지울 동선 리스트
 
         //--------------------------------------------------------------------------------------
         /*다이얼로그 연결*/
@@ -133,6 +142,35 @@ public class ManagerModify extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    private void TotalDeleteButtonAction(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ManagerModify.this);
+        alertDialogBuilder.setMessage("현재 확진자의 정보를 모두 삭제하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("삭제",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Toast.makeText(getApplicationContext(), "현재 확진자 정보를 삭제합니다", Toast.LENGTH_SHORT).show();
+                                // 여기서 DBEntity의 delete 함수 사용
+                                // 그리고 ManagerPages로 넘어가서 새로고침
+
+                                Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
+                                intent.putExtra("managerID", intent.getStringExtra("ID"));  //다시 ManagerPages로 돌아가기 위한 값
+                                intent.putExtra("managerPW", intent.getStringExtra("PW"));
+                                startActivity(intent);
+                            }
+                        })
+                .setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
 
@@ -164,13 +202,13 @@ public class ManagerModify extends AppCompatActivity {
         adapter.setModifyClickListenter(new AdapterOfPlace.OnModifyClickListener(){
             @Override
             public void onModifyItemClick(View v, int pos) {
+                // 삭제할 데이터를 deletePlaceArrayList에 저장
+                deletePlaceArrayList.add(visitPlaceArrayList.get(pos));
                 visitPlaceArrayList.remove(pos);
                 Log.d("삭제될 데이터 위치", Integer.toString(pos));
                 Log.d("삭제 후에 실제 데이터 크기 : ", Integer.toString(visitPlaceArrayList.size()));
             }
         });
-
-
     }
 
     private void setDefMode(){
@@ -184,6 +222,7 @@ public class ManagerModify extends AppCompatActivity {
 
     private void saveEditData(){
         // 이곳에서 변경된 데이터를 업데이트 함
+        // DBEntity 클래스의 pmoving_delete 함수, insert 함수
         Toast.makeText(this, "여기서 데이터를 업데이트 하면 됩니다.", Toast.LENGTH_SHORT).show();
     }
 

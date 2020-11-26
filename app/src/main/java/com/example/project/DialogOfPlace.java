@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -40,16 +41,12 @@ public class DialogOfPlace extends Dialog {
 
 
     interface VisitDialogListener{
-        // 다이얼로그에서 Fragment로 Place객체 보내주기 위한 리스너
-        void onAddCliked(Place place, String date);
+        void onAddClicked(VisitPlace visitPlace);
     }
 
     public void setVisitDialogListener(DialogOfPlace.VisitDialogListener visitDialogListener){
         this.visitDialogListener = visitDialogListener;
-        this.resultPlaces = new ArrayList<Place>();
     }
-
-
 
     public DialogOfPlace(@NonNull Context context) {
         super(context);
@@ -129,14 +126,15 @@ public class DialogOfPlace extends Dialog {
         placeAddButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
-                // 임시로 다이얼로그를 닫는다
+
                 if(visitDateEditText.getText().toString().equals("") || visitDateEditText.getText().toString() == null){
                     Toast.makeText(getContext(), "방문 날짜를 입력하세요", Toast.LENGTH_SHORT).show();
                 }else if(selectedRow == null){
                     Toast.makeText(getContext(), "장소를 검색해서 선택하세요", Toast.LENGTH_SHORT).show();
                 }else {
                     String date = visitDateEditText.getText().toString();
-                    visitDialogListener.onAddCliked(selectedRow, date);
+                    VisitPlace visitPlace = new VisitPlace(selectedRow, date);
+                    visitDialogListener.onAddClicked(visitPlace);
                     dismiss();
                 }
             }

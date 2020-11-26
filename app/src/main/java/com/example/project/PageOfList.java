@@ -18,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,8 +43,9 @@ public class PageOfList extends Fragment {
 
     /*데이터 저장 변수*/
     int pBigLocal, pSmallLocal;
-
-
+    String deleteOK = "";
+    Patient selectedRow;
+    int testPos;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -80,15 +83,32 @@ public class PageOfList extends Fragment {
         adapter.setOnListClickListenter(new AdapterOfList.OnListClickListener() {
             @Override
             public void onListItemClick(View v, int pos) {
-                Patient selectedRow = patientArrayList.get(pos);
+                selectedRow = patientArrayList.get(pos);
+                testPos = pos;
                 Intent intent = new Intent(getActivity(), ManagerModify.class);
                 intent.putExtra("row", (Serializable) selectedRow);
+                intent.putExtra("ID", (((ManagerPages)getActivity()).ID));
+                intent.putExtra("PW", (((ManagerPages)getActivity()).PW));
                 startActivity(intent);
             }
         });
 
+        //--------------------------------------------------------------------------------------
+        /* ManagerModify에서 전체삭제 버튼을 눌렀을 때, 해당 ROW 삭제*/
+       Bundle bundle = getArguments();
+        if(bundle != null){
+            deleteOK = bundle.getString("delete");
+            if(deleteOK == "OK"){
+                //DBEntity delete_Patient - delete seletedRow
+                Log.d("삭제할 위치 반환 : ", Integer.toString(testPos));
+
+            }
+        }
+
+
         return v;
     }
+
 
 
     private void BigSpinnerAction(){

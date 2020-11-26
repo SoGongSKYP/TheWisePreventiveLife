@@ -44,6 +44,7 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
     private RecyclerView visitRecyclerView;
     private LinearLayoutManager layoutManager;
     //private ArrayList<Patient> patientArrayList;
+    AdapterOfPlace adapter;
 
     /*다이얼로그 관련 컴포넌트*/
     private ImageButton addPlaceButton;
@@ -90,10 +91,13 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         visitRecyclerView.setHasFixedSize(true);
 
         visitPlaces = new ArrayList<>();
+        adapter = new AdapterOfPlace(visitPlaces, 1);
+        visitRecyclerView.setAdapter(adapter);
         //--------------------------------------------------------------------------------------
 
         /*다이얼로그 연결*/
         addPlaceButton = v.findViewById(R.id.patient_visit_add_Button);
+        addPlaceButton.setVisibility(View.INVISIBLE);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,9 +105,9 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                     dialog = new DialogOfPlace(getContext());
                     dialog.setVisitDialogListener(new DialogOfPlace.VisitDialogListener(){
                         @Override
-                        public void onAddCliked(Place place, String date) {
-                            VisitPlace vp = new VisitPlace(place, date);
-                            visitPlaces.add(vp);
+                        public void onAddClicked(VisitPlace visitPlace) {
+                            visitPlaces.add(visitPlace);
+                            adapter.notifyDataSetChanged();
                         }
                     });
                     dialog.setCancelable(true);
@@ -132,6 +136,7 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                         dupleCheckTextView.setText("중복 확인! 아래에서 확진자 동선을 추가하세요");
                         dupleCheckTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                         dupleCheck = true;
+                        addPlaceButton.setVisibility(View.VISIBLE);
                         dupleButton.setText("저    장");
                         dupleButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_full_green));
                     }else{
@@ -142,6 +147,7 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                     GetDataFromUI();
                     Toast.makeText(getContext(), "확진자"+pNum+" 정보가 저장되었습니다.", Toast.LENGTH_SHORT).show();
                     dupleButton.setText("새 로 고 침");
+                    addPlaceButton.setVisibility(View.INVISIBLE);
                     dupleButton.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_full_blue));
                     dupleCheckTextView.setText("정보가 저장되었습니다. 새로고침하여 새 정보를 입력하세요.");
                     dupleCheckTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlue));

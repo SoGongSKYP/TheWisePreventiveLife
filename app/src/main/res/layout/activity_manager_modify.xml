@@ -95,7 +95,7 @@
             android:padding="12dp"/>
     </LinearLayout>
 
-    <EditText
+    <TextView
         android:id="@+id/modify_num_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,12 +103,13 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
         android:padding="12dp"
-        android:hint="확진자 번호 : 15"
+        android:textSize="17dp"
+        android:text="확진자 번호"
         android:textColor="@color/colorMiddleGrey"
         android:background="@drawable/edittext_outline_design"
         android:enabled="false"/>
 
-    <EditText
+    <TextView
         android:id="@+id/modify_time_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -116,7 +117,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="15dp"
         android:padding="12dp"
-        android:hint="확진 판정 시간 : YYYYMMDD"
+        android:textSize="17dp"
+        android:text="확진 판정 시간 : YYYYMMDD"
         android:textColor="@color/colorMiddleGrey"
         android:background="@drawable/edittext_outline_design"
         android:enabled="false"/>
