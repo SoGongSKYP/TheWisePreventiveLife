@@ -67,6 +67,8 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener =new GPSListener(this,mMap);
         UserLoc.LocBy_gps(getContext(),gpsListener);
+        this.addMarker();
+
     } // 유저 현위치에 마커 추가
 
     @Override
@@ -98,7 +100,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         return fiveNearClinics;
     }
 
-    public void addMarker() throws IOException, SAXException, ParserConfigurationException {
+    public void addMarker()  {
         nearClinics = findClinic();
         for(int i =0; i <clinicsMarker.size();i++ ){
             this.clinicsMarker.get(i).remove();
@@ -192,11 +194,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            page.addMarker();
-                        } catch (IOException | ParserConfigurationException | SAXException e) {
-                            e.printStackTrace();
-                        }
+                        page.addMarker();
                     }
                 });
             }
