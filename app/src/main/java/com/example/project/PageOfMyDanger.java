@@ -121,6 +121,17 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                         // 다이얼로그에서 결과 Place 객체 받아서 저장 (DialogOfSearch)
                         finishPlace = place;
                         finishButton.setText(finishPlace.get_placeAddress());
+                        if(startPlace != null && finishPlace != null){
+                            //동선 검색 기능
+                            try {
+                                cl = new CalRoute(getContext(),startPlace,finishPlace);
+                                listener=cl.calRoute1();
+                                searchResultPath=listener.getResultPath();
+                                System.out.println("버튼 안에서"+searchResultPath.size());
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 });
                 dialog.setCancelable(true);
@@ -134,7 +145,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         mapView = v.findViewById(R.id.danger_MapView);
         mapView.getMapAsync(this);
         return v;
@@ -145,10 +155,14 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 if(startPlace != null && finishPlace != null){
-                    //동선 검색 기능
                     try {
-                        cl = new CalRoute(getContext(),startPlace,finishPlace);
+                        listener=cl.calRoute1();
                     } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        printPath(startPlace,finishPlace);
+                    } catch (ParserConfigurationException | SAXException | IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -157,13 +171,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-            try {
-                printPath(startPlace,finishPlace);
-            } catch (ParserConfigurationException | SAXException | IOException e) {
-                e.printStackTrace();
-            }
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

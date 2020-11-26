@@ -59,6 +59,4 @@ public class CalRoute {
     public ArrayList<SearchPath> getSearchResultPath() {
         return searchResultPath;
     }
-
-
 }
