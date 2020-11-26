@@ -59,7 +59,6 @@ public class UserPages extends AppCompatActivity {
     /*search bar 관련 컴포넌트*/
     private ImageButton searchButton;
     DialogOfSearch dialog;
-    Place searchPlace;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
 
@@ -126,7 +125,7 @@ public class UserPages extends AppCompatActivity {
                 dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener(){
                     @Override
                     public void onOKCliked(Place place) {
-                        searchPlace = place;    // searchPlace가 검색된 장소, 이 장소 좌표로 이동
+                        UserLoc.setUser_place(place);   // searchPlace가 검색된 장소, 이 장소 좌표로 이동
                     }
                 });
                 dialog.setCancelable(true);
@@ -146,9 +145,6 @@ public class UserPages extends AppCompatActivity {
             }
         });
     }
-
-
-
 
     /* 일반사용자 페이지 네비게이션 바 연결*/
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
