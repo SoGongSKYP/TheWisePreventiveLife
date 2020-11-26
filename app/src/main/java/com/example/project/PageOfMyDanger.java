@@ -100,8 +100,13 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onOKCliked(Place place) {
                         // 다이얼로그에서 결과 Place 객체 받아서 저장 (DialogOfSearch)
-                        startPlace = place;
-                        startButton.setText(startPlace.get_placeAddress());
+                        if(place !=null){
+                            startPlace = place;
+                            startButton.setText(startPlace.get_placeAddress());
+                        }
+                        else{
+                            Toast.makeText(getContext(), "장소가 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 dialog.setCancelable(true);
@@ -119,19 +124,25 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onOKCliked(Place place) {
                         // 다이얼로그에서 결과 Place 객체 받아서 저장 (DialogOfSearch)
-                        finishPlace = place;
-                        finishButton.setText(finishPlace.get_placeAddress());
-                        if(startPlace != null && finishPlace != null){
-                            //동선 검색 기능
-                            try {
-                                cl = new CalRoute(getContext(),startPlace,finishPlace);
-                                listener=cl.calRoute1();
-                                searchResultPath=listener.getResultPath();
-                                System.out.println("버튼 안에서"+searchResultPath.size());
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        if(place !=null){
+                            finishPlace = place;
+                            finishButton.setText(finishPlace.get_placeAddress());
+                            if(startPlace != null && finishPlace != null){
+                                //동선 검색 기능
+                                try {
+                                    cl = new CalRoute(getContext(),startPlace,finishPlace);
+                                    listener=cl.calRoute1();
+                                    searchResultPath=listener.getResultPath();
+                                    System.out.println("버튼 안에서"+searchResultPath.size());
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
+                        else{
+                            Toast.makeText(getContext(), "장소가 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
                 dialog.setCancelable(true);
@@ -154,7 +165,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         findRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(startPlace != null && finishPlace != null){
+                if(startPlace.get_placeAddress() != null && finishPlace.get_placeAddress() != null){
                     try {
                         listener=cl.calRoute1();
                     } catch (InterruptedException e) {
