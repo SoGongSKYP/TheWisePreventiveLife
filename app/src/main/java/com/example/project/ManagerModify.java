@@ -43,12 +43,12 @@ public class ManagerModify extends AppCompatActivity {
     /*RecyclerView 관련 컴포넌트*/
     private RecyclerView patientRecyclerView;
     private LinearLayoutManager layoutManager;
-    private ArrayList<Patient> patientArrayList;
+    private ArrayList<VisitPlace> visitPlaceArrayList;
+    private AdapterOfPlace adapter;
 
     /*데이터 관련 컴포넌트*/
     private EditText patientNumEditText, patientDateEditText;
     private TextView bigLocTextView, smallLocTextView;
-    private ArrayAdapter bigAdapter, smallAdapter;
     int pBigLocal, pSmallLocal;
 
     enum MODE {DEF, EDIT};
@@ -81,10 +81,10 @@ public class ManagerModify extends AppCompatActivity {
         smallLocTextView = findViewById(R.id.modify_small_TextView);
 
         Intent intent = getIntent();
-        RowOfPatient data = (RowOfPatient) intent.getSerializableExtra("row");
+        Patient data = (Patient) intent.getSerializableExtra("row");
 
         patientDateEditText.setText(data.getConfirmDate());
-        patientNumEditText.setText(Integer.toString(data.getPatientNum()));
+        patientNumEditText.setText(data.getPatientNum());
         pBigLocal = data.getBigLocalNum();
         pSmallLocal = data.getSmallLocalNum();
 
@@ -95,23 +95,22 @@ public class ManagerModify extends AppCompatActivity {
         String[] smallArray = getResources().getStringArray(resId);
         smallLocTextView.setText(smallArray[pSmallLocal]);
 
-
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
-        patientRecyclerView = findViewById(R.id.list_RecyclerView);
-        //layoutManager = new LinearLayoutManager(this);
-        //patientRecyclerView.setLayoutManager(layoutManager);
-        //patientRecyclerView.setHasFixedSize(true);
+        patientRecyclerView = findViewById(R.id.modify_visit_RecyclerView);
+        layoutManager = new LinearLayoutManager(this);
+        patientRecyclerView.setLayoutManager(layoutManager);
+        patientRecyclerView.setHasFixedSize(true);
 
-        //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
-        //patientRecyclerView.setAdapter(adapter);
+        visitPlaceArrayList = data.getVisitPlaceList();
+        adapter = new AdapterOfPlace(visitPlaceArrayList);
+        patientRecyclerView.setAdapter(adapter);
         //--------------------------------------------------------------------------------------
         /*다이얼로그 연결*/
         addPlaceButton = findViewById(R.id.modify_visit_add_Button);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                now = MODE.EDIT;
                 dialog = new DialogOfPlace(ManagerModify.this);
                 dialog.setCancelable(true);
                 dialog.setCanceledOnTouchOutside(false);
@@ -140,19 +139,13 @@ public class ManagerModify extends AppCompatActivity {
 
     private void setEditMode(){
         Toast.makeText(this, "편집 모드로 전환합니다.", Toast.LENGTH_SHORT).show();
-        patientDateEditText.setEnabled(true);
-        patientNumEditText.setEnabled(true);
-        patientDateEditText.setTextColor(ContextCompat.getColor(this, R.color.colorDarkGrey));
-        patientNumEditText.setTextColor(ContextCompat.getColor(this, R.color.colorDarkGrey));
         editButton.setImageResource(R.drawable.save);
+        addPlaceButton.setVisibility(View.VISIBLE);
     }
 
     private void setDefMode(){
-        patientDateEditText.setEnabled(false);
-        patientNumEditText.setEnabled(false);
-        patientDateEditText.setTextColor(ContextCompat.getColor(this, R.color.colorMiddleGrey));
-        patientNumEditText.setTextColor(ContextCompat.getColor(this, R.color.colorMiddleGrey));
         editButton.setImageResource(R.drawable.ic_baseline_edit_24);
+        addPlaceButton.setVisibility(View.INVISIBLE);
     }
 
     private void saveEditData(){

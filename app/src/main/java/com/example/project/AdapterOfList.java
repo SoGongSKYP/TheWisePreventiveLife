@@ -14,14 +14,14 @@ import java.util.ArrayList;
 public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHolder>{
 
     public interface OnListClickListener{
-        void onListItemCick(View v, int pos);
+        void onListItemClick(View v, int pos);
     }
     private OnListClickListener listClickListener = null;
     public void setOnListClickListenter(OnListClickListener listenter){
         this.listClickListener = listenter;
     }
 
-    private ArrayList<RowOfPatient> datalist;
+    private ArrayList<Patient> datalist;
 
     public class ListViewHolder extends RecyclerView.ViewHolder{
         private TextView patientNumTextView, patientDateTextView;
@@ -35,7 +35,7 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         if(listClickListener != null){
-                            listClickListener.onListItemCick(view, pos);
+                            listClickListener.onListItemClick(view, pos);
                         }
                     }
                 }
@@ -43,7 +43,7 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
         }
     }
 
-    public AdapterOfList(ArrayList<RowOfPatient> data){
+    public AdapterOfList(ArrayList<Patient> data){
         this.datalist = data;
     }
 

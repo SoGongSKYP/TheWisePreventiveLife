@@ -36,7 +36,7 @@ public class PageOfList extends Fragment {
     /*RecyclerView 관련 컴포넌트*/
     private RecyclerView patientRecyclerView;
     private LinearLayoutManager layoutManager;
-    private ArrayList<RowOfPatient> patientArrayList, totalArrayList;
+    private ArrayList<Patient> patientArrayList, totalArrayList;
     private AdapterOfList adapter;
 
     /*데이터 저장 변수*/
@@ -67,9 +67,8 @@ public class PageOfList extends Fragment {
         SmallSpinnerAction();
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
-        totalArrayList = new ArrayList<RowOfPatient>();
-        MakeTempArray();
-        patientArrayList = new ArrayList<RowOfPatient>();
+        totalArrayList = (((ManagerPages)getActivity()).data);
+        patientArrayList = new ArrayList<Patient>();
 
         patientRecyclerView = v.findViewById(R.id.list_RecyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -80,8 +79,8 @@ public class PageOfList extends Fragment {
         patientRecyclerView.setAdapter(adapter);
         adapter.setOnListClickListenter(new AdapterOfList.OnListClickListener() {
             @Override
-            public void onListItemCick(View v, int pos) {
-                RowOfPatient selectedRow = patientArrayList.get(pos);
+            public void onListItemClick(View v, int pos) {
+                Patient selectedRow = patientArrayList.get(pos);
                 Intent intent = new Intent(getActivity(), ManagerModify.class);
                 intent.putExtra("row", (Serializable) selectedRow);
                 startActivity(intent);
@@ -91,22 +90,6 @@ public class PageOfList extends Fragment {
         return v;
     }
 
-    private void MakeTempArray() {
-        RowOfPatient rowOfPatient00 = new RowOfPatient(1, "2020-11-15", 0, 0);
-        RowOfPatient rowOfPatient01 = new RowOfPatient(2, "2020-11-16", 0, 0);
-        RowOfPatient rowOfPatient02 = new RowOfPatient(3, "2020-11-13", 0, 0);
-        RowOfPatient rowOfPatient03  = new RowOfPatient(4, "2020-11-14", 0, 0);
-        RowOfPatient rowOfPatient1 = new RowOfPatient(5, "2020-11-15", 1, 0);
-        RowOfPatient rowOfPatient2 = new RowOfPatient(6, "2020-11-13", 12, 8);
-        RowOfPatient rowOfPatient3 = new RowOfPatient(7, "2020-11-15", 2, 0);
-        totalArrayList.add(rowOfPatient00);
-        totalArrayList.add(rowOfPatient01);
-        totalArrayList.add(rowOfPatient02);
-        totalArrayList.add(rowOfPatient03);
-        totalArrayList.add(rowOfPatient1);
-        totalArrayList.add(rowOfPatient2);
-        totalArrayList.add(rowOfPatient3);
-    }
 
     private void BigSpinnerAction(){
         bigLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -158,7 +141,7 @@ public class PageOfList extends Fragment {
         // 해당 지역 번호를 가지고 있는 리스트를 모두 보여줌
         // DB 구축 후, 쿼리 문으로 실행
         for(int i = 0;i<totalArrayList.size();i++){
-            RowOfPatient row =  totalArrayList.get(i);
+            Patient row =  totalArrayList.get(i);
             if (row.getBigLocalNum() == bigLoc && row.getSmallLocalNum() == smallLoc){
                 patientArrayList.add(row);
             }

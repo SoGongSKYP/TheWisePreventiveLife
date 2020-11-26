@@ -1,11 +1,12 @@
 package com.example.project;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * 장소 관련 정보 저장 class
  * x가 경도 y가 위도
  */
-public class Place {
+public class Place implements Serializable {
 
     private String placeAddress;
     private String placeDetailAddress;

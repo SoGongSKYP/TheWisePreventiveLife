@@ -54,7 +54,7 @@ public class ManagerPages extends AppCompatActivity {
 
         TitleTextView = findViewById(R.id.manager_Title_TextView);
         TitleTextView.setText("확진자 정보 추가");
-        
+
         Intent intent = getIntent();
         ID = intent.getExtras().getString("managerID");
         PW = intent.getExtras().getString("managerPW");

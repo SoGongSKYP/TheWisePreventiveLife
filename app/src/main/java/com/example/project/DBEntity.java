@@ -16,7 +16,9 @@ public class DBEntity{
     private String result="success";//일단 임시 success
     private String sendmsg;
 //-----------------------------------------------------------------------------------------------
-    public DBEntity(){ }
+    public DBEntity(){
+        patientList = new ArrayList<>();
+    }
 
     public void setPatientList(ArrayList<Patient> patientList){
         this.patientList = patientList;
@@ -50,9 +52,9 @@ public class DBEntity{
         Patient dumPatient2=new Patient(0,0,"2","2020-11-16",dumVSP2);
         Patient dumPatient3=new Patient(0,0,"3","2020-11-14",dumVSP1);
         Patient dumPatient4=new Patient(0,0,"4","2020-11-15",dumVSP2);
-        Patient dumPatient5=new Patient(1,0,"5","2020-11-15",dumVSP1);
-        Patient dumPatient6=new Patient(12,8,"6","2020-11-13",dumVSP2);
-        Patient dumPatient7=new Patient(2,0,"7","2020-11-15",dumVSP2);
+        Patient dumPatient5=new Patient(0,1,"5","2020-11-15",dumVSP1);
+        Patient dumPatient6=new Patient(8,12,"6","2020-11-13",dumVSP2);
+        Patient dumPatient7=new Patient(0,2,"7","2020-11-15",dumVSP2);
         patientList.add(dumPatient1);
         patientList.add(dumPatient2);
         patientList.add(dumPatient3);

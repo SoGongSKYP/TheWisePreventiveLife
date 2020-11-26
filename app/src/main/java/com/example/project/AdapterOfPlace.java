@@ -42,7 +42,7 @@ public class AdapterOfPlace extends RecyclerView.Adapter<AdapterOfPlace.PlaceVie
     @Override
     public void onBindViewHolder(@NonNull PlaceViewHolder holder, int position) {
         holder.placeTitleTextView.setText(placeList.get(position).getVisitPlace().get_placeAddress());
-        holder.visitDateTextView.setText(placeList.get(position).getVisitDate().toString());
+        holder.visitDateTextView.setText(placeList.get(position).getVisitDate());
 
         // 여기서 리스트를 없앤다면, 실제 Entity와 DB에서도
         // 해당 내용이 업데이트가 되어서 사라져야 함
