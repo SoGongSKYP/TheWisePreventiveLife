@@ -39,7 +39,7 @@ package com.example.project;
         import javax.xml.parsers.ParserConfigurationException;
 
 
-public class UserPages extends AppCompatActivity {
+public class UserPages<Private> extends AppCompatActivity {
 
     /*Bottom Navigation Bar 관련 컴포넌트*/
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -60,7 +60,7 @@ public class UserPages extends AppCompatActivity {
     private ImageButton searchButton;
     DialogOfSearch dialog;
 
-    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
+    private String nowPage="user_Home";
 
     public UserPages() throws ParserConfigurationException, SAXException, ParseException, IOException {
         pageOfMain = new PageOfMain();
@@ -126,6 +126,23 @@ public class UserPages extends AppCompatActivity {
                     @Override
                     public void onOKCliked(Place place) {
                         UserLoc.setUser_place(place);   // searchPlace가 검색된 장소, 이 장소 좌표로 이동
+                        if(nowPage.equals("user_Home")){
+                            pageOfMain.RefreshMarker();
+                            pageOfMain.calNearPlace();
+                            try {
+                                pageOfMain.addNearPlaceMaker();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(nowPage.equals("user_Clinics")){
+                            pageOfSelectedClinic.RefreshMarker();
+                            try {
+                                pageOfSelectedClinic.addMarker();
+                            } catch (IOException | ParserConfigurationException | SAXException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 });
                 dialog.setCancelable(true);
@@ -153,6 +170,7 @@ public class UserPages extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch(item.getItemId()){
                 case R.id.user_Home:
+                    nowPage = "user_Home";
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfMain).commit();
                     TitleTextView.setText("주변 확진자 현황");
                     searchButton.setVisibility(View.VISIBLE);
@@ -173,6 +191,7 @@ public class UserPages extends AppCompatActivity {
                     searchButton.setVisibility(View.GONE);
                     return true;
                 case R.id.user_Clinics:
+                    nowPage = "user_Clinics";
                     getSupportFragmentManager().beginTransaction().replace(R.id.user_FrameLayout, pageOfSelectedClinic).commit();
                     TitleTextView.setText("주변 선별 진료소");
                     searchButton.setVisibility(View.VISIBLE);
