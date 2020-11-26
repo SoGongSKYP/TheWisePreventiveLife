@@ -55,6 +55,7 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
     /*데이터 저장 변수*/
     String pBigLocal, pSmallLocal, pNum, pDate;
     ArrayList<Place> pPlaces;
+    ArrayList<VisitPlace> visitPlaces;
     Boolean dupleCheck, saveCheck;
 
 
@@ -88,8 +89,7 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         visitRecyclerView.setLayoutManager(layoutManager);
         visitRecyclerView.setHasFixedSize(true);
 
-        //adapter = new AdapterOfDiagnosis(QuestionSentencesArray);
-        //patientRecyclerView.setAdapter(adapter);
+        visitPlaces = new ArrayList<>();
         //--------------------------------------------------------------------------------------
 
         /*다이얼로그 연결*/
@@ -99,6 +99,13 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
             public void onClick(View view) {
                 if(dupleCheck == true){
                     dialog = new DialogOfPlace(getContext());
+                    dialog.setVisitDialogListener(new DialogOfPlace.VisitDialogListener(){
+                        @Override
+                        public void onAddCliked(Place place, String date) {
+                            VisitPlace vp = new VisitPlace(place, date);
+                            visitPlaces.add(vp);
+                        }
+                    });
                     dialog.setCancelable(true);
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

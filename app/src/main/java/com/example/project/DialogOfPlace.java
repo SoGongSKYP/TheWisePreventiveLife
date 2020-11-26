@@ -15,7 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DialogOfPlace extends Dialog {
@@ -23,12 +26,30 @@ public class DialogOfPlace extends Dialog {
     private Context mContext;
     ImageButton dialogDismissButton, searchButton;
     Button placeAddButton;
-    EditText visitDateEditText, searchBar;
+    EditText visitDateEditText, searchEditText;
     TextView visitPlaceTextView, visitDetailTextView;
 
     /*서치바 관련 컴포넌트*/
-    String searchPlace;
-    Place findPlace;   // 검색 결과의 리턴값
+    RecyclerView searchRecyclerView;
+    AdapterOfSearch adapter;
+    ArrayList<Place> resultPlaces;
+    LinearLayoutManager layoutManager;
+    DialogOfPlace.VisitDialogListener visitDialogListener;
+    Place selectedRow;
+    private FindPlace fp;
+
+
+    interface VisitDialogListener{
+        // 다이얼로그에서 Fragment로 Place객체 보내주기 위한 리스너
+        void onAddCliked(Place place, String date);
+    }
+
+    public void setVisitDialogListener(DialogOfPlace.VisitDialogListener visitDialogListener){
+        this.visitDialogListener = visitDialogListener;
+        this.resultPlaces = new ArrayList<Place>();
+    }
+
+
 
     public DialogOfPlace(@NonNull Context context) {
         super(context);
@@ -48,7 +69,54 @@ public class DialogOfPlace extends Dialog {
         visitDetailTextView = findViewById(R.id.dialog_visit_select_detail);
 
         searchButton = findViewById(R.id.dialog_search_button);
-        searchBar = findViewById(R.id.dialog_search_bar_EditText);
+        searchEditText = findViewById(R.id.dialog_search_bar_EditText);
+
+        layoutManager = new LinearLayoutManager(getContext());
+        searchRecyclerView.setLayoutManager(layoutManager);
+        searchRecyclerView.setHasFixedSize(true);
+
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(searchEditText.getText().toString().equals("") || searchEditText.getText().toString() == null){
+                    Toast.makeText(getContext(), "검색어를 입력하세요", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // 여기에서 검색 구현
+                    // 검색 결과는 resultPlaces 배열에 넣으면 됩니다. (지금은 dummyData()로 더미 데이터 넣음)
+                    String searchPlace = searchEditText.getText().toString();
+                    fp = new FindPlace(searchPlace);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fp.searchPlace();
+                        }
+                    });
+                    thread.start();
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    resultPlaces = fp.getSearchLocList();
+
+                    adapter = new AdapterOfSearch(resultPlaces);
+                    searchRecyclerView.setAdapter(adapter);
+                    adapter.setOnSearchClickListenter(new AdapterOfSearch.OnSearchClickListener() {
+                        @Override
+                        public void onSearchItemCick(View v, int pos) {
+                            // 연관 장소 리스트 중에서 클릭해서 선택
+                            // 선택한 Place 객체가 selectedRow
+                            selectedRow = resultPlaces.get(pos);
+                            visitPlaceTextView.setText(selectedRow.get_placeAddress());
+                            visitDetailTextView.setText(selectedRow.get_placeDetailAddress());
+                        }
+                    });
+                }
+            }
+        });
+
 
         dialogDismissButton.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -61,38 +129,17 @@ public class DialogOfPlace extends Dialog {
             @Override
             public void onClick(View view) {
                 // 임시로 다이얼로그를 닫는다
-                //updateVisitButtonAction();
-                dismiss();
-            }
-        });
-        searchAction();
-    }
-
-    void searchAction(){
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchPlace = searchBar.getText().toString();
-                if(searchPlace != null){
-                    // searchPlace(String) 변수로 검색 기능 구현
-
-                    // 아래는 검색 결과 String을 보여주는 코드
-                    visitPlaceTextView.setText(searchPlace);
-                }
-                else{
-                    Toast.makeText(getContext(), "입력값이 없습니다", Toast.LENGTH_SHORT).show();
+                if(visitDateEditText.getText().toString().equals("") || visitDateEditText.getText().toString() == null){
+                    Toast.makeText(getContext(), "방문 날짜를 입력하세요", Toast.LENGTH_SHORT).show();
+                }else if(selectedRow == null){
+                    Toast.makeText(getContext(), "장소를 검색해서 선택하세요", Toast.LENGTH_SHORT).show();
+                }else {
+                    String date = visitDateEditText.getText().toString();
+                    visitDialogListener.onAddCliked(selectedRow, date);
+                    dismiss();
                 }
             }
         });
-
     }
-
-    void updateVisitButtonAction(){
-        //서치바의 리턴값이 Place 객체
-
-        //Place place = new Place();
-        //VisitPlace visitPlace = new VisitPlace(place, visitDateEditText.toString());
-    }
-
 
 }
