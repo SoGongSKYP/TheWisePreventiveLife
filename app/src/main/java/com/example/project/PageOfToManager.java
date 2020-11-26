@@ -31,7 +31,7 @@ public class PageOfToManager extends AppCompatActivity {
     Button toManagerButton;
     Dialog loginDialog;
     private TextInputEditText managerIDEditText, managerPWEditText;
-    private Button loginButton, tempButton;
+    private Button loginButton;
     private ImageButton dismissButton;
     private String managerID, managerPW;
 
@@ -72,15 +72,6 @@ public class PageOfToManager extends AppCompatActivity {
         });
         //----------------------------------------------------------------------
 
-        /*임시 전환 버튼 (로그인 구현 완료시 삭제)*/
-        tempButton = findViewById(R.id.temp_Button);
-        tempButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
-                startActivity(intent);
-            }
-        });
         //----------------------------------------------------------------------
     }
 

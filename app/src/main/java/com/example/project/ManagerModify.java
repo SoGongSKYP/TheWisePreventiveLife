@@ -50,6 +50,8 @@ public class ManagerModify extends AppCompatActivity {
     private EditText patientNumEditText, patientDateEditText;
     private TextView bigLocTextView, smallLocTextView;
     int pBigLocal, pSmallLocal;
+    private ImageButton deleteButton;
+    private TextView titleTextView;
 
     enum MODE {DEF, EDIT};
     MODE now = MODE.DEF;
@@ -74,7 +76,17 @@ public class ManagerModify extends AppCompatActivity {
         editButton = findViewById(R.id.manager_modify_save_ImageButton);
         setMode();
         //--------------------------------------------------------------------------------------
+        /* 확진자 데이터 전체 삭제 */
+        deleteButton = findViewById(R.id.modify_delete_Button);
+        deleteButton.setVisibility(View.INVISIBLE);
 
+
+
+
+
+        //--------------------------------------------------------------------------------------
+        titleTextView = findViewById(R.id.modify_next_to_button_TextView);
+        titleTextView.setText("확진자 정보");
         patientNumEditText = findViewById(R.id.modify_num_EditText);
         patientDateEditText = findViewById(R.id.modify_time_EditText);
         bigLocTextView = findViewById(R.id.modify_big_TextView);
@@ -103,11 +115,14 @@ public class ManagerModify extends AppCompatActivity {
         patientRecyclerView.setHasFixedSize(true);
 
         visitPlaceArrayList = data.getVisitPlaceList();
-        adapter = new AdapterOfPlace(visitPlaceArrayList);
+        adapter = new AdapterOfPlace(visitPlaceArrayList, 0);
         patientRecyclerView.setAdapter(adapter);
+
+
         //--------------------------------------------------------------------------------------
         /*다이얼로그 연결*/
         addPlaceButton = findViewById(R.id.modify_visit_add_Button);
+        addPlaceButton.setVisibility(View.INVISIBLE);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,8 +133,9 @@ public class ManagerModify extends AppCompatActivity {
                 dialog.show();
             }
         });
-
     }
+
+
 
     private void setMode(){
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -141,11 +157,29 @@ public class ManagerModify extends AppCompatActivity {
         Toast.makeText(this, "편집 모드로 전환합니다.", Toast.LENGTH_SHORT).show();
         editButton.setImageResource(R.drawable.save);
         addPlaceButton.setVisibility(View.VISIBLE);
+        deleteButton.setVisibility(View.VISIBLE);
+        titleTextView.setText("수정할 확진자");
+        adapter = new AdapterOfPlace(visitPlaceArrayList, 1);
+        patientRecyclerView.setAdapter(adapter);
+        adapter.setModifyClickListenter(new AdapterOfPlace.OnModifyClickListener(){
+            @Override
+            public void onModifyItemClick(View v, int pos) {
+                visitPlaceArrayList.remove(pos);
+                Log.d("삭제될 데이터 위치", Integer.toString(pos));
+                Log.d("삭제 후에 실제 데이터 크기 : ", Integer.toString(visitPlaceArrayList.size()));
+            }
+        });
+
+
     }
 
     private void setDefMode(){
         editButton.setImageResource(R.drawable.ic_baseline_edit_24);
         addPlaceButton.setVisibility(View.INVISIBLE);
+        deleteButton.setVisibility(View.INVISIBLE);
+        titleTextView.setText("확진자 정보");
+        adapter = new AdapterOfPlace(visitPlaceArrayList, 0);
+        patientRecyclerView.setAdapter(adapter);
     }
 
     private void saveEditData(){

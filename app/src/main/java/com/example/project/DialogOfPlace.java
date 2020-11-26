@@ -71,6 +71,7 @@ public class DialogOfPlace extends Dialog {
         searchButton = findViewById(R.id.dialog_search_button);
         searchEditText = findViewById(R.id.dialog_search_bar_EditText);
 
+        searchRecyclerView = findViewById(R.id.dialog_visit_RecyclerView);
         layoutManager = new LinearLayoutManager(getContext());
         searchRecyclerView.setLayoutManager(layoutManager);
         searchRecyclerView.setHasFixedSize(true);
