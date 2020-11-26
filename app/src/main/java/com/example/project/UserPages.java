@@ -137,11 +137,7 @@ public class UserPages<Private> extends AppCompatActivity {
                         }
                         else if(nowPage.equals("user_Clinics")){
                             pageOfSelectedClinic.RefreshMarker();
-                            try {
-                                pageOfSelectedClinic.addMarker();
-                            } catch (IOException | ParserConfigurationException | SAXException e) {
-                                e.printStackTrace();
-                            }
+                            pageOfSelectedClinic.addMarker();
                         }
                     }
                 });
