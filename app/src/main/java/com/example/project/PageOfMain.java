@@ -143,6 +143,11 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void run() {
                         RefreshMarker();
+                    }
+                });
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         calNearPlace();
                         try {
                             addNearPlaceMaker();
