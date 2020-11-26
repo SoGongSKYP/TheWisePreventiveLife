@@ -181,10 +181,15 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
             if(getActivity()!=null){
-                getActivity().runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread((new Runnable() {
                     @Override
                     public void run() {
                         page.RefreshMarker();
+                    }
+                }));
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         try {
                             page.addMarker(mMap);
                         } catch (IOException | ParserConfigurationException | SAXException e) {
