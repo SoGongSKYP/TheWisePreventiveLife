@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -59,6 +60,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener =new GPSListener(this,mMap);
@@ -106,6 +108,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
             markerOptions.title(nearClinics.get(i).getName());
             markerOptions.snippet("주소: " + nearClinics.get(i).getPlace().get_placeAddress() +
                     "전화번호: " + nearClinics.get(i).getPhoneNum());
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital1));
             clinicsMarker.add(googleMap.addMarker(markerOptions));
         }
     }
@@ -117,6 +120,7 @@ public class PageOfSelectedClinic extends Fragment implements OnMapReadyCallback
         markerOptions.position(this.myLatLng);
         markerOptions.title("사용자");
         markerOptions.snippet("현재 위치 GPS");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
