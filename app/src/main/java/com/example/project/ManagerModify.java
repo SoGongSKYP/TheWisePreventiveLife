@@ -52,7 +52,6 @@ public class ManagerModify extends AppCompatActivity {
     private TextView patientNumEditText, patientDateEditText;
     private TextView bigLocTextView, smallLocTextView;
     int pBigLocal, pSmallLocal;
-    private ImageButton deleteButton;
     private TextView titleTextView;
     private ArrayList<VisitPlace> deletePlaceArrayList;
     Patient data;   // PageOfList에서 선택된 확진자 객체
@@ -82,14 +81,6 @@ public class ManagerModify extends AppCompatActivity {
         setMode();
         //--------------------------------------------------------------------------------------
         /* 확진자 데이터 전체 삭제 */
-        deleteButton = findViewById(R.id.modify_delete_Button);
-        deleteButton.setVisibility(View.INVISIBLE);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TotalDeleteButtonAction();
-            }
-        });
 
         //--------------------------------------------------------------------------------------
         titleTextView = findViewById(R.id.modify_next_to_button_TextView);
@@ -144,34 +135,7 @@ public class ManagerModify extends AppCompatActivity {
         });
     }
 
-    private void TotalDeleteButtonAction(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ManagerModify.this);
-        alertDialogBuilder.setMessage("현재 확진자의 정보를 모두 삭제하시겠습니까?")
-                .setCancelable(false)
-                .setPositiveButton("삭제",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(getApplicationContext(), "현재 확진자 정보를 삭제합니다", Toast.LENGTH_SHORT).show();
-                                // 여기서 DBEntity의 delete 함수 사용
-                                // 그리고 ManagerPages로 넘어가서 새로고침
 
-                                Intent intent = new Intent(getApplicationContext(), ManagerPages.class);
-                                intent.putExtra("managerID", intent.getStringExtra("ID"));  //다시 ManagerPages로 돌아가기 위한 값
-                                intent.putExtra("managerPW", intent.getStringExtra("PW"));
-                                startActivity(intent);
-                            }
-                        })
-                .setNegativeButton("취소",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
 
 
 
@@ -195,7 +159,6 @@ public class ManagerModify extends AppCompatActivity {
         Toast.makeText(this, "편집 모드로 전환합니다.", Toast.LENGTH_SHORT).show();
         editButton.setImageResource(R.drawable.save);
         addPlaceButton.setVisibility(View.VISIBLE);
-        deleteButton.setVisibility(View.VISIBLE);
         titleTextView.setText("수정할 확진자");
         adapter = new AdapterOfPlace(visitPlaceArrayList, 1);
         patientRecyclerView.setAdapter(adapter);
@@ -214,7 +177,6 @@ public class ManagerModify extends AppCompatActivity {
     private void setDefMode(){
         editButton.setImageResource(R.drawable.ic_baseline_edit_24);
         addPlaceButton.setVisibility(View.INVISIBLE);
-        deleteButton.setVisibility(View.INVISIBLE);
         titleTextView.setText("확진자 정보");
         adapter = new AdapterOfPlace(visitPlaceArrayList, 0);
         patientRecyclerView.setAdapter(adapter);

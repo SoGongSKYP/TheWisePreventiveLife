@@ -1,5 +1,7 @@
 package com.example.project;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,14 +46,18 @@ public class PageOfList extends Fragment {
 
     /*데이터 저장 변수*/
     int pBigLocal, pSmallLocal;
-    String deleteOK = "";
-    Patient selectedRow;
+    Patient selectedRow, deletePatient;
     int testPos;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("onCreate", "1");
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_manager_list, container, false);
-
+        Log.d("onCreateView", "2");
         pBigLocal = 0;
         pSmallLocal = 0;
 
@@ -70,7 +77,8 @@ public class PageOfList extends Fragment {
         SmallSpinnerAction();
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
-        totalArrayList = (((ManagerPages)getActivity()).data);
+        DBEntity dbEntity = new DBEntity();
+        totalArrayList = dbEntity.patient_info();
         patientArrayList = new ArrayList<Patient>();
 
         patientRecyclerView = v.findViewById(R.id.list_RecyclerView);
@@ -87,28 +95,24 @@ public class PageOfList extends Fragment {
                 testPos = pos;
                 Intent intent = new Intent(getActivity(), ManagerModify.class);
                 intent.putExtra("row", (Serializable) selectedRow);
-                intent.putExtra("ID", (((ManagerPages)getActivity()).ID));
-                intent.putExtra("PW", (((ManagerPages)getActivity()).PW));
                 startActivity(intent);
             }
         });
 
         //--------------------------------------------------------------------------------------
         /* ManagerModify에서 전체삭제 버튼을 눌렀을 때, 해당 ROW 삭제*/
-       Bundle bundle = getArguments();
-        if(bundle != null){
-            deleteOK = bundle.getString("delete");
-            if(deleteOK == "OK"){
-                //DBEntity delete_Patient - delete seletedRow
-                Log.d("삭제할 위치 반환 : ", Integer.toString(testPos));
-
+        // DBEntity_patient_delete
+        adapter.setOnDeleteClickListener(new AdapterOfList.onDeleteClickListener() {
+            @Override
+            public void onDeleteClick(View v, int pos) {
+                TotalDeleteButtonAction(pos);
+                //DBEntity에서도 삭제
             }
-        }
+        });
 
 
         return v;
     }
-
 
 
     private void BigSpinnerAction(){
@@ -169,5 +173,33 @@ public class PageOfList extends Fragment {
                 Log.d("List Recyclerview : ", "현재 데이터가 없습니다.");
             }
         }
+    }
+
+    private void TotalDeleteButtonAction(final int pos){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage("현재 확진자의 정보를 모두 삭제하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("삭제",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //delete data
+                                Patient removePatient = patientArrayList.get(pos);
+                                patientArrayList.remove(removePatient);
+                                totalArrayList.remove(removePatient);
+                                adapter.notifyDataSetChanged();
+                                Log.d("삭제되었나?", Integer.toString(totalArrayList.size()));
+                                Toast.makeText(getContext(), "현재 확진자 정보를 삭제합니다", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                .setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

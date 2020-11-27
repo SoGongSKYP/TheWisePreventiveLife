@@ -1,9 +1,13 @@
 package com.example.project;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,14 +25,24 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
         this.listClickListener = listenter;
     }
 
+    public interface onDeleteClickListener{
+        void onDeleteClick(View v, int pos);
+    }
+    private onDeleteClickListener deleteClickListener = null;
+    public void setOnDeleteClickListener(onDeleteClickListener listener){
+        this.deleteClickListener = listener;
+    }
+
     private ArrayList<Patient> datalist;
 
     public class ListViewHolder extends RecyclerView.ViewHolder{
         private TextView patientNumTextView, patientDateTextView;
+        private ImageButton deleteRowButton;
         public ListViewHolder(@NonNull View v) {
             super(v);
             patientNumTextView = v.findViewById(R.id.patient_num_TextView);
             patientDateTextView = v.findViewById(R.id.patient_date_TextView);
+            deleteRowButton = v.findViewById(R.id.manager_list_delete_Button);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -57,16 +71,27 @@ public class AdapterOfList extends RecyclerView.Adapter<AdapterOfList.ListViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterOfList.ListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterOfList.ListViewHolder holder, final int position) {
         holder.patientNumTextView.setText("확진자 "+ datalist.get(position).getPatientNum());
 
         String dateFromData = datalist.get(position).getConfirmDate();
         String date = dateFromData.substring(0, 4)+"년 "+dateFromData.substring(5, 7)+"월 "+dateFromData.substring(8,10)+"일";
         holder.patientDateTextView.setText(date);
+
+        holder.deleteRowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(deleteClickListener != null){
+                    deleteClickListener.onDeleteClick(view, position);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return (null != datalist ? datalist.size() : 0);
     }
+
+
 }

@@ -34,31 +34,17 @@
             android:background="@color/colorWhite"
             android:scaleType="fitCenter"/>
     </androidx.appcompat.widget.Toolbar>
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/modify_next_to_button_TextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="15dp">
-        <TextView
-            android:id="@+id/modify_next_to_button_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:text="확진자 정보"
-            android:textSize="17dp"
-            android:textColor="@color/colorDarkGrey"
-            android:textStyle="bold"/>
-        <ImageButton
-            android:id="@+id/modify_delete_Button"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:src="@drawable/delete_red"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:layout_gravity="right|center_vertical"/>
-    </LinearLayout>
+        android:layout_gravity="center_vertical"
+        android:layout_margin="15dp"
+        android:paddingLeft="10dp"
+        android:text="확진자 정보"
+        android:textSize="17dp"
+        android:textColor="@color/colorDarkGrey"
+        android:textStyle="bold"/>
 
 
     <LinearLayout

@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -18,6 +20,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 public class ManagerPages extends AppCompatActivity {
+
+    interface DeleteButtonClickListener{
+        void onDeleteClick();
+    }
+    private DeleteButtonClickListener deleteButtonClickListener = null;
+    public void setDeleteButtonClickListener(DeleteButtonClickListener listener){
+        this.deleteButtonClickListener = listener;
+    }
 
     /*Bottom Navigation Bar 관련 컴포넌트*/
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -29,6 +39,7 @@ public class ManagerPages extends AppCompatActivity {
     private Toolbar toolbar;
     private ActionBar actionBar;
     private TextView TitleTextView;
+    private ImageButton deleteButton;
 
     String ID, PW;
     DBEntity entity = new DBEntity();
@@ -54,6 +65,7 @@ public class ManagerPages extends AppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
+
         TitleTextView = findViewById(R.id.manager_Title_TextView);
         TitleTextView.setText("확진자 정보 추가");
 
@@ -64,7 +76,6 @@ public class ManagerPages extends AppCompatActivity {
         }
 
 
-        data = entity.patient_info();   // entity 클래스에서 데이터 받아옴
 
     }
 

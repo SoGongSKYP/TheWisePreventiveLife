@@ -65,7 +65,6 @@ public class AdapterOfPlace extends RecyclerView.Adapter<AdapterOfPlace.PlaceVie
                         modifyClickListener.onModifyItemClick(view, position);
                         Log.d("지금 지워진 row 넘버 : ", Integer.toString(position));
                     }
-                    //placeList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, placeList.size());
                 }
