@@ -16,12 +16,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -72,6 +75,12 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     private CalRoute cl;
     private ResultCallbackListener listener;
 
+    /*RecyclerView 관련 함수*/
+    private LinearLayout routeLayout;
+    private RecyclerView pathRecyclerView;
+    private LinearLayoutManager layoutManager;
+    private AdapterOfRow adapter;
+
     public PageOfMyDanger() throws InterruptedException {
         //this.userLoc=new UserLoc();
         this.visitPlacePoint = new ArrayList<Marker>();
@@ -94,6 +103,16 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         startButton = v.findViewById(R.id.starting_point_Button);
         finishButton = v.findViewById(R.id.finish_point_Button);
         findRouteButton = v.findViewById(R.id.search_route_Button);
+
+        routeLayout = v.findViewById(R.id.danger_route_LinearLayout);
+        routeLayout.setVisibility(View.INVISIBLE);
+
+        pathRecyclerView = v.findViewById(R.id.danger_route_RecyclerView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        pathRecyclerView.setLayoutManager(layoutManager);
+        pathRecyclerView.setHasFixedSize(true);
+        adapter = new AdapterOfRow(searchResultPath);
+        pathRecyclerView.setAdapter(adapter);
 
         // 출발지를 누르면 다이얼로그가 생성됨
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -160,10 +179,12 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         mapView = v.findViewById(R.id.danger_MapView);
         mapView.getMapAsync(this);
         return v;
     }
+
     /*경로 검색 버튼 누르면 실행되는 함수*/
     void SearchRouteButtonAction() throws InterruptedException {
         findRouteButton.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +201,15 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     } catch (ParserConfigurationException | SAXException | IOException e) {
                         e.printStackTrace();
                     }
+
+                    //동선 찾기 버튼을 누르면 루트 결과 레이아웃이 보이면서, 결과 보여줌
+                    Log.d("동선 Recyclerview", "OK");
+                    routeLayout.setVisibility(View.VISIBLE);
+                    Log.d("지금 결과 데이터의 크기는?", Integer.toString(searchResultPath.size()));
+                    adapter = new AdapterOfRow(searchResultPath);
+                    pathRecyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
                 }
                 else{
                     Toast.makeText(getContext(), "출발지와 도착지를 입력했는지 확인하세요", Toast.LENGTH_SHORT).show();
@@ -212,6 +242,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
     } // 유저 현위치에 마커 추가
 
+
     public void RefreshMarker() {
         System.out.print("5");
         this.userPoint.remove();
@@ -224,7 +255,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
-
+/*
     public void addVisitNearMarker(){
         calVisitPlace();
         for(int i =0; i < visitPlacePoint.size();i++){
@@ -259,7 +290,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                 this.visitPlaceList.add(searchResultPath.get(i).getSubPaths().get(j).getEndStation());
             }
         } // 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
-    }
+    }*/
     public void calNearPlace() {
         this.nearPlaces.clear();
         for (int a = 0; a < this.patient.size(); a++) {
@@ -346,7 +377,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                addVisitNearMarker();
+                //addVisitNearMarker();
             }
         }).start();
 
