@@ -1,19 +1,24 @@
 package com.example.project;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class AdapterOfRow extends RecyclerView.Adapter<AdapterOfRow.RowViewHolder> {
 
+    Context context;
     ArrayList<SearchPath> paths;
-    public AdapterOfRow(ArrayList<SearchPath> data) {
+    public AdapterOfRow(Context context, ArrayList<SearchPath> data) {
+        this.context = context;
         this.paths = data;
     }
 
@@ -24,7 +29,7 @@ public class AdapterOfRow extends RecyclerView.Adapter<AdapterOfRow.RowViewHolde
             super(v);
             startStationTextView = v.findViewById(R.id.route_start_TextView);
             finishStationTextView = v.findViewById(R.id.route_finish_TextView);
-            //colRecyclerView = v.findViewById(R.id.route_RecyclerView);
+            colRecyclerView = v.findViewById(R.id.route_RecyclerView);
         }
     }
 
@@ -42,6 +47,10 @@ public class AdapterOfRow extends RecyclerView.Adapter<AdapterOfRow.RowViewHolde
     public void onBindViewHolder(@NonNull RowViewHolder holder, int position) {
         holder.startStationTextView.setText(paths.get(position).getInfo().getFirstStartStation());
         holder.finishStationTextView.setText(paths.get(position).getInfo().getLastEndStation());
+        AdapterOfCol colAdapter = new AdapterOfCol(context, paths.get(position).getSubPaths());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.colRecyclerView.setLayoutManager(layoutManager);
+        holder.colRecyclerView.setAdapter(colAdapter);
     }
 
     @Override

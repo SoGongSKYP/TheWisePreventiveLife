@@ -111,7 +111,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         layoutManager = new LinearLayoutManager(getActivity());
         pathRecyclerView.setLayoutManager(layoutManager);
         pathRecyclerView.setHasFixedSize(true);
-        adapter = new AdapterOfRow(searchResultPath);
+        adapter = new AdapterOfRow(getContext(), searchResultPath);
         pathRecyclerView.setAdapter(adapter);
 
         // 출발지를 누르면 다이얼로그가 생성됨
@@ -206,7 +206,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     Log.d("동선 Recyclerview", "OK");
                     routeLayout.setVisibility(View.VISIBLE);
                     Log.d("지금 결과 데이터의 크기는?", Integer.toString(searchResultPath.size()));
-                    adapter = new AdapterOfRow(searchResultPath);
+                    adapter = new AdapterOfRow(getContext(), searchResultPath);
                     pathRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
@@ -437,6 +437,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     System.out.println("이동 정거장 수: "+subPath.getStationCount());
                     System.out.println("승차 정류장: "+subPath.getStartStation().get_placeAddress());
                     System.out.println("하차 정류장: "+subPath.getEndStation().get_placeAddress());
+                    System.out.println("레인 크기: "+subPath.getLaneList().size());
                     for(int sub = 0; sub < subPath.getLaneList().size();sub++){
                         Lane temp = subPath.getLaneList().get(sub);
                         System.out.println("버스 번호: "+temp.getName());
