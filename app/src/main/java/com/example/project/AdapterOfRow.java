@@ -1,9 +1,11 @@
 package com.example.project;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class AdapterOfRow extends RecyclerView.Adapter<AdapterOfRow.RowViewHolder> {
+
+    interface onRowClickListener{
+        void onRowClick(View view, int pos);
+    }
+    private onRowClickListener rowClickListener = null;
+    public void setRowClickListener(onRowClickListener listener){
+        this.rowClickListener = listener;
+    }
 
     Context context;
     ArrayList<SearchPath> paths;
@@ -30,6 +40,19 @@ public class AdapterOfRow extends RecyclerView.Adapter<AdapterOfRow.RowViewHolde
             startStationTextView = v.findViewById(R.id.route_start_TextView);
             finishStationTextView = v.findViewById(R.id.route_finish_TextView);
             colRecyclerView = v.findViewById(R.id.route_RecyclerView);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    Log.d("클릭된거 맞음?", Integer.toString(pos));
+                    if(pos!=RecyclerView.NO_POSITION){
+                        if(rowClickListener != null){
+                            Log.d("여기도 통과?", "OK");
+                            rowClickListener.onRowClick(view, pos);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -44,9 +67,11 @@ public class AdapterOfRow extends RecyclerView.Adapter<AdapterOfRow.RowViewHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RowViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RowViewHolder holder, final int position) {
         holder.startStationTextView.setText(paths.get(position).getInfo().getFirstStartStation());
         holder.finishStationTextView.setText(paths.get(position).getInfo().getLastEndStation());
+
+        // 내부 루트 구현
         AdapterOfCol colAdapter = new AdapterOfCol(context, paths.get(position).getSubPaths());
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         holder.colRecyclerView.setLayoutManager(layoutManager);

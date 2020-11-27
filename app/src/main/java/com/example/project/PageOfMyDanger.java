@@ -80,6 +80,10 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     private RecyclerView pathRecyclerView;
     private LinearLayoutManager layoutManager;
     private AdapterOfRow adapter;
+    private SearchPath selectedPath; //사용자가 선택한 루트
+
+    /*결과 관련 컴포넌트*/
+    private LinearLayout resultLayout;
 
     public PageOfMyDanger() throws InterruptedException {
         //this.userLoc=new UserLoc();
@@ -106,6 +110,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
         routeLayout = v.findViewById(R.id.danger_route_LinearLayout);
         routeLayout.setVisibility(View.INVISIBLE);
+        resultLayout = v.findViewById(R.id.danger_result_LinearLayout);
+        resultLayout.setVisibility(View.INVISIBLE);
 
         pathRecyclerView = v.findViewById(R.id.danger_route_RecyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -113,6 +119,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         pathRecyclerView.setHasFixedSize(true);
         adapter = new AdapterOfRow(getContext(), searchResultPath);
         pathRecyclerView.setAdapter(adapter);
+
+
 
         // 출발지를 누르면 다이얼로그가 생성됨
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -205,10 +213,20 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     //동선 찾기 버튼을 누르면 루트 결과 레이아웃이 보이면서, 결과 보여줌
                     Log.d("동선 Recyclerview", "OK");
                     routeLayout.setVisibility(View.VISIBLE);
+                    resultLayout.setVisibility(View.GONE);
                     Log.d("지금 결과 데이터의 크기는?", Integer.toString(searchResultPath.size()));
                     adapter = new AdapterOfRow(getContext(), searchResultPath);
                     pathRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                    adapter.setRowClickListener(new AdapterOfRow.onRowClickListener() {
+                        @Override
+                        public void onRowClick(View view, int pos) {
+                            Toast.makeText(getContext(), "이동 경로를 선택하였습니다.", Toast.LENGTH_SHORT).show();
+                            selectedPath = searchResultPath.get(pos);
+                            routeLayout.setVisibility(View.INVISIBLE);
+                            resultLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
 
                 }
                 else{

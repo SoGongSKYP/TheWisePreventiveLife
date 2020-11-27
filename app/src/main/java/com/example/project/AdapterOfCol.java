@@ -25,7 +25,7 @@ public class AdapterOfCol extends RecyclerView.Adapter<AdapterOfCol.ColViewHolde
     public class ColViewHolder extends RecyclerView.ViewHolder {
         LinearLayout startLinear, finishLinear;
         TextView startTextView, finishTextView, laneTextView;
-        ImageView trafficTypeImageView;
+        ImageView trafficTypeImageView, nextImageView;
         public ColViewHolder(@NonNull View v) {
             super(v);
             startLinear = v.findViewById(R.id.col_start_LinearLayout);
@@ -34,6 +34,7 @@ public class AdapterOfCol extends RecyclerView.Adapter<AdapterOfCol.ColViewHolde
             finishTextView = v.findViewById(R.id.col_finish_TextView);
             laneTextView = v.findViewById(R.id.col_lane_TextView);
             trafficTypeImageView = v.findViewById(R.id.col_traffic_type_ImageView);
+            nextImageView = v.findViewById(R.id.col_next_ImageView);
         }
     }
     @NonNull
@@ -62,6 +63,7 @@ public class AdapterOfCol extends RecyclerView.Adapter<AdapterOfCol.ColViewHolde
             holder.trafficTypeImageView.setImageResource(R.drawable.run);
             holder.startLinear.setVisibility(View.GONE);
             holder.finishLinear.setVisibility(View.GONE);
+            holder.nextImageView.setVisibility(View.INVISIBLE);
             holder.laneTextView.setText("도보");
         }
     }
