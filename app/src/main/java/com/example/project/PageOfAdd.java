@@ -55,7 +55,6 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
 
     /*데이터 저장 변수*/
     String pBigLocal, pSmallLocal, pNum, pDate;
-    ArrayList<Place> pPlaces;
     ArrayList<VisitPlace> visitPlaces;
     Boolean dupleCheck, saveCheck;
 
@@ -93,6 +92,14 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         visitPlaces = new ArrayList<>();
         adapter = new AdapterOfPlace(visitPlaces, 1);
         visitRecyclerView.setAdapter(adapter);
+
+        adapter.setModifyClickListenter(new AdapterOfPlace.OnModifyClickListener() {
+            @Override
+            public void onModifyItemClick(View v, int pos) {
+                visitPlaces.remove(pos);
+                adapter.notifyDataSetChanged();
+            }
+        });
         //--------------------------------------------------------------------------------------
 
         /*다이얼로그 연결*/
