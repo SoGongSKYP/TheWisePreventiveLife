@@ -39,18 +39,18 @@ public class DBEntity {
     //Android 프로젝트에 저장되어 있는 patientlist 수정 메소드----------------------------------------------------------------------------------------------------
     // DB테이블 수정 메소드들의 반환값이 1로 선행되어야 함
 
-    /*관리자의 확진자 추가 페이지에서 확진자 정보를 추가하는 메소-동선 제외 */
+      /*관리자의 확진자 추가 페이지에서 확진자 정보를 추가하는 메소-동선 제외 */
     public void AND_insert_patient(Patient patient) {
         patientList.add(patient);
     }
 
     /*관리자의 확진자 추가 페이지에서 확진자 동선 정보 하나를 추가하는 메소드-무조건 해당 환자에 한 정보가 테이블에 저장되어 있어야 함. */
     public int AND_insert_pmoving(Patient patient, VisitPlace visitplace) {
-        size = patientList.size();
-        for (int i = 0; i < size; i++) {
-            Patient getpatient = patientList.get(i);
-            //조건문 바꿔야 함! patient 테이블의 프라이머리 키는 지역번호랑 환자번호! 즉 patient와 patientList.get(i)의 정보가 같을 두객체가 같을 때--patient는 smalllocalnum,bigloculnum,patientnum 같으면 같은 객체!
-            if (true) {
+        for (int i = 0; i < patientList.size(); i++) {
+            if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() || patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
+                    || patient.getPatientNum() == patientList.get(i).getPatientNum()) {
+                //조건문 바꿔야 함! patient 테이블의 프라이머리 키는 지역번호랑 환자번호! 즉 patient와 patientList.get(i)의 정보가 같을 두객체가 같을 때——————————————————————————————————————————————————patient는 smalllocalnum,bigloculnum,patientnum 같으면 같은 객체!
+                patientList.get(i).getVisitPlaceList().add(visitplace);
                 //해당 환자에 visitplace 추가
                 return 1;// 동선 삽입 성공
             }
@@ -60,24 +60,23 @@ public class DBEntity {
 
     /*관리자의 확진자 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드 */
     public int AND_delete_pmoving(Patient patient, VisitPlace visitplace) {
-        size = patientList.size();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < patientList.size(); i++) {
             //1. 환자리스트를 돌며 동일한 환자 찾기.
-            if (true) {
-                //DB테이블에서의 primary 키값들의 값이 같을 때 동일 환자.
-                for (int x = 0; x < patientList.get(i).getVisitPlaceList().size(); x++) {
-                    //칮으면 해당 환자의 visitplacelist를 돌며 매개변수로 온 visitplace 찾고 삭제하기
-                    return 1;//정상 삭제
-                }
-                return 0;//환자 정보는 있는데 visitplace 정보가 존재 x
+            //DB테이블에서의 primary 키값들의 값이 같을 때 동일 환자.
+            if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() || patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
+                    || patient.getPatientNum() == patientList.get(i).getPatientNum()){
+                //칮으면 해당 환자의 visitplacelist를 돌며 매개변수로 온 visitplace 찾고 삭제하기
+                patientList.get(i).getVisitPlaceList().remove(visitplace);
+                return 1;//정상 삭제
             }
+            return 0;//환자 정보는 있는데 visitplace 정보가 존재 x
         }
         return -1;//환자 정보도 없을 경우
     }
 
     /*관리자의 확진자 추가, 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드-환자 정보를 삭제하면 관련 동선 정보도 싹다 삭제*/
     public void AND_delete_patient(Patient patient) {
-
+        patientList.remove(patient);
     }
 
 
