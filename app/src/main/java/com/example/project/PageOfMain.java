@@ -43,10 +43,13 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
     private ArrayList<Patient> patient;
     private ArrayList<VisitPlace> nearPlaces;
 
+    private DBEntity dbEntity;
+
     public PageOfMain() {
         this.nearPlaces = new ArrayList<VisitPlace>();
         this.patient = new ArrayList<Patient>();
         this.nearMaker = new ArrayList<Marker>();
+        this.dbEntity =new DBEntity();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -130,6 +133,17 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         markerOptions.snippet("현재 위치 GPS");
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.myicon1));
         this.userPoint = this.mMap.addMarker(markerOptions);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                calNearPlace();
+                try {
+                    addNearPlaceMaker();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
 
@@ -170,11 +184,12 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
 
     public void calNearPlace() {
         this.nearPlaces.clear();
+        this.patient=this.dbEntity.patient_info();
         for (int a = 0; a < this.patient.size(); a++) {
             for (int b = 0; b < this.patient.get(a).getVisitPlaceList().size(); b++) {
                 if (this.patient.get(a).getVisitPlaceList().get(b).
                         Distance(UserLoc.getUserPlace().get_placeX(),
-                                UserLoc.getUserPlace().get_placeX(), "kilometer") <= 1) {
+                                UserLoc.getUserPlace().get_placeY(), "kilometer") <= 1) {
                     this.nearPlaces.add(this.patient.get(a).getVisitPlaceList().get(b));
                 }
             }
@@ -192,7 +207,7 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         for (int a = 0; a < this.nearPlaces.size(); a++)
         {
             String from = nearPlaces.get(a).getVisitDate();
-            SimpleDateFormat transDate= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat transDate= new SimpleDateFormat("yyyy-MM-dd");
             Date to = transDate.parse(from);
             long dateGap = (time.getTime()- to.getTime())/(1000*60*60*24);
             LatLng nearLatlng = new LatLng(this.nearPlaces.get(a).getVisitPlace().get_placeX(), this.nearPlaces.get(a).getVisitPlace().get_placeY());
@@ -200,7 +215,8 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
             markerOptions.position(nearLatlng);
             markerOptions.title("확진자");
             SimpleDateFormat transFormat = new SimpleDateFormat("MM월dd일");
-            markerOptions.snippet(transFormat.format(this.nearPlaces.get(a).getVisitDate()) + this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
+            from = transFormat.format(to);
+            markerOptions.snippet(from + this.nearPlaces.get(a).getVisitPlace().get_placeAddress());
 
             if(dateGap < 2){
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.virus1));
