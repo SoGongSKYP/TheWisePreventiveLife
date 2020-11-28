@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -84,6 +86,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
 
     /*결과 관련 컴포넌트*/
     private LinearLayout resultLayout;
+    private ImageView redImageView, yellowImageView, greenImageView;
+    private TextView resultTextView;
 
     public PageOfMyDanger() throws InterruptedException {
         //this.userLoc=new UserLoc();
@@ -120,7 +124,12 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         adapter = new AdapterOfRow(getContext(), searchResultPath);
         pathRecyclerView.setAdapter(adapter);
 
-
+        redImageView = v.findViewById(R.id.danger_red_ImageView);
+        yellowImageView = v.findViewById(R.id.danger_yellow_ImageView);
+        greenImageView = v.findViewById(R.id.danger_green_ImageView);
+        resultTextView = v.findViewById(R.id.danger_result_TextView);
+        // redImageView.getBackground().setAlpha(80);
+        // 검색하신 외출 동선의 위험도는 '주의' 입니다. - '심각', '주의', '안전'
 
         // 출발지를 누르면 다이얼로그가 생성됨
         startButton.setOnClickListener(new View.OnClickListener() {

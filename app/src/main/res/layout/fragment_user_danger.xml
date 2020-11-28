@@ -133,22 +133,53 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="오늘의 동선 위험도는"
-            android:textSize="17dp"
+            android:text="오늘의 동선 위험도는?"
+            android:textSize="18dp"
             android:textColor="@color/colorDarkGrey"
             android:textStyle="bold"
             android:gravity="center_horizontal"
             android:layout_margin="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:orientation="horizontal"
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:background="@drawable/danger_light_design">
+            <ImageView
+                android:id="@+id/danger_red_ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/circle_red"
+                android:layout_weight="1"
+                android:alpha="0.3"/>
+            <ImageView
+                android:id="@+id/danger_yellow_ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/circle_yellow"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/danger_green_ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/circle_green"
+                android:layout_weight="1"
+                android:alpha="0.3"/>
+        </LinearLayout>
         <TextView
-            android:id="@+id/route_result_TextView"
+            android:id="@+id/danger_result_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="60%"
-            android:textColor="@color/colorMainRed"
-            android:textStyle="bold"
-            android:textSize="60dp"
-            android:gravity="center_horizontal"
-            android:layout_marginBottom="30dp"/>
+            android:text="검색하신 외출 동선의 위험도는 '주의' 입니다."
+            android:textSize="15dp"
+            android:textColor="@color/colorDarkGrey"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"/>
+
 
     </LinearLayout>
 
