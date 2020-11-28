@@ -54,11 +54,12 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
     private TextView dupleCheckTextView;
 
     /*데이터 저장 변수*/
-    String pBigLocal, pSmallLocal, pNum, pDate;
+    String pNum, pDate;
+    int pBigLocal, pSmallLocal;
     ArrayList<VisitPlace> visitPlaces;
     Boolean dupleCheck, saveCheck;
-
-
+    DBEntity dbEntity = new DBEntity();
+    Patient patient;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_manager_add, container, false);
@@ -138,8 +139,12 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         dupleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(dupleCheck == false && saveCheck == false){
+                if(dupleCheck == false && saveCheck == false){  // 중복 확인 버튼 클릭 후
                     if(patientNumEditText.getText() != null && patientDateEditText.getText() !=null){
+                        GetDataFromUI();
+                        int localNumber = pBigLocal*100+pSmallLocal;
+                        //dbEntity.check_patient(localNumber, num);
+
                         dupleCheckTextView.setText("중복 확인! 아래에서 확진자 동선을 추가하세요");
                         dupleCheckTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                         dupleCheck = true;
@@ -150,8 +155,12 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                         Toast.makeText(getContext(), "확진자 기본 정보를 모두 입력하세요", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else if(dupleCheck == true && saveCheck == false){
-                    GetDataFromUI();
+                else if(dupleCheck == true && saveCheck == false){  // 저장 버튼 클릭 후
+                    Log.d("현재 DB엔티티 더미데이터 크기 : ", Integer.toString(dbEntity.ListSize()));
+                    Patient addPatient = new Patient(pSmallLocal, pBigLocal, pNum, pDate, visitPlaces);
+                    dbEntity.AND_insert_patient(addPatient);
+                    Log.d("지금 추가 후 DB엔티티 더미데이터 크기 : ", Integer.toString(dbEntity.ListSize()));
+
                     Toast.makeText(getContext(), "확진자"+pNum+" 정보가 저장되었습니다.", Toast.LENGTH_SHORT).show();
                     dupleButton.setText("새 로 고 침");
                     addPlaceButton.setVisibility(View.INVISIBLE);
@@ -176,6 +185,7 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         ft.detach(this).attach(this).commit();
     }
 
+
     private void GetDataFromUI(){
         pNum = patientNumEditText.getText().toString();
         pDate = patientDateEditText.getText().toString();
@@ -185,7 +195,6 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         //Date pdate = dateFormat.parse(date);
 
     }
-
 
 
     private void SetSpinnerAdapter(){
@@ -206,15 +215,15 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
                 int resId = getResources().getIdentifier("array_"+index, "array", getContext().getPackageName());
                 smallAdapter = ArrayAdapter.createFromResource(getContext(), resId, android.R.layout.simple_spinner_dropdown_item);
 
-                pBigLocal = Integer.toString(i);
-                Log.d("ADD 큰 도시 : ", pBigLocal);
+                pBigLocal = i;
+                Log.d("ADD 큰 도시 : ", Integer.toString(i));
                 smallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 smallLocSpinner.setAdapter(smallAdapter);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                pBigLocal = "0";
+                pBigLocal = 0;
             }
         });
     }
@@ -222,12 +231,12 @@ public class PageOfAdd<STATE_DUPLE_FALSE> extends Fragment {
         smallLocSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                pSmallLocal = Integer.toString(i);
+                pSmallLocal = i;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                pSmallLocal = "0";
+                pSmallLocal = 0;
             }
         });
     }

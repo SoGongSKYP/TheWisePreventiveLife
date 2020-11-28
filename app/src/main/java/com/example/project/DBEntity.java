@@ -35,6 +35,11 @@ public class DBEntity {
         return patientList;
     }
 
+    public int ListSize(){
+        return patientList.size();
+    }
+
+
 
     //Android 프로젝트에 저장되어 있는 patientlist 수정 메소드----------------------------------------------------------------------------------------------------
     // DB테이블 수정 메소드들의 반환값이 1로 선행되어야 함
@@ -58,11 +63,13 @@ public class DBEntity {
         return 0;//동선 삽입 실패: 해당 환자 정보가 없음
     }
 
+
     /*관리자의 확진자 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드 */
     public int AND_delete_pmoving(Patient patient, VisitPlace visitplace) {
         for (int i = 0; i < patientList.size(); i++) {
             //1. 환자리스트를 돌며 동일한 환자 찾기.
             //DB테이블에서의 primary 키값들의 값이 같을 때 동일 환자.
+            Log.d("AND 환자 : ", patient.getPatientNum()+", "+Integer.toString(patient.getSmallLocalNum())+", "+Integer.toString(patient.getBigLocalNum()));
             if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() || patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
                     || patient.getPatientNum() == patientList.get(i).getPatientNum()){
                 //칮으면 해당 환자의 visitplacelist를 돌며 매개변수로 온 visitplace 찾고 삭제하기
@@ -73,6 +80,7 @@ public class DBEntity {
         }
         return -1;//환자 정보도 없을 경우
     }
+
 
     /*관리자의 확진자 추가, 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드-환자 정보를 삭제하면 관련 동선 정보도 싹다 삭제*/
     public void AND_delete_patient(Patient patient) {
@@ -123,7 +131,7 @@ public class DBEntity {
     }
 
     /*환자번호와 지역번호로 중복되는 환자가 있는지 확인하는 메소드*/
-    public int check_patient(Patient patient) {
+    public int check_patient(int LocalNumber, String patientNum) {
         if (result.equals("success")) return 1;
         else return 0;
     }

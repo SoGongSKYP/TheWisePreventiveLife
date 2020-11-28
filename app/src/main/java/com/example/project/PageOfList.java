@@ -48,6 +48,7 @@ public class PageOfList extends Fragment {
     int pBigLocal, pSmallLocal;
     Patient selectedRow, deletePatient;
     int testPos;
+    DBEntity dbEntity = new DBEntity();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,8 +78,11 @@ public class PageOfList extends Fragment {
         SmallSpinnerAction();
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
-        DBEntity dbEntity = new DBEntity();
-        totalArrayList = dbEntity.patient_info();
+
+        if(totalArrayList == null){
+            totalArrayList = dbEntity.patient_info();
+            Log.d("리스트 페이지에 Total Array : ", "NULL");
+        }
         patientArrayList = new ArrayList<Patient>();
 
         patientRecyclerView = v.findViewById(R.id.list_RecyclerView);
@@ -161,9 +165,6 @@ public class PageOfList extends Fragment {
     }
 
     private void showList(int bigLoc, int smallLoc){
-        // 스피너에 대한 값을 받고
-        // 해당 지역 번호를 가지고 있는 리스트를 모두 보여줌
-        // DB 구축 후, 쿼리 문으로 실행
         for(int i = 0;i<totalArrayList.size();i++){
             Patient row =  totalArrayList.get(i);
             if (row.getBigLocalNum() == bigLoc && row.getSmallLocalNum() == smallLoc){
@@ -188,7 +189,9 @@ public class PageOfList extends Fragment {
                                 patientArrayList.remove(removePatient);
                                 totalArrayList.remove(removePatient);
                                 adapter.notifyDataSetChanged();
-                                Log.d("삭제되었나?", Integer.toString(totalArrayList.size()));
+
+                                dbEntity.AND_delete_patient(removePatient);
+                                Log.d("삭제되었나?", Integer.toString(dbEntity.ListSize()));
                                 Toast.makeText(getContext(), "현재 확진자 정보를 삭제합니다", Toast.LENGTH_SHORT).show();
                             }
                         })
