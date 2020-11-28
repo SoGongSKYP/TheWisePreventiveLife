@@ -97,8 +97,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         this.danger=0;
         this.startPlace = new Place(null,0,0);
         this.finishPlace= new Place(null,0,0);
-        this.searchResultPath =new ArrayList<SearchPath>();
         this.cl=new CalRoute(getContext(),null,null);
+        this.selectedPath= null;
     }
 
 
@@ -225,6 +225,12 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                             selectedPath = searchResultPath.get(pos);
                             routeLayout.setVisibility(View.INVISIBLE);
                             resultLayout.setVisibility(View.VISIBLE);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addVisitNearMarker();
+                                }
+                            });
                         }
                     });
 
@@ -257,7 +263,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
         GPSListener gpsListener = new GPSListener();
         UserLoc.LocBy_gps(getContext(),gpsListener);
-
     } // 유저 현위치에 마커 추가
 
 
@@ -273,7 +278,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         this.userPoint = this.mMap.addMarker(markerOptions);
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.myLatLng, 15));
     }
-/*
+
     public void addVisitNearMarker(){
         calVisitPlace();
         for(int i =0; i < visitPlacePoint.size();i++){
@@ -282,7 +287,8 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         visitPlacePoint.clear();
         for(int i=0; i < visitPlaceList.size();i++){
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(this.myLatLng);
+            LatLng latLng = new LatLng(visitPlaceList.get(i).get_placeX(),visitPlaceList.get(i).get_placeY());
+            markerOptions.position(latLng);
             markerOptions.title(visitPlaceList.get(i).get_placeAddress());
             markerOptions.snippet(visitPlaceList.get(i).get_placeDetailAddress());
             this.visitPlacePoint.add(this.mMap.addMarker(markerOptions));
@@ -302,13 +308,17 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
     }
 
     public void calVisitPlace() {
-        for(int i=0; i < searchResultPath.size();i++){
-            for (int j=0;j<searchResultPath.get(i).getSubPaths().size();j++){
-                this.visitPlaceList.add(searchResultPath.get(i).getSubPaths().get(j).getStartStation());
-                this.visitPlaceList.add(searchResultPath.get(i).getSubPaths().get(j).getEndStation());
+        this.visitPlaceList.clear();
+        this.visitPlaceList.add(startPlace);
+        for (int j=0;j<selectedPath.getSubPaths().size();j++){
+            if(selectedPath.getSubPaths().get(j).getTrafficType()!=3){
+                this.visitPlaceList.add(selectedPath.getSubPaths().get(j).getStartStation());
+                this.visitPlaceList.add(selectedPath.getSubPaths().get(j).getEndStation());
             }
-        } // 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
-    }*/
+        }// 경로 상 모든 들리는 장소를 경유지 리스트에 넣어줌
+        this.visitPlaceList.add(finishPlace);
+        System.out.println(this.visitPlaceList.size());
+    }
     public void calNearPlace() {
         this.nearPlaces.clear();
         for (int a = 0; a < this.patient.size(); a++) {
@@ -330,7 +340,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
             RefreshMarker();
-            calNearPlace();
         }
 
         public void onProviderDisabled(String provider) {
