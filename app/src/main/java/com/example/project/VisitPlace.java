@@ -11,6 +11,7 @@ public class VisitPlace implements Serializable {
     private String visitDate;
 
     //Constructor
+    public VisitPlace(){ } //확진자 추가 페이지에서 동선 정보 없이 확진자 객체 만들 때, 필요함
     public VisitPlace(Place place, String date) {
         this.visitDate=date;
         this.visitPlace=place;

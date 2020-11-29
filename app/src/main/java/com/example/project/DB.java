@@ -21,7 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
-public class DB  extends AsyncTask<String, Void, String> {
+public class DB {
     /*원래 설했던 필드들*/
      private ArrayList<Patient> patients;
     // public void connect_DB() { }
@@ -32,15 +32,15 @@ public class DB  extends AsyncTask<String, Void, String> {
     //서버로 보낼 메세지, 받을 메세
     String sendMsg, receiveMsg;
     // 접속할 서버 주소 (이클립스에서 android.jsp 실행시 웹브라우저 주소)
-    String serverip="http://10.90.1.205:8080/WLP_re/androidDB.jsp";
+    String serverip="http://192.168.1.196:8080/WLP_re/androidDB.jsp";
 
     //클래스 생성자
     DB(String sendMsg){
         this.sendMsg=sendMsg;
     }
     //
-    @Override
-    protected String doInBackground(String... strings) {
+
+    protected String dbcon(String... strings) {
 
         try {
             String str;

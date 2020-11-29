@@ -36,7 +36,7 @@ public class DBEntity {
     }
 
 
-    //Android 프로젝트에 저장되어 있는 patientlist 수정 메소드----------------------------------------------------------------------------------------------------
+    //Android 프로젝트에 저장되어 있는 patientlist 수정 메소드——————————————————————————————————————————————————
     // DB테이블 수정 메소드들의 반환값이 1로 선행되어야 함
 
       /*관리자의 확진자 추가 페이지에서 확진자 정보를 추가하는 메소-동선 제외 */
@@ -78,7 +78,6 @@ public class DBEntity {
     public void AND_delete_patient(Patient patient) {
         patientList.remove(patient);
     }
-
 
     //DB 테이블 수정----------------------------------------------------------------------------------------------------
 
@@ -154,13 +153,26 @@ public class DBEntity {
 
     /*로그인 메소드드*/
     public int login(String managerID, String managerPW) {
+        /*try {
+            String sendmsg = "login";
+            OK3 task = new OK3();
+            result = task.login(managerID, managerPW, sendmsg);
+            Log.i("Servertest뭔꼬", "서버에서 받은 값" + result);
+            if (result.equals("success")) return 1;
+            else if (result.equals("failed")) return 0;
+            else if (result.equals("noId")) return 2;
+            else return -1;
+        }catch (Exception e) {
+            Log.i("DBtest", ".....ERROR.....!");
+            return -2;}*/
         if (result.equals("success")) return 1;
         else return 0;
-        /* 밥소놈이랑 접선시 언롹
+        //밥소놈이랑 접선시 언롹
+        /*
         try {
-            sendmsg = "login";
+            String sendmsg = "login";
             task = new DB(sendmsg);
-            result = task.execute(managerID, managerPW, sendmsg).get();
+            result = task.dbcon(managerID, managerPW, sendmsg);
             Log.i("Servertest", "서버에서 받은 값" + result);
             if (result.equals("success")) return 1;
             else if (result.equals("failed")) return 0;
