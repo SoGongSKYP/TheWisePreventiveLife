@@ -15,7 +15,7 @@ import java.util.Date;
 public class DBEntity {
 
     /*DBEntity에서 계속 저장할 환자 리스트*/
-    private static ArrayList<Patient> patientList;
+    private static ArrayList<Patient> patientList = new ArrayList<Patient>();
     private static ArrayList<VisitPlace> dumVSP1;
     private static ArrayList<VisitPlace> dumVSP2;
 
@@ -31,7 +31,6 @@ public class DBEntity {
     //patientList 값 접-----------------------------------------------------------------------------------------------
 
     public DBEntity() {
-        patientList = new ArrayList<Patient>();
     }
 
     public void setPatientList(ArrayList<Patient> patientList) {
@@ -42,16 +41,14 @@ public class DBEntity {
         return patientList;
     }
 
-    public int ListSize(){
+    public static int ListSize(){
         return patientList.size();
     }
 
-
-
-    //Android 프로젝트에 저장되어 있는 patientlist 수정 메소드——————————————————————————————————————————————————
+    //Android 프로젝트에 저장되어 있는 patientlist 수정 메소드----------------------------------------------------------------------------------------------------
     // DB테이블 수정 메소드들의 반환값이 1로 선행되어야 함
 
-      /*관리자의 확진자 추가 페이지에서 확진자 정보를 추가하는 메소-동선 제외 */
+    /*관리자의 확진자 추가 페이지에서 확진자 정보를 추가하는 메소-동선 제외 */
     public void AND_insert_patient(Patient patient) {
         patientList.add(patient);
     }
@@ -60,8 +57,8 @@ public class DBEntity {
     public static int AND_insert_pmoving(Patient patient, VisitPlace visitplace) {
         for (int i = 0; i < patientList.size(); i++) {
             Log.d("AND 환자 : ", patient.getPatientNum()+", "+Integer.toString(patient.getSmallLocalNum())+", "+Integer.toString(patient.getBigLocalNum()));
-            if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() || patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
-                    || patient.getPatientNum() == patientList.get(i).getPatientNum()) {
+            if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() && patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
+                    && patient.getPatientNum().equals(patientList.get(i).getPatientNum())) {
                 //조건문 바꿔야 함! patient 테이블의 프라이머리 키는 지역번호랑 환자번호! 즉 patient와 patientList.get(i)의 정보가 같을 두객체가 같을 때——————————————————————————————————————————————————patient는 smalllocalnum,bigloculnum,patientnum 같으면 같은 객체!
                 Log.d("patient",Integer.toString(patientList.get(i).getVisitPlaceList().size()));
                 patientList.get(i).getVisitPlaceList().add(visitplace);
@@ -81,10 +78,13 @@ public class DBEntity {
             //1. 환자리스트를 돌며 동일한 환자 찾기.
             //DB테이블에서의 primary 키값들의 값이 같을 때 동일 환자.
             Log.d("AND 환자 : ", patient.getPatientNum()+", "+Integer.toString(patient.getSmallLocalNum())+", "+Integer.toString(patient.getBigLocalNum()));
-            if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() || patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
-                    || patient.getPatientNum() == patientList.get(i).getPatientNum()){
+            if (patient.getSmallLocalNum() == patientList.get(i).getSmallLocalNum() && patient.getBigLocalNum() == patientList.get(i).getBigLocalNum()
+                    && patient.getPatientNum().equals(patientList.get(i).getPatientNum())){
                 //칮으면 해당 환자의 visitplacelist를 돌며 매개변수로 온 visitplace 찾고 삭제하기
-                patientList.get(i).getVisitPlaceList().remove(visitplace);
+                int t = findIndex(patientList.get(i).getVisitPlaceList(),visitplace);
+                if(t!=-1){
+                    patientList.get(i).getVisitPlaceList().remove(t);
+                }
                 //setPatientList(patientList);
                 Log.d("patient",Integer.toString(patientList.get(i).getVisitPlaceList().size()));
                 return 1;//정상 삭제
@@ -93,24 +93,31 @@ public class DBEntity {
         }
         return -1;//환자 정보도 없을 경우
     }
-
-
+    public static int findIndex(ArrayList<VisitPlace> visitplaceList,VisitPlace visitplace2){
+        for(int i =0; i <visitplaceList.size();i++){
+            if(visitplaceList.get(i).getVisitDate().equals(visitplace2.getVisitDate())&&
+                    visitplaceList.get(i).getVisitPlace().get_placeAddress().equals(visitplace2.getVisitPlace().get_placeAddress())){
+                return i;
+            }
+        }
+        return -1;
+    }
     /*관리자의 확진자 추가, 수정 페이지에서 확진자 동선 정보 하나를 삭제하는 메소드-환자 정보를 삭제하면 관련 동선 정보도 싹다 삭제*/
-    public void AND_delete_patient(Patient patient) {
+    public static void AND_delete_patient(Patient patient) {
         patientList.remove(patient);
     }
+
 
     //DB 테이블 수정----------------------------------------------------------------------------------------------------
 
     /*인트로 때, 앱 실행시 한 번만 불리는 메소드드*/
     public static ArrayList<Patient> patient_info() throws JSONException {
-        patientList = new ArrayList<Patient>();
         task = new DB("patients_info");
-        ArrayList<VisitPlace> temp = new ArrayList<VisitPlace>();
+        //ArrayList<VisitPlace> temp = new ArrayList<VisitPlace>();
         // int small=Integer.parseInt(plocnum.substring(0,1));
         // int big=Integer.parseInt(plocnum.substring(2,3));
         //박소영 놈이 제대로 DB연동하기 전까지 만든 임시 확진자 리스트--> 구축 후 삭제 예정
-
+        /*
         JSONArray patients = null;
         JSONArray movingList=null;
 
@@ -131,7 +138,39 @@ public class DBEntity {
             }
             patientList.add(new Patient(small,big,patient.getString("pnum")
                     ,patient.getString("confirmdate"),temp));
-        }
+        }*/
+        Place dumP1 = new Place("파주", 37.284346, 126.991860);
+        Place dumP2 = new Place("서울", 37.283818, 126.991094);
+        Place dumP3 = new Place("파주", 37.282638, 126.992093);
+        Place dumP4 = new Place("서울", 37.286340, 126.993733);
+        Place dumP5 = new Place("파주", 37.285683, 126.996666);
+        Place dumP6 = new Place("서울", 37.283314, 126.993939);
+
+        //3. 1,2로 확진자 방문장소 더미객체 생성
+        VisitPlace dumVP1 = new VisitPlace(dumP1, "2020-11-10");
+        VisitPlace dumVP2 = new VisitPlace(dumP2, "2020-11-27");
+        VisitPlace dumVP3 = new VisitPlace(dumP3, "2020-11-26");
+        VisitPlace dumVP4 = new VisitPlace(dumP4, "2020-11-28");
+        VisitPlace dumVP5 = new VisitPlace(dumP5, "2020-11-25");
+        VisitPlace dumVP6 = new VisitPlace(dumP6, "2020-11-11");
+
+        //4. 3으로 확진자 방문장소 리스트 더미객체 생
+        ArrayList<VisitPlace> dumVSP1 = new ArrayList<VisitPlace>();
+        ArrayList<VisitPlace> dumVSP2 = new ArrayList<VisitPlace>();
+
+        dumVSP1.add(dumVP1);
+        dumVSP1.add(dumVP2);
+        dumVSP2.add(dumVP3);
+        dumVSP2.add(dumVP4);
+        dumVSP2.add(dumVP5);
+        dumVSP2.add(dumVP6);
+
+        //5. 확진자 두명
+        Patient dumPatient1 = new Patient(0, 0, "1", "2020-11-15", dumVSP1);
+        Patient dumPatient2 = new Patient(0, 0, "2", "2020-11-16", dumVSP2);
+
+        patientList.add(dumPatient1);
+        patientList.add(dumPatient2);
         return patientList;
     }
 
@@ -167,26 +206,13 @@ public class DBEntity {
 
     /*로그인 메소드드*/
     public int login(String managerID, String managerPW) {
-        /*try {
-            String sendmsg = "login";
-            OK3 task = new OK3();
-            result = task.login(managerID, managerPW, sendmsg);
-            Log.i("Servertest뭔꼬", "서버에서 받은 값" + result);
-            if (result.equals("success")) return 1;
-            else if (result.equals("failed")) return 0;
-            else if (result.equals("noId")) return 2;
-            else return -1;
-        }catch (Exception e) {
-            Log.i("DBtest", ".....ERROR.....!");
-            return -2;}*/
         if (result.equals("success")) return 1;
         else return 0;
-        //밥소놈이랑 접선시 언롹
-        /*
+        /* 밥소놈이랑 접선시 언롹
         try {
-            String sendmsg = "login";
+            sendmsg = "login";
             task = new DB(sendmsg);
-            result = task.dbcon(managerID, managerPW, sendmsg);
+            result = task.execute(managerID, managerPW, sendmsg).get();
             Log.i("Servertest", "서버에서 받은 값" + result);
             if (result.equals("success")) return 1;
             else if (result.equals("failed")) return 0;
