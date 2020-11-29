@@ -99,7 +99,11 @@ public class UserPages<Private> extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_pages);
-
+        try {
+            DBEntity.patient_info();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         /*Bottom Navigation 연결*/
         BottomNavigationView navigationView = findViewById(R.id.user_BottomNavigation);
         navigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
