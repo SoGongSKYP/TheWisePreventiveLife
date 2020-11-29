@@ -26,6 +26,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,7 +50,6 @@ public class PageOfList extends Fragment {
     int pBigLocal, pSmallLocal;
     Patient selectedRow, deletePatient;
     int testPos;
-    DBEntity dbEntity = new DBEntity();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class PageOfList extends Fragment {
         /*RecyclerView 연결*/
 
         if(totalArrayList == null){
-            totalArrayList = dbEntity.patient_info();
+            totalArrayList = DBEntity.getPatientList();
             Log.d("리스트 페이지에 Total Array : ", "NULL");
         }
         patientArrayList = new ArrayList<Patient>();
@@ -190,8 +191,8 @@ public class PageOfList extends Fragment {
                                 totalArrayList.remove(removePatient);
                                 adapter.notifyDataSetChanged();
 
-                                dbEntity.AND_delete_patient(removePatient);
-                                Log.d("삭제되었나?", Integer.toString(dbEntity.ListSize()));
+                                DBEntity.AND_delete_patient(removePatient);
+                                Log.d("삭제되었나?", Integer.toString(DBEntity.ListSize()));
                                 Toast.makeText(getContext(), "현재 확진자 정보를 삭제합니다", Toast.LENGTH_SHORT).show();
                             }
                         })
