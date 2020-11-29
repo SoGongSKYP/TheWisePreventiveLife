@@ -6,16 +6,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class DBEntity {
 
     /*DBEntity에서 계속 저장할 환자 리스트*/
-    private static ArrayList<Patient> patientList = new ArrayList<Patient>();
+    private static ArrayList<Patient> patientList;
     private static ArrayList<VisitPlace> dumVSP1;
     private static ArrayList<VisitPlace> dumVSP2;
 
@@ -27,10 +37,20 @@ public class DBEntity {
     /*AND메소드에서 임시로 쓸 필드들*/
     private int size;
 
+    private static OkHttpClient client;
+    private static String OkhttpUrl;
+    private static Request request;
+    private static MediaType mediaType;
+    private static RequestBody body;
+    private static JSONArray patients;
+    private static JSONArray movingList;
+
 
     //patientList 값 접-----------------------------------------------------------------------------------------------
 
     public DBEntity() {
+        patientList = new ArrayList<Patient>();
+
     }
 
     public void setPatientList(ArrayList<Patient> patientList) {
@@ -106,28 +126,104 @@ public class DBEntity {
     public static void AND_delete_patient(Patient patient) {
         patientList.remove(patient);
     }
+    public static void connectAppDB(){
+        client = new OkHttpClient().newBuilder().build();
+        mediaType = MediaType.parse("text/plain");
+        OkhttpUrl="http://10.80.20.128:8080/WLP_re/androidDB.jsp";
+
+        patientList = new ArrayList<Patient>();
+        task = new DB("patients_info");
+        ArrayList<VisitPlace> temp = new ArrayList<VisitPlace>();
+        // int small=Integer.parseInt(plocnum.substring(0,1));
+        // int big=Integer.parseInt(plocnum.substring(2,3));
+        //박소영 놈이 제대로 DB연동하기 전까지 만든 임시 확진자 리스트—> 구축 후 삭제 예정
+
+        patients = null;
+        //JSONArray movingList=null;
+
+        RequestBody body =new FormBody.Builder().add("type","patients_info").build();
+        Request request = new Request.Builder().url(OkhttpUrl).method("POST", body).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("연결 실패", "error Connect Server error is"+e.toString());
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        patients = new JSONArray(response.body().string());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //result =response.body().string();
+                    //Log.d("젼쥬", patients.toString());
+                    // Log.d("response jsp db",response.body().string()+"");
+                }
+            }
+        });
+    }
+    public static void connectMovingDB(){
+        client = new OkHttpClient().newBuilder().build();
+        mediaType = MediaType.parse("text/plain");
+        OkhttpUrl="http://10.80.20.128:8080/WLP_re/androidDB.jsp";
+
+        patientList = new ArrayList<Patient>();
+        task = new DB("patients_info");
+        ArrayList<VisitPlace> temp = new ArrayList<VisitPlace>();
+        // int small=Integer.parseInt(plocnum.substring(0,1));
+        // int big=Integer.parseInt(plocnum.substring(2,3));
+        //박소영 놈이 제대로 DB연동하기 전까지 만든 임시 확진자 리스트—> 구축 후 삭제 예정
+
+        patients = null;
+        //JSONArray movingList=null;
+
+        RequestBody body =new FormBody.Builder().add("type","pmoving_info").build();
+        Request request = new Request.Builder().url(OkhttpUrl).method("POST", body).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("연결 실패", "error Connect Server error is"+e.toString());
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        movingList = new JSONArray(response.body().string());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //result =response.body().string();
+                    //Log.d("젼쥬", patients.toString());
+                    // Log.d("response jsp db",response.body().string()+"");
+                }
+            }
+        });
+    }
 
 
     //DB 테이블 수정----------------------------------------------------------------------------------------------------
 
     /*인트로 때, 앱 실행시 한 번만 불리는 메소드드*/
     public static ArrayList<Patient> patient_info() throws JSONException {
-        task = new DB("patients_info");
-        //ArrayList<VisitPlace> temp = new ArrayList<VisitPlace>();
+        ArrayList<VisitPlace> temp = new ArrayList<VisitPlace>();
         // int small=Integer.parseInt(plocnum.substring(0,1));
         // int big=Integer.parseInt(plocnum.substring(2,3));
         //박소영 놈이 제대로 DB연동하기 전까지 만든 임시 확진자 리스트--> 구축 후 삭제 예정
-        /*
-        JSONArray patients = null;
-        JSONArray movingList=null;
 
         for(int i =0; i < patients.length();i++){
             JSONObject patient = patients.getJSONObject(i);
             temp = new  ArrayList<VisitPlace>();
             String plocnum = patient.getString("plocnum");
             String checkNum = plocnum+patient.getString("pnum");
-            int small=Integer.parseInt(plocnum.substring(2,3));
-            int big=Integer.parseInt(plocnum.substring(0,1));
+            int small=Integer.parseInt(plocnum.substring(2));
+            int big=Integer.parseInt(plocnum.substring(0,2));
             for(int j =0; j < movingList.length();j++){
                 JSONObject moving = movingList.getJSONObject(j);
                 String movingCheckNum = moving.getString("plocnum")+moving.getString("pnum");
@@ -138,39 +234,7 @@ public class DBEntity {
             }
             patientList.add(new Patient(small,big,patient.getString("pnum")
                     ,patient.getString("confirmdate"),temp));
-        }*/
-        Place dumP1 = new Place("파주", 37.284346, 126.991860);
-        Place dumP2 = new Place("서울", 37.283818, 126.991094);
-        Place dumP3 = new Place("파주", 37.282638, 126.992093);
-        Place dumP4 = new Place("서울", 37.286340, 126.993733);
-        Place dumP5 = new Place("파주", 37.285683, 126.996666);
-        Place dumP6 = new Place("서울", 37.283314, 126.993939);
-
-        //3. 1,2로 확진자 방문장소 더미객체 생성
-        VisitPlace dumVP1 = new VisitPlace(dumP1, "2020-11-10");
-        VisitPlace dumVP2 = new VisitPlace(dumP2, "2020-11-27");
-        VisitPlace dumVP3 = new VisitPlace(dumP3, "2020-11-26");
-        VisitPlace dumVP4 = new VisitPlace(dumP4, "2020-11-28");
-        VisitPlace dumVP5 = new VisitPlace(dumP5, "2020-11-25");
-        VisitPlace dumVP6 = new VisitPlace(dumP6, "2020-11-11");
-
-        //4. 3으로 확진자 방문장소 리스트 더미객체 생
-        ArrayList<VisitPlace> dumVSP1 = new ArrayList<VisitPlace>();
-        ArrayList<VisitPlace> dumVSP2 = new ArrayList<VisitPlace>();
-
-        dumVSP1.add(dumVP1);
-        dumVSP1.add(dumVP2);
-        dumVSP2.add(dumVP3);
-        dumVSP2.add(dumVP4);
-        dumVSP2.add(dumVP5);
-        dumVSP2.add(dumVP6);
-
-        //5. 확진자 두명
-        Patient dumPatient1 = new Patient(0, 0, "1", "2020-11-15", dumVSP1);
-        Patient dumPatient2 = new Patient(0, 0, "2", "2020-11-16", dumVSP2);
-
-        patientList.add(dumPatient1);
-        patientList.add(dumPatient2);
+        }
         return patientList;
     }
 
