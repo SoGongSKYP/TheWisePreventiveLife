@@ -53,9 +53,10 @@ public class ManagerModify extends AppCompatActivity {
     private TextView bigLocTextView, smallLocTextView;
     int pBigLocal, pSmallLocal;
     private TextView titleTextView;
-    private ArrayList<VisitPlace> deletePlaceArrayList;
+    private ArrayList<VisitPlace> deletePlaceArrayList, addPlaceArrayList;
     Patient data;   // PageOfList에서 선택된 확진자 객체
     int rowNum;      // PageOfList에서 선택된 확진자 번호
+    DBEntity dbEntity = new DBEntity();
 
     enum MODE {DEF, EDIT};
     MODE now = MODE.DEF;
@@ -118,7 +119,7 @@ public class ManagerModify extends AppCompatActivity {
         patientRecyclerView.setAdapter(adapter);
 
         deletePlaceArrayList = new ArrayList<VisitPlace>(); // DB에서 지울 동선 리스트
-
+        addPlaceArrayList = new ArrayList<VisitPlace>();    // DB에 올릴 동선 리스트
         //--------------------------------------------------------------------------------------
         /*다이얼로그 연결*/
         addPlaceButton = findViewById(R.id.modify_visit_add_Button);
@@ -127,6 +128,14 @@ public class ManagerModify extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog = new DialogOfPlace(ManagerModify.this);
+                dialog.setVisitDialogListener(new DialogOfPlace.VisitDialogListener() {
+                    @Override
+                    public void onAddClicked(VisitPlace visitPlace) {
+                        visitPlaceArrayList.add(visitPlace);
+                        addPlaceArrayList.add(visitPlace);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
                 dialog.setCancelable(true);
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -135,10 +144,6 @@ public class ManagerModify extends AppCompatActivity {
         });
     }
 
-
-
-
-
     private void setMode(){
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,10 +151,13 @@ public class ManagerModify extends AppCompatActivity {
                 if(now == MODE.DEF){
                     now = MODE.EDIT;
                     setEditMode();
+                    Toast.makeText(getApplicationContext(), "확진자 동선 수정 모드입니다.", Toast.LENGTH_SHORT).show();
                 }else{
                     now = MODE.DEF;
                     saveEditData();
                     setDefMode();
+                    Toast.makeText(getApplicationContext(), "변경 사항을 저장했습니다.", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -185,7 +193,18 @@ public class ManagerModify extends AppCompatActivity {
     private void saveEditData(){
         // 이곳에서 변경된 데이터를 업데이트 함
         // DBEntity 클래스의 pmoving_delete 함수, insert 함수
-        Toast.makeText(this, "여기서 데이터를 업데이트 하면 됩니다.", Toast.LENGTH_SHORT).show();
+        for(int i=0; i<deletePlaceArrayList.size();i++){
+            VisitPlace vp = deletePlaceArrayList.get(i);
+            int result1 = dbEntity.AND_delete_pmoving(data, vp);
+
+            Log.d("확진자 방문지 삭제리스트 삭제 완료 : ", Integer.toString(result1));
+        }
+        for(int i=0; i<addPlaceArrayList.size(); i++){
+            VisitPlace vp = addPlaceArrayList.get(i);
+            int result2 = dbEntity.AND_insert_pmoving(data, vp);
+            Log.d("확진자 방문지 추가리스트 추가 완료 : ", Integer.toString(result2));
+        }
+        Toast.makeText(this, "변경 사항이 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
 

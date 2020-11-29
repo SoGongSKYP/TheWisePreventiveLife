@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialiconsround/navigate_next/round_navigate_next_24.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/brightness_1/baseline_brightness_1_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="636363" />
-                            <entry key="outputName" value="ic_round_navigate_next_24" />
+                            <entry key="color" value="37bf54" />
+                            <entry key="opacityPercent" value="30" />
+                            <entry key="outputName" value="circle_green_trans" />
                             <entry key="sourceFile" value="C:\Users\lg\AndroidStudioProjects\TheWisePreventiveLife" />
                           </map>
                         </option>
