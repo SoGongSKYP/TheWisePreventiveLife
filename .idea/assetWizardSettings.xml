@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="f8ce00" />
-                            <entry key="outputName" value="circle_yellow" />
+                            <entry key="color" value="37bf54" />
+                            <entry key="opacityPercent" value="30" />
+                            <entry key="outputName" value="circle_green_trans" />
                             <entry key="sourceFile" value="C:\Users\lg\AndroidStudioProjects\TheWisePreventiveLife" />
                           </map>
                         </option>

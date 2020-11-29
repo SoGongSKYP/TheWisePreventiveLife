@@ -154,8 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/circle_red"
-                android:layout_weight="1"
-                android:alpha="0.3"/>
+                android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/danger_yellow_ImageView"
                 android:layout_width="wrap_content"
@@ -167,8 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/circle_green"
-                android:layout_weight="1"
-                android:alpha="0.3"/>
+                android:layout_weight="1"/>
         </LinearLayout>
         <TextView
             android:id="@+id/danger_result_TextView"

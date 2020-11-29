@@ -128,8 +128,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         yellowImageView = v.findViewById(R.id.danger_yellow_ImageView);
         greenImageView = v.findViewById(R.id.danger_green_ImageView);
         resultTextView = v.findViewById(R.id.danger_result_TextView);
-        // redImageView.getBackground().setAlpha(80);
-        // 검색하신 외출 동선의 위험도는 '주의' 입니다. - '심각', '주의', '안전'
 
         // 출발지를 누르면 다이얼로그가 생성됨
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -213,11 +211,6 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    try {
-                        printPath(startPlace,finishPlace);
-                    } catch (ParserConfigurationException | SAXException | IOException e) {
-                        e.printStackTrace();
-                    }
 
                     //동선 찾기 버튼을 누르면 루트 결과 레이아웃이 보이면서, 결과 보여줌
                     Log.d("동선 Recyclerview", "OK");
@@ -234,6 +227,7 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
                             selectedPath = searchResultPath.get(pos);
                             routeLayout.setVisibility(View.INVISIBLE);
                             resultLayout.setVisibility(View.VISIBLE);
+                            calDanger();
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -403,155 +397,25 @@ public class PageOfMyDanger extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-    public void printPath(Place startPlace,Place desPlace) throws ParserConfigurationException, SAXException, IOException {
-        try {
-            searchResultPath=cl.calRoute1().getResultPath();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //addVisitNearMarker();
-            }
-        }).start();
-
-        System.out.println("사이즈: "+searchResultPath.size());
-        for(int i =0; i < searchResultPath.size();i++){
-            SearchPath path = this.searchResultPath.get(i);
-            ExtendNode exNode = path.getInfo();
-            SubPath subPath=null;
-            if (path.getPathType()==1){
-                System.out.println("지하철만 이용");
-            }
-            else if(path.getPathType()==2)
-            {
-                System.out.println("버스만 이용");
-            }
-            else if(path.getPathType()==3){
-                System.out.println("지하철+버스 이용");
-            }
-
-            System.out.println("총 요금: "+exNode.getPayment());
-            System.out.println("총 이동 거리: "+exNode.getTotalDistance());
-            System.out.println("출발 지점: "+startPlace.get_placeAddress());
-            System.out.println("도착 지점: "+desPlace.get_placeAddress());
-            System.out.println("최초 출발 역/정류장: "+exNode.getFirstStartStation());
-            System.out.println("최종 도착 역/정류장: "+exNode.getLastEndStation());
-
-            for(int a =0; a<path.getSubPaths().size();a++){
-                subPath=path.getSubPaths().get(a);
-                System.out.println("이동 거리: "+subPath.getDistance()+"km");
-                System.out.println("이동 시간: "+subPath.getSectionTime());
-                if(subPath.getTrafficType()==1){
-                    System.out.println("이동 수단: 지하철");
-                    System.out.println("이동 정거장 수: "+subPath.getStationCount());
-                    System.out.println("승차 정류장: "+subPath.getStartStation().get_placeAddress());
-                    System.out.println("하차 정류장: "+subPath.getEndStation().get_placeAddress());
-                    System.out.println("이동 방면: "+subPath.getWay());
-                    if(subPath.getWayCode() ==1 ){
-                        System.out.println("상행");
-                    }
-                    else{
-                        System.out.println("하행");
-                    }
-                    System.out.println("지하철 환승 위치: "+subPath.getDoor());
-                    if(subPath.getStartExitNo()!=null){
-                        System.out.println("지하철 입구: "+subPath.getStartExitNo().get_placeAddress());
-                    }
-                    if(subPath.getEndExitNo()!=null){
-                        System.out.println("지하철 출구: "+subPath.getEndExitNo().get_placeAddress());
-                    }
-                    for(int sub = 0; sub < subPath.getLaneList().size();sub++){
-                        Lane temp = subPath.getLaneList().get(sub);
-                        System.out.println("지하철 노선: "+temp.getName());
-                    }
-                }
-                else if(subPath.getTrafficType()==2){
-                    System.out.println("이동 수단: 버스");
-                    System.out.println("이동 정거장 수: "+subPath.getStationCount());
-                    System.out.println("승차 정류장: "+subPath.getStartStation().get_placeAddress());
-                    System.out.println("하차 정류장: "+subPath.getEndStation().get_placeAddress());
-                    System.out.println("레인 크기: "+subPath.getLaneList().size());
-                    for(int sub = 0; sub < subPath.getLaneList().size();sub++){
-                        Lane temp = subPath.getLaneList().get(sub);
-                        System.out.println("버스 번호: "+temp.getName());
-                        if(temp.getSubwayCodeORtype() == 1){
-                            System.out.println("일반");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 2){
-                            System.out.println("좌석");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 3){
-                            System.out.println("마을 버스");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 4){
-                            System.out.println("직행 좌석");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 5){
-                            System.out.println("공항 버스");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 6){
-                            System.out.println("간선 급행");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 10){
-                            System.out.println("외곽 ");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 11){
-                            System.out.println("간선");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 12){
-                            System.out.println("지선");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 13){
-                            System.out.println("순환");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 14){
-                            System.out.println("광역");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 15){
-                            System.out.println("급행");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 20){
-                            System.out.println("농어촌 버스");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 21){
-                            System.out.println("제주도 시외형 버스");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 22){
-                            System.out.println("경기도 시외형 버스");
-                        }
-                        else if(temp.getSubwayCodeORtype() == 26){
-                            System.out.println("급행 간선");
-                        }
-                    }
-                }
-                else if(subPath.getTrafficType()==3){
-                    System.out.println("이동 수단: 도보");
-                }
-
-            }
-        }
-
-    }// 여러개의 path중 하나의 path를 출력할 함수
 
     public void calDanger(){
-        if (this.nearPlaces.size() >=50){
-            this.danger=5;
-        }//초고도 위험
-        else if(this.nearPlaces.size() >=25){
-            this.danger=4;
-        }// 고위험
-        else if(this.nearPlaces.size() >=10){
-            this.danger=3;
-        }// 위험
-        else if(this.nearPlaces.size() >=1){
-            this.danger=2;
-        }// 주의
-        else{
-            this.danger=1;
-        }//안전
+        if(this.nearPlaces.size() >= 50){
+            redImageView.setImageResource(R.drawable.circle_red);
+            yellowImageView.setImageResource(R.drawable.circle_yellow_trans);
+            greenImageView.setImageResource(R.drawable.circle_green_trans);
+            resultTextView.setText("검색하신 외출 동선의 위험도는 '심각' 입니다.");
+        }
+        else if((this.nearPlaces.size() >= 25) && (this.nearPlaces.size()<50)){
+            redImageView.setImageResource(R.drawable.circle_red_trans);
+            yellowImageView.setImageResource(R.drawable.circle_yellow);
+            greenImageView.setImageResource(R.drawable.circle_green_trans);
+            resultTextView.setText("검색하신 외출 동선의 위험도는 '주의' 입니다.");
+        }else{
+            redImageView.setImageResource(R.drawable.circle_red_trans);
+            yellowImageView.setImageResource(R.drawable.circle_yellow_trans);
+            greenImageView.setImageResource(R.drawable.circle_green);
+            resultTextView.setText("검색하신 외출 동선의 위험도는 '안전' 입니다.");
+        }
     }
 
 
