@@ -2,6 +2,10 @@ package com.example.project;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +28,7 @@ public class DBEntity {
     //patientList 값 접-----------------------------------------------------------------------------------------------
 
     public DBEntity() {
-        patientList = new ArrayList<>();
+        patientList = new ArrayList<Patient>();
     }
 
     public void setPatientList(ArrayList<Patient> patientList) {
@@ -91,42 +95,32 @@ public class DBEntity {
     //DB 테이블 수정----------------------------------------------------------------------------------------------------
 
     /*인트로 때, 앱 실행시 한 번만 불리는 메소드드*/
-    public ArrayList<Patient> patient_info() {
+    public ArrayList<Patient> patient_info() throws JSONException {
         task = new DB("patients_info");
-        // int small=Integer.parseInt(plocnum.substring(0,1));
-        // int big=Integer.parseInt(plocnum.substring(2,3));
+        ArrayList<VisitPlace> temp = new  ArrayList<VisitPlace>();
         //박소영 놈이 제대로 DB연동하기 전까지 만든 임시 확진자 리스트--> 구축 후 삭제 예정
 
-        Place dumP1 = new Place("파주", 1.1, 1.2);
-        Place dumP2 = new Place("서울", 2.1, 2.2);
+        JSONArray patients = null;
+        JSONArray movingList=null;
 
-        //3. 1,2로 확진자 방문장소 더미객체 생성
-        VisitPlace dumVP1 = new VisitPlace(dumP1, "2020-12-23");
-        VisitPlace dumVP2 = new VisitPlace(dumP2, "2020-9-3");
-        VisitPlace dumVP3 = new VisitPlace(dumP1, "2020-9-3");
-        //4. 3으로 확진자 방문장소 리스트 더미객체 생
-        ArrayList<VisitPlace> dumVSP1 = new ArrayList<VisitPlace>();
-        ArrayList<VisitPlace> dumVSP2 = new ArrayList<VisitPlace>();
-        dumVSP1.add(dumVP1);
-        dumVSP1.add(dumVP2);
-        dumVSP2.add(dumVP2);
-        dumVSP2.add(dumVP3);
-        //5. 확진자 두명
-        Patient dumPatient1 = new Patient(0, 0, "1", "2020-11-15", dumVSP1);
-        Patient dumPatient2 = new Patient(0, 0, "2", "2020-11-16", dumVSP2);
-        Patient dumPatient3 = new Patient(0, 0, "3", "2020-11-14", dumVSP1);
-        Patient dumPatient4 = new Patient(0, 0, "4", "2020-11-15", dumVSP2);
-        Patient dumPatient5 = new Patient(0, 1, "5", "2020-11-15", dumVSP1);
-        Patient dumPatient6 = new Patient(8, 12, "6", "2020-11-13", dumVSP2);
-        Patient dumPatient7 = new Patient(0, 2, "7", "2020-11-15", dumVSP2);
-        patientList.add(dumPatient1);
-        patientList.add(dumPatient2);
-        patientList.add(dumPatient3);
-        patientList.add(dumPatient4);
-        patientList.add(dumPatient5);
-        patientList.add(dumPatient6);
-        patientList.add(dumPatient7);
-
+        for(int i =0; i < patients.length();i++){
+            JSONObject patient = patients.getJSONObject(i);
+            temp = new  ArrayList<VisitPlace>();
+            String plocnum = patient.getString("plocnum");
+            String checkNum = plocnum+patient.getString("pnum");
+            int small=Integer.parseInt(plocnum.substring(2,3));
+            int big=Integer.parseInt(plocnum.substring(0,1));
+            for(int j =0; j < movingList.length();j++){
+                JSONObject moving = movingList.getJSONObject(j);
+                String movingCheckNum = moving.getString("plocnum")+moving.getString("pnum");
+                if(checkNum.equals(movingCheckNum)){
+                    temp.add(new VisitPlace(new Place("확진자"+moving.getString("address"),
+                            moving.getDouble("pointx"),moving.getDouble("pointy")),moving.getString("visitdate")));
+                }
+            }
+            this.patientList.add(new Patient(small,big,patient.getString("pnum")
+                    ,patient.getString("confirmdate"),temp));
+        }
         return patientList;
     }
 
