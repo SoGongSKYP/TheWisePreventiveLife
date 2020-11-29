@@ -54,9 +54,8 @@ public class ManagerModify extends AppCompatActivity {
     int pBigLocal, pSmallLocal;
     private TextView titleTextView;
     private ArrayList<VisitPlace> deletePlaceArrayList, addPlaceArrayList;
-    Patient data;   // PageOfList에서 선택된 확진자 객체
+    Patient data;   // DBEntity.patient_info()에서 선택된 확진자 객체
     int rowNum;      // PageOfList에서 선택된 확진자 번호
-    DBEntity dbEntity = new DBEntity();
 
     enum MODE {DEF, EDIT};
     MODE now = MODE.DEF;
@@ -195,13 +194,12 @@ public class ManagerModify extends AppCompatActivity {
         // DBEntity 클래스의 pmoving_delete 함수, insert 함수
         for(int i=0; i<deletePlaceArrayList.size();i++){
             VisitPlace vp = deletePlaceArrayList.get(i);
-            int result1 = dbEntity.AND_delete_pmoving(data, vp);
-
+            int result1 = DBEntity.AND_delete_pmoving(data, vp);
             Log.d("확진자 방문지 삭제리스트 삭제 완료 : ", Integer.toString(result1));
         }
         for(int i=0; i<addPlaceArrayList.size(); i++){
             VisitPlace vp = addPlaceArrayList.get(i);
-            int result2 = dbEntity.AND_insert_pmoving(data, vp);
+            int result2 = DBEntity.AND_insert_pmoving(data, vp);
             Log.d("확진자 방문지 추가리스트 추가 완료 : ", Integer.toString(result2));
         }
         Toast.makeText(this, "변경 사항이 저장되었습니다.", Toast.LENGTH_SHORT).show();
