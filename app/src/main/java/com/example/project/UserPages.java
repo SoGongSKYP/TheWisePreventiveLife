@@ -27,6 +27,7 @@ package com.example.project;
         import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+        import org.json.JSONException;
         import org.xml.sax.SAXException;
 
         import java.io.IOException;
@@ -124,7 +125,7 @@ public class UserPages<Private> extends AppCompatActivity {
                 dialog = new DialogOfSearch(UserPages.this);
                 dialog.setSearchDialogListener(new DialogOfSearch.SearchDialogListener(){
                     @Override
-                    public void onOKCliked(Place place) {
+                    public void onOKCliked(Place place) throws JSONException {
                         UserLoc.setUser_place(place);   // searchPlace가 검색된 장소, 이 장소 좌표로 이동
                         if(nowPage.equals("user_Home")){
                             pageOfMain.RefreshMarker();
