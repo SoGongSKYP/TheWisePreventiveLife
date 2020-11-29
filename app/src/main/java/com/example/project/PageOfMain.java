@@ -22,6 +22,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -136,7 +138,11 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                calNearPlace();
+                try {
+                    calNearPlace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 try {
                     addNearPlaceMaker();
                 } catch (ParseException e) {
@@ -162,7 +168,11 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        calNearPlace();
+                        try {
+                            calNearPlace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         try {
                             addNearPlaceMaker();
                         } catch (ParseException e) {
@@ -182,9 +192,9 @@ public class PageOfMain extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void calNearPlace() {
+    public void calNearPlace() throws JSONException {
         this.nearPlaces.clear();
-        this.patient=this.dbEntity.patient_info();
+        this.patient=DBEntity.getPatientList();
         for (int a = 0; a < this.patient.size(); a++) {
             for (int b = 0; b < this.patient.get(a).getVisitPlaceList().size(); b++) {
                 if (this.patient.get(a).getVisitPlaceList().get(b).
