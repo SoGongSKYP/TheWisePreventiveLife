@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class ManagerPages extends AppCompatActivity {
@@ -28,7 +30,15 @@ public class ManagerPages extends AppCompatActivity {
     public void setDeleteButtonClickListener(DeleteButtonClickListener listener){
         this.deleteButtonClickListener = listener;
     }
-
+    /*
+    public ManagerPages(){
+        try {
+            DBEntity.patient_info();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    */
     /*Bottom Navigation Bar 관련 컴포넌트*/
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private PageOfList pageOfList = new PageOfList();
@@ -42,7 +52,6 @@ public class ManagerPages extends AppCompatActivity {
     private ImageButton deleteButton;
 
     String ID, PW;
-    DBEntity entity = new DBEntity();
     ArrayList<Patient> data;
     Patient deletePatient;
 
