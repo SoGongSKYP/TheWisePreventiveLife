@@ -35,13 +35,19 @@ public class PageOfIntro extends AppCompatActivity {
             threadArray[i].start();
         }
 
-        try {
-            lock.lock();
-            DBEntity.patient_info();
-            lock.unlock();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DBEntity.connectAppDB();
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DBEntity.connectMovingDB();
+            }
+        }).start();
+
 
         this.LocPermission(this,getApplicationContext());
         new android.os.Handler().postDelayed(
@@ -52,7 +58,7 @@ public class PageOfIntro extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
-        , 6000);
+                , 6000);
     }
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 200;
     public void LocPermission(Activity activity , Context context) {
@@ -63,4 +69,3 @@ public class PageOfIntro extends AppCompatActivity {
         } // 권한확인후 위치정보 제공 동의가 안 되어 있을때 위치 정보 제공 동의받기
     }
 }
-
