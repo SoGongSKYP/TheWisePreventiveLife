@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -33,6 +35,13 @@ public class PageOfIntro extends AppCompatActivity {
             threadArray[i].start();
         }
 
+        try {
+            lock.lock();
+            DBEntity.patient_info();
+            lock.unlock();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         this.LocPermission(this,getApplicationContext());
         new android.os.Handler().postDelayed(
