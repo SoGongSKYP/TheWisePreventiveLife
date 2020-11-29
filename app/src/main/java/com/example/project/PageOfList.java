@@ -54,6 +54,14 @@ public class PageOfList extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(totalArrayList == null){
+            try {
+                totalArrayList = DBEntity.patient_info();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.d("리스트 페이지에 Total Array : ", "NULL");
+        }
         Log.d("onCreate", "1");
     }
 
@@ -80,10 +88,6 @@ public class PageOfList extends Fragment {
         //--------------------------------------------------------------------------------------
         /*RecyclerView 연결*/
 
-        if(totalArrayList == null){
-            totalArrayList = DBEntity.getPatientList();
-            Log.d("리스트 페이지에 Total Array : ", "NULL");
-        }
         patientArrayList = new ArrayList<Patient>();
 
         patientRecyclerView = v.findViewById(R.id.list_RecyclerView);
@@ -127,17 +131,14 @@ public class PageOfList extends Fragment {
                 String index = Integer.toString(i);
                 int resId = getResources().getIdentifier("array_"+index, "array", getContext().getPackageName());
                 smallAdapter = ArrayAdapter.createFromResource(getContext(), resId, android.R.layout.simple_spinner_dropdown_item);
-
                 pBigLocal = i;
+                if(pBigLocal<=7){
+                    patientArrayList.clear();
+                    showList(pBigLocal, 0);
+                }
                 Log.d("큰 도시 선택 : ", Integer.toString(i));
                 smallAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 smallLocSpinner.setAdapter(smallAdapter);
-                if(i<=7){
-                    if(patientArrayList.size() !=0 ){
-                        patientArrayList.clear();
-                        showList(pBigLocal, 0);
-                    }
-                }
             }
 
             @Override
@@ -152,12 +153,11 @@ public class PageOfList extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 pSmallLocal = i;
                 Log.d("작은 도시 선택 : ", Integer.toString(i));
-                if(patientArrayList.size() != 0){
+                if(pBigLocal>7){
                     patientArrayList.clear();
+                    showList(pBigLocal, pSmallLocal);
                 }
-                showList(pBigLocal, pSmallLocal);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 pSmallLocal = 0;
