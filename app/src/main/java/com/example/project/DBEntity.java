@@ -109,7 +109,6 @@ public class DBEntity {
                 Log.d("patient",Integer.toString(patientList.get(i).getVisitPlaceList().size()));
                 return 1;//정상 삭제
             }
-            return 0;//환자 정보는 있는데 visitplace 정보가 존재 x
         }
         return -1;//환자 정보도 없을 경우
     }
