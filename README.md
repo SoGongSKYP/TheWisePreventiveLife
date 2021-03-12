@@ -5,6 +5,10 @@
 ## 개발환경
 Android Studio SDK 30
 
+## 배포 서비스
+https://github.com/SoGongSKYP/TheWisePreventiveLife_android
+현재 리포지터리(TheWisePreventiveLife_test)는 서버 연결 전 리포입니다.
+
 ## 사용자 기능 및 UI 
 1. 인트로 및 GPS 위치 허용
 <div>
